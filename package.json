@@ -1,0 +1,21 @@
+{
+  "name": "prototipo",
+  "version": "1.0.0",
+  "description": "test of arjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx webpack",
+    "start": "npx webpack serve"
+  },
+  "author": "luigi senzamici",
+  "license": "ISC",
+  "dependencies": {
+    "@ar-js-org/ar.js": "^3.4.5",
+    "webpack": "^5.88.2"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.3",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
