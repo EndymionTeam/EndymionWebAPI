@@ -31,7 +31,35 @@ class EnSpawnCubeComponent extends HTMLElement{
         shadow.appendChild(div);
 
     }
+    randomSpherePoint = ()=>{
+        var u = Math.random();
+        var v = Math.random();
+        var theta = 2 * Math.PI * u;
+        var phi = Math.acos(2 * v - 1);
+        var x = Math.sin(phi) * Math.cos(theta);
+        var y = Math.sin(phi) * Math.sin(theta);
+        var z = Math.cos(phi);
+        return [x, y, z];
+    }
+    spawnCube =() =>{
+        var rpos = this.randomSpherePoint();
+        var radius = Math.random() * 2;
+        rpos = rpos.map(v => v * radius);
 
+        var id = 'cube_' + this.cube_index++; 
+
+        window.vuplex.postMessage(
+            {
+                action: 'create-primitive',
+                id: id,
+                primitive: 'cube',
+                position: { x: rpos[0], y: rpos[1], z: rpos[2] },
+                rotation: { x: 45, y: 0, z: 0 },
+                scale: { x: 0.5, y: 0.5, z: 0.5}
+            }
+        );
+
+    }
 
 }
-export const EsSpawnCube = customElements.define('es-spawn-cube', EnSpawnCubeComponent)
+export const EsSpawnCube = customElements.define('en-spawn-cube', EnSpawnCubeComponent)

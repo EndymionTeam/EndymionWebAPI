@@ -1,2 +1,5 @@
-import { popupInfo } from "./components/a";
-import { EsSpawnCube } from "./components/en-spawn-cube-component";
+import { EsSpawnCube } from "./js/en-spawn-cube-component";
+import { EndymionWebApi } from "./js/endymion-web-api";
+window.endymion = {
+    webapi : new EndymionWebApi()
+}

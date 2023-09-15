@@ -1,0 +1,138 @@
+<html>
+<head>
+    <meta name="transparent" content="true">
+
+    <style>
+        html * {
+            font-size: 48px;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            border: 3px solid blue;
+        }
+		
+		.api-button {
+			margin: 5px;
+		}
+    </style>
+
+	<!-- Endymion API -->
+	<script type="text/javascript">
+		function EndymionWebApi() 
+		{ 
+			this.sendAction = function(name, payload) 
+			{
+				var jsonAction = this.createAction(name, payload);
+				window.vuplex.postMessage(jsonAction);
+			}
+			
+			this.sendActions = function(actionArray) 
+			{
+				var jsonAction = this.createAction('multi-action', actionArray);
+				window.vuplex.postMessage(jsonAction);
+			}
+			
+			this.createAction = function(actName, actPayload) 
+			{	
+				var act = {};
+				act.name = actName;
+				act.payload = actPayload;
+				return act;
+			}
+		}
+		
+		function Endymion() 
+		{
+			this.webapi = new EndymionWebApi();
+		}
+		
+		window.endymion = new Endymion();	
+	</script>
+
+	<!-- API Examples -->
+    <script type="text/javascript">	
+        function randomSpherePoint() {
+            var u = Math.random();
+            var v = Math.random();
+            var theta = 2 * Math.PI * u;
+            var phi = Math.acos(2 * v - 1);
+            var x = Math.sin(phi) * Math.cos(theta);
+            var y = Math.sin(phi) * Math.sin(theta);
+            var z = Math.cos(phi);
+            return [x, y, z];
+        }
+
+        var next_object_id = 0;
+
+        function spawnCube() {
+
+            var rpos = randomSpherePoint();
+            var radius = Math.random() * 2;
+            rpos = rpos.map(v => v * radius);
+
+            var id = next_object_id++; 
+			
+			//API Description: https://github.com/EndymionTeam/EndymionBrowser/issues/15
+			// allowed 'primitive' values: cube, sphere, cylinder, capsule, plane, quad
+            window.endymion.webapi.sendAction(
+				'create-primitive',
+				{
+                    id: id,
+                    primitive: 'cube',
+                    position: { x: rpos[0], y: rpos[1], z: rpos[2] },
+                    rotation: { x: 45, y: 0, z: 0 },
+                    scale: { x: 0.5, y: 0.5, z: 0.5}
+                }
+			);
+        }
+		
+		function updateTransform() {
+			var last_next_object_id = next_object_id - 1;
+			
+			//API Description: https://github.com/EndymionTeam/EndymionBrowser/issues/16
+			window.endymion.webapi.sendAction(
+                'update-transform',
+				{
+                    id: last_next_object_id,
+					type: 'delta',
+                    position: { x: 1, y: 0, z: 0 }
+                }
+            );
+		}
+		
+		function multiAction() {
+			var id1 = next_object_id++;
+			var id2 = next_object_id++;
+			
+			https://github.com/EndymionTeam/EndymionBrowser/issues/31
+			var act1 = window.endymion.webapi.createAction(
+						'create-primitive', 
+						{
+							id: id1,
+							primitive: 'sphere',
+							position: { x: 0, y: 1, z: 0 }
+						});
+			var act2 = window.endymion.webapi.createAction(
+						'create-primitive', 
+						{
+							id: id2,
+							primitive: 'cylinder',
+							position: { x: 0, y: -1, z: 0 }
+						});
+			window.endymion.webapi.sendActions([act1, act2]);
+		}
+    </script>
+
+</head>
+<body>
+    <div class="center">
+        <button class="api-button" onclick="spawnCube()">Spawn Cube</button>
+		<button class="api-button" onclick="updateTransform()">Update Transform</button>
+		<button class="api-button" onclick="multiAction()">Multi Action</button>
+    </div>
+</body>
+</html>
