@@ -1,11 +1,17 @@
-export class EndymionWebApi{
+import { Subject } from 'rxjs';
+class EndymionWebApi{
     vuplex;
-
+    messageIn = new Subject();
+    messageIn$ = this.messageIn.asObservable();
     constructor(){
         this.vuplex = window.vuplex;
         if (this.vuplex == undefined 
             || this.vuplex ==='' 
             || this.vuplex === null) throw new Error("vuplex is not setted");
+
+        window.vuplex.addEventListener('message', (event)=>{
+            this.messageIn.next(event.data);
+        });
                
     }
 
@@ -26,3 +32,4 @@ export class EndymionWebApi{
         window.vuplex.postMessage(jsonAction);
     }
 }
+export { EndymionWebApi }

@@ -1,22 +1,22 @@
 {
-  "name": "prototipo",
+  "name": "endymion-api",
   "version": "1.0.0",
-  "description": "test of arjs",
-  "main": "index.js",
+  "description": "Endymion library for augmented reality",
+  "main": "src/endymion.js",
   "scripts": {
-    "build": "npx webpack",
-    "start": "npx webpack serve"
+    "build": "npx webpack --config webpack.config.js"
   },
-  "author": "luigi senzamici",
+  "keywords": [
+    "augmented",
+    "reality"
+  ],
+  "author": "Endymion",
   "license": "ISC",
-  "dependencies": {
-    "@ar-js-org/ar.js": "^3.4.5",
-    "webpack": "^5.88.2"
-  },
   "devDependencies": {
-    "copy-webpack-plugin": "^11.0.0",
-    "html-webpack-plugin": "^5.5.3",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.1"
   }
 }
