@@ -2,23 +2,46 @@
   "name": "endymion-api",
   "version": "1.0.0",
   "description": "Endymion library for augmented reality",
-  "main": "src/endymion.js",
+  "main": "./lib/endymion.js",
+  "types": "./lib/core.d.ts",
+
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "test"
+  },
   "scripts": {
-    "build": "npx webpack --config webpack.config.js"
+    "setup": "npm install",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test-console": "mocha --require ts-node/register test/**/*.ts",
+    "test-only": "mocha --require ts-node/register test/**/*.ts --reporter mocha-junit-reporter",
+    "pretest": "npm run build",
+    "test": "npm run test-only",
+    "typedoc": "typedoc --out ./docs --mode file --tsconfig ./tsconfig.json "
   },
   "keywords": [
     "augmented",
     "reality"
   ],
-  "author": "Endymion",
-  "license": "ISC",
+  "author": {
+    "name": "Endymion"
+  },
+  "license": "MIT",
   "devDependencies": {
-    "ts-loader": "^9.4.4",
-    "typescript": "^5.2.2",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "@types/chai": "^4.3.6",
+    "@types/mocha": "^10.0.2",
+    "chai": "^4.3.10",
+    "jsdom": "^22.1.0",
+    "mocha": "^10.2.0",
+    "mocha-junit-reporter": "^2.2.1",
+    "ts-node": "^10.9.1",
+    "typedoc": "^0.25.1",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@types/jsdom": "^21.1.3",
+    "@types/node": "^20.8.2",
     "rxjs": "^7.8.1"
   }
 }
