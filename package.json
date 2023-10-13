@@ -18,7 +18,8 @@
     "test-only": "mocha --require ts-node/register test/**/*.ts --reporter mocha-junit-reporter",
     "pretest": "npm run build",
     "test": "npm run test-only",
-    "typedoc": "typedoc src/endymion.ts --out ./docs"
+    "typedoc": "typedoc src/endymion.ts --out ./docs",
+    "publish":"npm publish --registry https://npm.endymion.tech/"
   },
   "keywords": [
     "augmented",
