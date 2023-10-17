@@ -1,5 +1,5 @@
 import { assert, expect } from "chai";
-import { Endymion } from "../lib/endymion";
+import { Endymion } from "../lib/src/endymion";
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 var sinon = require("sinon");

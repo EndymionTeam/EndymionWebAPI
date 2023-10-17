@@ -1,9 +1,9 @@
 {
-  "name": "endymion-api",
-  "version": "1.1.0",
+  "name": "endymion",
+  "version": "1.2.0",
   "description": "Endymion library for augmented reality",
   "main": "./lib/endymion.js",
-  "types": "./lib/core.d.ts",
+  "types": "./lib/endymion.d.ts",
   "directories": {
     "doc": "docs",
     "lib": "lib",
@@ -18,7 +18,7 @@
     "pretest": "npm run build",
     "test": "npm run test-only",
     "typedoc": "typedoc src/endymion.ts --out ./docs",
-    "publish": "npm publish --registry https://npm.endymion.tech/"
+    "publish": "npm publish --folder lib --registry https://npm.pegasopr.com/"
   },
   "keywords": [
     "augmented",

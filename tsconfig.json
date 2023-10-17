@@ -12,6 +12,7 @@
     "strictNullChecks": true,
     "moduleResolution": "Node",
     "allowJs": true,
+    "resolveJsonModule": true,
     "lib": [
       "es2016",
       "dom",
@@ -19,7 +20,9 @@
   },
    "files": [
       "src/endymion.ts",
-
+    ],
+    "include":[
+      "./package.json"
     ],
   "exclude":[
     "./test/**/*.spec.ts"
