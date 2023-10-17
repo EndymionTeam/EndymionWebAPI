@@ -20,6 +20,8 @@
   },
    "files": [
       "src/endymion.ts",
+      "src/tags/a-cube.element.ts",
+      "src/utils/color-utils.ts"
     ],
     "include":[
       "./package.json"
