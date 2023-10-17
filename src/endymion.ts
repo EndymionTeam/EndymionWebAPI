@@ -1,27 +1,28 @@
 
 import { Subject } from 'rxjs';
-import { primitive, position, rotation, scale, TransformType, TransformGreatness, Color } from './endymion.types';
+import { primitive, position, rotation, scale, TransformType, TransformGreatness, Color, actionName, action } from './endymion.types';
 
-
-class Endymion{
-    vuplex:any;
+class Endymion {
+    communicationInterface:any;
+    window:Window
     messageIn = new Subject();
     messageIn$ = this.messageIn.asObservable();
     objectId = 0;
-    constructor(){
-        this.vuplex = (window as any).vuplex;
-        if (this.vuplex == undefined 
-            || this.vuplex ==='' 
-            || this.vuplex === null) {
+    constructor(commInterface: string = 'vuplex', w:Window = window){
+        this.window = w;
+        this.communicationInterface = (this.window as any)["commInterface"];
+
+        if (this.communicationInterface == undefined 
+            || this.communicationInterface ==='' 
+            || this.communicationInterface === null) {
                 //polyfill for vuplex for execution in browser
-                console.log("vuplex is not setted");
-                this.vuplex = {};
-                this.vuplex.postMessage = (message:any) => {};
-                this.vuplex.addEventListener = (message:any) => {};
+                this.communicationInterface = {};
+                this.communicationInterface.postMessage = (message:any) => {};
+                this.communicationInterface.addEventListener = (message:any) => {};
 
             }
 
-        (window as any).vuplex.addEventListener('message', (event:any)=>{
+        this.communicationInterface.addEventListener('message', (event:any)=>{
             this.messageIn.next(event.data);
         });
                
@@ -33,12 +34,14 @@ class Endymion{
      * @param actPayload Definition of asset to create
      * @returns action object
      */
-    private createAction = (actName:string, actPayload:any):any =>{
+    public createAction = (actName:actionName, actPayload:any):action =>{
+        if(actName == undefined || actName == null) throw new Error('actName is not defined');
+        if(actPayload == undefined || actPayload == null) throw new Error('actPayload is not defined');
         var act = {
             name: actName,
             payload: actPayload
         };
-        return act;
+        return act as action;
     }
     /**
      * Send action to Endymion Browser Application      
@@ -48,9 +51,11 @@ class Endymion{
      * @param payload Definition of action
      * @returns void
      */
-    public sendAction = (name:string, payload:any):void=>{
+    public sendAction = (name:actionName, payload:any):void=>{
+        if(name == undefined || name == null) throw new Error('name is not defined');
+        if(payload == undefined || payload == null) throw new Error('payload is not defined');
         let jsonAction = this.createAction(name, payload);
-        this.vuplex.postMessage(jsonAction);
+        this.communicationInterface.postMessage(jsonAction);
     }
     /**
      * Send multiple actions to Endymion Browser Application        
@@ -60,9 +65,10 @@ class Endymion{
      * @param actionArray Array of actions
      * @returns void
      */
-    public sendActions = (actionArray:any[]):void =>{
+    public sendActions = (actionArray:action[]):void =>{
+        if(actionArray == undefined || actionArray == null || typeof actionArray !== 'object' || actionArray.length == 0) throw new Error('actionArray is not defined');
         var jsonAction = this.createAction('multi-action', actionArray);
-        this.vuplex.postMessage(jsonAction);
+        this.communicationInterface.postMessage(jsonAction);
     }
     /**
      * Destroy object in Endymion Browser Application       
@@ -71,6 +77,7 @@ class Endymion{
      * @param objectId 
      */
     public destroyObject = (objectId:number)=>{
+        if(objectId < 0) throw new Error('objectId is not valid');
         this.sendAction(
             'destroy-object',
             {
@@ -94,6 +101,7 @@ class Endymion{
                                 rotation:rotation, 
                                 scale:scale
                             ):void=>{
+        if(objectId < 0) throw new Error('objectId is not valid');
         this.sendAction(
             'create-primitive',
             {
@@ -114,6 +122,8 @@ class Endymion{
      * @returns void
      */
     public importGltf = (objectId: number, source:string):void=>{
+        if(objectId < 0) throw new Error('objectId is not valid');
+        if(source == undefined || source == null || typeof source !== 'string' || source.length == 0) throw new Error('source is not defined');
         var action = this.sendAction(
             'import-gltf',
             {
@@ -161,6 +171,21 @@ class Endymion{
      * @returns void
      */
     public setColor = (objectId:number, color:Color):void=>{
+        if(objectId < 0) throw new Error('objectId is not valid');
+        if(color.r < 0) throw new Error('r color value is not valid');
+        if(color.g < 0) throw new Error('g color value is not valid');
+        if(color.b < 0) throw new Error('b color value is not valid');
+        if(color.a < 0) throw new Error('a color value is not valid');
+
+        if(color.r > 255) throw new Error('r color value must be minor or equal to 255');
+        if(color.g > 255) throw new Error('g color value must be minor or equal to 255');
+        if(color.b > 255) throw new Error('b color value must be minor or equal to 255');
+        if(color.a > 1) throw new Error('a color value must be minor or equal to 1');
+
+        if(!isInt(color.r)) throw new Error('r color value must be an integer');
+        if(!isInt(color.g)) throw new Error('g color value must be an integer');
+        if(!isInt(color.b)) throw new Error('b color value must be an integer');
+
         this.sendAction(
             'set-color',
             {
@@ -186,6 +211,16 @@ class Endymion{
         );
     }
 }
+
+function isInt(value: string | number) {
+    var x;
+    if (isNaN(value as number)) {
+      return false;
+    }
+    x = parseFloat(value as string);
+    return (x | 0) === x;
+}
+
 export  { Endymion };
 
 
