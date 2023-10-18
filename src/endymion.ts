@@ -10,7 +10,7 @@ class Endymion {
     objectId = 0;
     constructor(commInterface: string = 'vuplex', w:Window = window){
         this.window = w;
-        this.communicationInterface = (this.window as any)["commInterface"];
+        this.communicationInterface = (this.window as any)[commInterface];
 
         if (this.communicationInterface == undefined 
             || this.communicationInterface ==='' 

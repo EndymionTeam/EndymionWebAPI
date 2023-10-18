@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "ES6",
+    "target": "ES2022",
     "module": "CommonJS",
     "declaration": true,
     "removeComments": true,
@@ -14,7 +14,7 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "lib": [
-      "es2016",
+      "ES2022",
       "dom",
     ]
   },

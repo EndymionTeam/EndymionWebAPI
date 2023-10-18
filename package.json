@@ -13,12 +13,12 @@
     "setup": "npm install",
     "build": "tsc",
     "watch": "tsc --watch",
-    "test-console": "mocha --require ts-node/register test/**/*.spec.ts",
+    "test-console": "npm run build && mocha --require ts-node/register test/**/*.spec.ts",
     "test-only": "mocha --require ts-node/register test/**/*.spec.ts --reporter mocha-junit-reporter",
     "pretest": "npm run build",
     "test": "npm run test-only",
     "typedoc": "typedoc src/endymion.ts --out ./docs",
-    "publish": "npm publish --folder lib --registry https://npm.pegasopr.com/"
+    "publish": "npm publish --folder lib --registry https://npm.endymion.tech/"
   },
   "keywords": [
     "augmented",
