@@ -1,8 +1,8 @@
-import { Endymion } from '../endymion';
-import { Color } from '../endymion.types';
+import { EndymionApi } from '../endymion-api/endymion-api';
+import { Color } from '../endymion-api/endymion-api.types';
 import { checkValueForColor } from '../utils/color-utils';
 class ACube extends HTMLElement{
-    endy:Endymion = new Endymion();
+    endy:EndymionApi = new EndymionApi();
     objectId:number = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
     debugBox!:HTMLDivElement;
 
@@ -27,7 +27,7 @@ class ACube extends HTMLElement{
                 } 
                 break;
             case 'position':
-                    
+
                 break;
             case 'rotation':
 

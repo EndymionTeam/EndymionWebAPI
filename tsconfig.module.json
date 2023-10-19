@@ -4,9 +4,9 @@
     "emitDecoratorMetadata": true,
     "target": "ES2022",
     "module": "CommonJS",
-    "declaration": false,
+    "declaration": true,
     "removeComments": true,
-    "outDir": "./lib",
+    "outDir": "./lib/modules",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -19,7 +19,9 @@
     ]
   },
    "files": [
-      "src/endymion.ts"
+      "src/endymion.ts",
+      "src/endymion-api/endymion-api.ts",
+      "src/tags/a-cube.element.ts"
     ],
   "exclude":[
     "./test/**/*.spec.ts"
