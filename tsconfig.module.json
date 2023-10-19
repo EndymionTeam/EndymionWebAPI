@@ -20,7 +20,7 @@
   },
    "files": [
       "src/endymion.ts",
-      "src/endymion-api/endymion-api.ts",
+      "src/endymion/endymion-api.ts",
       "src/tags/a-cube.element.ts"
     ],
   "exclude":[

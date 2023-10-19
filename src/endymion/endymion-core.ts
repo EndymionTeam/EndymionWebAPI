@@ -1,13 +1,17 @@
 
 import { Subject } from 'rxjs';
-import { primitive, position, rotation, scale, TransformType, TransformGreatness, Color, actionName, action } from './endymion-api.types';
+import { Primitive, Position, Rotation, Scale, TransformType, TransformGreatness, Color, ActionName, action } from './endymion.types';
 
-class EndymionApi {
+class EndymionCore {
     communicationInterface:any;
     window:Window
     messageIn = new Subject();
     messageIn$ = this.messageIn.asObservable();
     objectId = 0;
+    defaultPosition:Position = {x:0, y:0, z:0};
+    defaultRotation:Rotation = {x:0, y:0, z:0};
+    defaultScale:Scale = {x:1, y:1, z:1};
+    defaultColor:Color = {r:255, g:255, b:255, a:1};
     constructor(commInterface: string = 'vuplex', w:Window = window){
         this.window = w;
         this.communicationInterface = (this.window as any)[commInterface];
@@ -34,7 +38,7 @@ class EndymionApi {
      * @param actPayload Definition of asset to create
      * @returns action object
      */
-    public createAction = (actName:actionName, actPayload:any):action =>{
+    public createAction = (actName:ActionName, actPayload:any):action =>{
         if(actName == undefined || actName == null) throw new Error('actName is not defined');
         if(actPayload == undefined || actPayload == null) throw new Error('actPayload is not defined');
         var act = {
@@ -51,7 +55,7 @@ class EndymionApi {
      * @param payload Definition of action
      * @returns void
      */
-    public sendAction = (name:actionName, payload:any):void=>{
+    public sendAction = (name:ActionName, payload:any):void=>{
         if(name == undefined || name == null) throw new Error('name is not defined');
         if(payload == undefined || payload == null) throw new Error('payload is not defined');
         let jsonAction = this.createAction(name, payload);
@@ -96,10 +100,10 @@ class EndymionApi {
      * @param scale typeof scale
      */
     public createObject =   (   objectId:number, 
-                                primitive:primitive, 
-                                position:position, 
-                                rotation:rotation, 
-                                scale:scale
+                                primitive:Primitive, 
+                                position:Position, 
+                                rotation:Rotation, 
+                                scale:Scale
                             ):void=>{
         if(objectId < 0) throw new Error('objectId is not valid');
         this.sendAction(
@@ -148,7 +152,7 @@ class EndymionApi {
     public updateTransform = (objectId: number, 
                         type: TransformType,
                         greatness: TransformGreatness, 
-                        value: position|rotation|scale):{objectId:number, action:any} => {
+                        value: Position|Rotation|Scale):{objectId:number, action:any} => {
 
         let request = { id:objectId, type: type };
         if(greatness === 'position') (request as any)['position'] = value;
@@ -199,6 +203,7 @@ class EndymionApi {
             }
         );
     }
+    
     /**
      * play haptics on device       
      * 
@@ -221,7 +226,7 @@ function isInt(value: string | number) {
     return (x | 0) === x;
 }
 
-export  { EndymionApi };
+export  { EndymionCore };
 
 
 

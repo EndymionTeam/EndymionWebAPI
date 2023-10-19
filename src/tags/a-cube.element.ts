@@ -1,8 +1,8 @@
-import { EndymionApi } from '../endymion-api/endymion-api';
-import { Color } from '../endymion-api/endymion-api.types';
+import { EndymionCore } from '../endymion/endymion-core';
+import { Color } from '../endymion/endymion.types';
 import { checkValueForColor } from '../utils/color-utils';
 class ACube extends HTMLElement{
-    endy:EndymionApi = new EndymionApi();
+    endy:EndymionCore = new EndymionCore();
     objectId:number = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
     debugBox!:HTMLDivElement;
 
