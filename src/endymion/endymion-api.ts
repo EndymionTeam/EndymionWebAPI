@@ -86,8 +86,8 @@ export class EndymionApi{
 
     public apply = (): EntityMap => {
         this.entity = this.mapEntity(this);
-        this.core.sendAction('destroy-object',{id:this.entity.id});
-        this.core.sendAction('create-primitive',this.entity);
+        this.core.sendAction('destroy-object',{ id:this.entity.id });
+        this.core.sendAction('create-primitive', this.entity);
         this.core.setColor(this.entity.id, this.color);
         return {...this.entity, color:this.color};
     }
@@ -127,6 +127,7 @@ export class EndymionApi{
             this.objectId = entity.id;
             var entityMap = this.renderedEntities.get(entity.id);
             if(entityMap){
+                this.primitive = entityMap.primitive;
                 this.position = entityMap.position;
                 this.rotation = entityMap.rotation;
                 this.scale = entityMap.scale;
