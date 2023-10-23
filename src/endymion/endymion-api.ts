@@ -1,5 +1,7 @@
 import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap } from './endymion.types';
 import { EndymionCore } from './endymion-core';
+import { hexToRGB } from '../utils/color-utils';
+import { rgba, rgb } from '../utils/color-utils';
 export class EndymionApi{
     objectId: number = 0;
     primitive!: Primitive;
@@ -70,8 +72,29 @@ export class EndymionApi{
         this.scale.z = z;
         return this;
     }
-    public setColor = (color:Color):EndymionApi => {
-        this.color = color;
+    public setColor = (color:Color | string):EndymionApi => {
+        if(typeof color === 'string'){
+            if(color.includes('#')){
+                this.color = hexToRGB(color) as Color;
+            }
+            if(color.includes('rgb')){
+                const rgb = color.replace('rgb(','').replace(')','').split(',');
+                this.color = {r:parseInt(rgb[0]), g:parseInt(rgb[1]), b:parseInt(rgb[2]), a:1};
+            }
+            if(color.includes('rgba')){
+                const rgb = color.replace('rgba(','').replace(')','').split(',');
+                this.color = {r:parseInt(rgb[0]), g:parseInt(rgb[1]), b:parseInt(rgb[2]), a:parseFloat(rgb[3])};
+            }
+        }
+        if(typeof color === 'object' 
+                && color !== null 
+                && color !== undefined 
+                && color.hasOwnProperty('r') 
+                && color.hasOwnProperty('g') 
+                && color.hasOwnProperty('b') 
+                && color.hasOwnProperty('a')){
+            this.color = color;
+        }
         return this;
     }
 
@@ -149,3 +172,4 @@ export class EndymionApi{
     }
 
 }
+export { rgba, rgb };

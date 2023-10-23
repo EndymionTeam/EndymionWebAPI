@@ -307,3 +307,11 @@ export const namedColor = ():Map<string, string>=>{
     m.set('COPPER',  '#B87333');
     return m;
 }
+export function rgba(r:number, g:number, b:number, a:number){
+    if(r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 1) return {r:0, g:0, b:0, a:1};
+    return { r, g, b, a };
+}
+export function rgb(r:number, g:number, b:number){
+    if(r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) return {r:0, g:0, b:0, a:1};
+    return { r, g, b, a:1 };
+}
