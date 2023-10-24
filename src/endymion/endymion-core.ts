@@ -215,6 +215,24 @@ class EndymionCore {
             {}
         );
     }
+    /**
+     * play animation on object       
+     * 
+     * @param objectId 
+     * @param animationName 
+     * @returns void
+     */
+    public playAnimation = (objectId:number, index:number, animationName:string):void=>{
+        this.sendAction(
+            'play-anim',
+            {
+                id: objectId,
+                index: index,
+                //name: animationName
+            }
+        );
+       
+    }
 }
 
 function isInt(value: string | number) {

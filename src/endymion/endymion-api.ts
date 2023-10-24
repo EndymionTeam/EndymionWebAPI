@@ -12,7 +12,11 @@ export class EndymionApi{
     core!: EndymionCore;
     entity!: Entity;
     url!: string;
+    animation:boolean = false;
+    index:number = 0;
+    animationName:string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
+
     constructor(){
         this.primitive = 'cube';
         this.position = {x:0, y:0, z:0};
@@ -196,6 +200,10 @@ export class EndymionApi{
         if(this.primitive === 'gltf'){
             this.core.importGltf(this.objectId, this.url);
             this.core.sendAction('update-transform', this.entity);
+            if(this.animation){
+                this.core.playAnimation(this.objectId, this.index, this.animationName);
+                this.animation = false;
+            }
         }else{
             this.core.sendAction('create-primitive',this.entity);
             this.core.setColor(this.entity.id, this.color);
@@ -210,8 +218,16 @@ export class EndymionApi{
      */
     public apply = (): EntityMap => {
         this.entity = this.mapEntity(this);
-        this.core.sendAction('update-transform', this.entity);
-        this.core.setColor(this.entity.id, this.color);
+        if(this.primitive === 'gltf'){
+            this.core.sendAction('update-transform', this.entity);
+            if(this.animation){
+                this.core.playAnimation(this.objectId, this.index, this.animationName);
+                this.animation = false;
+            }
+        }else{
+            this.core.sendAction('update-transform', this.entity);
+            this.core.setColor(this.entity.id, this.color);
+        }
         return {...this.entity, color:this.color};
     }
 
@@ -289,12 +305,28 @@ export class EndymionApi{
         return this;
     }
     
+    /**
+     * Loads an asset from the specified URL.
+     * @param url The URL of the asset to load.
+     * @returns The EndymionApi instance.
+     */
     public loadAsset = (url:string):EndymionApi => {
         this.primitive = 'gltf';
         this.url = url;
         return this;
     }
 
+    /**
+     * Plays the animation for the current object.
+     * @returns void
+     */
+    public play = (index:number, name:string):EndymionApi => {
+        this.animation = true;
+        this.index = index;
+        this.animationName = name;
+        return this;
+    }
+    
     private mapEntity = (config:EndymionApi): Entity=> {
         return {
             id: config.objectId,
