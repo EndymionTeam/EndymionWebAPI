@@ -195,6 +195,7 @@ export class EndymionApi{
         this.entity = this.mapEntity(this);
         if(this.primitive === 'gltf'){
             this.core.importGltf(this.objectId, this.url);
+            this.core.sendAction('update-transform', this.entity);
         }else{
             this.core.sendAction('create-primitive',this.entity);
             this.core.setColor(this.entity.id, this.color);
