@@ -20,58 +20,128 @@ export class EndymionApi{
         this.color = {r:255, g:255, b:255, a:1};
         this.core = new EndymionCore();
     }
+    /**
+     * Sets the primitive of the EndymionApi instance.
+     * @param primitive - The primitive to set.
+     * @returns The updated EndymionApi instance.
+     */
     public setPrimitive = (primitive:Primitive):EndymionApi => {
         this.primitive = primitive;
         return this;
     }
+    /**
+     * Sets the position of the EndymionApi instance.
+     * @param position - The new position to set.
+     * @returns The updated EndymionApi instance.
+     */
     public setPosition = (position:Position):EndymionApi => {
         this.position = position;
         return this;
     }
-    public setPosX= (x:number):EndymionApi => {
+    /**
+     * Sets the x-coordinate of the position of the EndymionApi object.
+     * @param x - The new x-coordinate value.
+     * @returns The updated EndymionApi object.
+     */
+    public setPosX = (x:number):EndymionApi => {
         this.position.x = x;
         return this;
     }
-    public setPosY= (y:number):EndymionApi => {
+    /**
+     * Sets the y-coordinate of the position of the EndymionApi object.
+     * @param y - The new y-coordinate value.
+     * @returns The updated EndymionApi object.
+     */
+    public setPosY = (y:number):EndymionApi => {
         this.position.y = y;
         return this;
     }
-    public setPosZ= (z:number):EndymionApi => {
+    /**
+     * Sets the z position of the EndymionApi object.
+     * @param z - The new z position value.
+     * @returns The updated EndymionApi object.
+     */
+    public setPosZ = (z:number):EndymionApi => {
         this.position.z = z;
         return this;
     }
+    /**
+     * Sets the rotation of the EndymionApi instance.
+     * @param rotation The rotation to set.
+     * @returns The updated EndymionApi instance.
+     */
     public setRotation = (rotation:Rotation):EndymionApi => {
         this.rotation = rotation;
         return this;
     }
-    public setRotX= (x:number):EndymionApi => {
+    /**
+     * Sets the rotation value of the x-axis.
+     * @param x - The value to set the x-axis rotation to.
+     * @returns The updated EndymionApi instance.
+     */
+    public setRotX = (x:number):EndymionApi => {
         this.rotation.x = x;
         return this;
     }
-    public setRotY= (y:number):EndymionApi => {
+    /**
+     * Sets the rotation of the EndymionApi object around the y-axis.
+     * @param y The new rotation value in radians.
+     * @returns The updated EndymionApi object.
+     */
+    public setRotY = (y:number):EndymionApi => {
         this.rotation.y = y;
         return this;
     }
-    public setRotZ= (z:number):EndymionApi => {
+    /**
+     * Sets the rotation around the z-axis of the EndymionApi object.
+     * @param z - The rotation value in radians.
+     * @returns The updated EndymionApi object.
+     */
+    public setRotZ = (z:number):EndymionApi => {
         this.rotation.z = z;
         return this;
     }   
+    /**
+     * Sets the scale of the EndymionApi instance.
+     * @param scale The scale to set.
+     * @returns The updated EndymionApi instance.
+     */
     public setScale = (scale:Scale):EndymionApi => {
         this.scale = scale;
         return this;
     }
-    public setScaleX= (x:number):EndymionApi => {
+    /**
+     * Sets the scale of the EndymionApi instance along the x-axis.
+     * @param x - The new scale value for the x-axis.
+     * @returns The updated EndymionApi instance.
+     */
+    public setScaleX = (x:number):EndymionApi => {
         this.scale.x = x;
         return this;
     }
-    public setScaleY= (y:number):EndymionApi => {
+    /**
+     * Sets the scale of the object along the y-axis.
+     * @param y - The new scale value for the y-axis.
+     * @returns The updated EndymionApi object.
+     */
+    public setScaleY = (y:number):EndymionApi => {
         this.scale.y = y;
         return this;
     }
-    public setScaleZ= (z:number):EndymionApi => {
+    /**
+     * Sets the z scale of the EndymionApi object.
+     * @param z - The z scale value to set.
+     * @returns The updated EndymionApi object.
+     */
+    public setScaleZ = (z:number):EndymionApi => {
         this.scale.z = z;
         return this;
     }
+    /**
+     * Sets the color of the EndymionApi object.
+     * @param color - The color to set. Can be a Color object or a string in the format of a hex, rgb, or rgba value.
+     * @returns The updated EndymionApi object.
+     */
     public setColor = (color:Color | string):EndymionApi => {
         if(typeof color === 'string'){
             if(color.includes('#')){
@@ -98,6 +168,22 @@ export class EndymionApi{
         return this;
     }
 
+    /**
+     * Sets the opacity of the EndymionApi object.
+     * @param opacity - A number between 0 and 1 representing the opacity value.
+     * @returns The updated EndymionApi object.
+     * @throws An error if the opacity value is not between 0 and 1.
+     */
+    public setOpacity = (opacity:number):EndymionApi => {
+        if(opacity <0 || opacity > 1) throw new Error('Opacity must be between 0 and 1');
+        this.color.a = opacity;
+        return this;
+    }
+
+    /**
+     * Renders an entity and returns an EntityMap object.
+     * @returns {EntityMap} The rendered entity as an EntityMap object.
+     */
     public render = (): EntityMap => {
         this.objectId += 1;
         this.entity = this.mapEntity(this);
@@ -107,6 +193,10 @@ export class EndymionApi{
         return {...this.entity, color:this.color};
     }
 
+    /**
+     * Applies the changes made to the entity and returns the updated entity map.
+     * @returns The updated entity map with the new color.
+     */
     public apply = (): EntityMap => {
         this.entity = this.mapEntity(this);
         this.core.sendAction('destroy-object',{ id:this.entity.id });
@@ -115,36 +205,65 @@ export class EndymionApi{
         return {...this.entity, color:this.color};
     }
 
+    /**
+     * Sets the primitive to 'cube'.
+     * @returns The EndymionApi instance.
+     */
     public cube = (): EndymionApi => {
         this.primitive = 'cube';
         return this;
     }
 
+    /**
+     * Sets the primitive to 'sphere' for the EndymionApi instance.
+     * @returns The updated EndymionApi instance.
+     */
     public sphere = (): EndymionApi => {
         this.primitive = 'sphere';
         return this;
     }
 
+    /**
+     * Sets the primitive to 'cylinder'.
+     * @returns The EndymionApi instance.
+     */
     public cylinder = (): EndymionApi => {
         this.primitive = 'cylinder';
         return this;
     }
 
+    /**
+     * Sets the primitive to 'capsule' and returns the EndymionApi instance.
+     * @returns {EndymionApi} The EndymionApi instance.
+     */
     public capsule = (): EndymionApi => {
         this.primitive = 'capsule';
         return this;
     }
 
+    /**
+     * Sets the primitive to 'plane' for the EndymionApi instance.
+     * @returns The updated EndymionApi instance.
+     */
     public plane = (): EndymionApi => {
         this.primitive = 'plane';
         return this;
     }
 
+    /**
+     * Sets the primitive type to 'quad'.
+     * @returns The EndymionApi instance.
+     */
     public quad = (): EndymionApi => {
         this.primitive = 'quad';
         return this;
     }
 
+    /**
+     * Sets the properties of the EndymionApi instance based on the provided entity.
+     * @param entity - The entity to set the properties from.
+     * @returns The updated EndymionApi instance.
+     */
     public with = (entity:EntityMap): EndymionApi => {
         if(entity !== undefined){
             this.objectId = entity.id;
