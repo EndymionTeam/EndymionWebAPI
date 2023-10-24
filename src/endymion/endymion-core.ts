@@ -128,13 +128,13 @@ class EndymionCore {
     public importGltf = (objectId: number, source:string):void=>{
         if(objectId < 0) throw new Error('objectId is not valid');
         if(source == undefined || source == null || typeof source !== 'string' || source.length == 0) throw new Error('source is not defined');
-        var action = this.sendAction(
+        this.sendAction(
             'import-gltf',
             {
                 id: objectId,
                 url: source
             }
-        );
+        ); 
     }
 
     /**

@@ -1,6 +1,6 @@
 import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap } from './endymion.types';
 import { EndymionCore } from './endymion-core';
-import { hexToRGB } from '../utils/color-utils';
+import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
 export class EndymionApi{
     objectId: number = 0;
@@ -11,6 +11,7 @@ export class EndymionApi{
     color!: Color;
     core!: EndymionCore;
     entity!: Entity;
+    url!: string;
     renderedEntities: Map<number, EntityMap> = new Map();
     constructor(){
         this.primitive = 'cube';
@@ -19,6 +20,7 @@ export class EndymionApi{
         this.scale = {x:1, y:1, z:1};
         this.color = {r:255, g:255, b:255, a:1};
         this.core = new EndymionCore();
+        this.url = '';
     }
     /**
      * Sets the primitive of the EndymionApi instance.
@@ -155,6 +157,10 @@ export class EndymionApi{
                 const rgb = color.replace('rgba(','').replace(')','').split(',');
                 this.color = {r:parseInt(rgb[0]), g:parseInt(rgb[1]), b:parseInt(rgb[2]), a:parseFloat(rgb[3])};
             }
+            if(namedColor().has(color.toUpperCase())){
+                var hexColor = namedColor().get(color.toUpperCase()) as string;
+                this.color = hexToRGB(hexColor) as Color;
+            }
         }
         if(typeof color === 'object' 
                 && color !== null 
@@ -187,9 +193,13 @@ export class EndymionApi{
     public render = (): EntityMap => {
         this.objectId += 1;
         this.entity = this.mapEntity(this);
-        this.core.sendAction('create-primitive',this.entity);
-        this.core.setColor(this.entity.id, this.color);
-        this.renderedEntities.set(this.entity.id, {...this.entity, color:this.color});
+        if(this.primitive === 'gltf'){
+            this.core.importGltf(this.objectId, this.url);
+        }else{
+            this.core.sendAction('create-primitive',this.entity);
+            this.core.setColor(this.entity.id, this.color);
+        }
+        this.renderedEntities.set(this.entity.id, {...this.entity, color:this.color, url:this.url});
         return {...this.entity, color:this.color};
     }
 
@@ -199,8 +209,7 @@ export class EndymionApi{
      */
     public apply = (): EntityMap => {
         this.entity = this.mapEntity(this);
-        this.core.sendAction('destroy-object',{ id:this.entity.id });
-        this.core.sendAction('create-primitive', this.entity);
+        this.core.sendAction('update-transform', this.entity);
         this.core.setColor(this.entity.id, this.color);
         return {...this.entity, color:this.color};
     }
@@ -279,6 +288,11 @@ export class EndymionApi{
         return this;
     }
     
+    public loadAsset = (url:string):EndymionApi => {
+        this.primitive = 'gltf';
+        this.url = url;
+        return this;
+    }
 
     private mapEntity = (config:EndymionApi): Entity=> {
         return {
