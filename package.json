@@ -1,6 +1,6 @@
 {
   "name": "endymion",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Endymion library for augmented reality",
   "main": "./lib/endymion.js",
   "types": "./lib/endymion.d.ts",
@@ -14,8 +14,8 @@
     "build:compiled": "npx webpack --config webpack.config.js",
     "build": "tsc --project tsconfig.module.json",
     "watch": "tsc --project tsconfig.module.json --watch",
-    "test": "npm run build && mocha --require ts-node/register test/**/*.spec.ts",
-    "test:ci": "mocha --require ts-node/register test/**/*.spec.ts --reporter mocha-junit-reporter",
+    "test": "npm run build && mocha --require ts-node/register src/**/*.spec.ts",
+    "test:ci": "mocha --require ts-node/register src/**/*.spec.ts --reporter mocha-junit-reporter",
     "doc": "typedoc src/endymion.ts --out ./docs",
     "publish": "npm publish --registry https://npm.endymion.tech/"
   },

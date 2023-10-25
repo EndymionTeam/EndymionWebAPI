@@ -2,9 +2,9 @@ import { EndymionCore } from '../endymion/endymion-core';
 import { Color } from '../endymion/endymion.types';
 import { checkValueForColor } from '../utils/color-utils';
 class ACube extends HTMLElement{
+    
     endy:EndymionCore = new EndymionCore();
     objectId:number = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
-    debugBox!:HTMLDivElement;
 
     static observedAttributes = ["color"];
 
@@ -13,7 +13,6 @@ class ACube extends HTMLElement{
     }
 
     connectedCallback(){
-        this.debugBox = this.crateDebugBox();
         this.endy.createObject(this.objectId, 'cube', {x: 0, y: 0, z: 0}, {x: 45, y: 45, z: 45}, {x: 1, y: 1, z: 1});
         this.renderPresets();
     }
@@ -60,27 +59,6 @@ class ACube extends HTMLElement{
     private preset(property: 'color' | 'position' | 'rotation' | 'scale', value: any) {
         this.setAttribute(property, value);
     }
-    private crateDebugBox() {
-        var shadow = this.attachShadow({ mode: 'closed' });
-        var div = document.createElement('div');
-        div.style.width = '100%';
-        div.style.height = '300px';
-        div.style.backgroundColor = 'white';
-        div.style.border = '1px solid black';
-        div.style.overflow = 'scroll';
-        div.style.display = 'none';
-        div.style.marginTop = '300px';
-        shadow.appendChild(div);
-        return div;
-    }
-
-    private consoleLog(message: object) {
-        this.debugBox.innerHTML = JSON.stringify(message);
-        this.debugBox.style.display = 'block';
-        setTimeout(() => {
-            this.debugBox.style.display = 'none';
-        }, 7000);
-    }
-     
+    
 }
 export default ACube;

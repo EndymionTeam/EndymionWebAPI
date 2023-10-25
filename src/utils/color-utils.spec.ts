@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { checkValueForColor } from '../lib/modules/utils/color-utils';
+import { checkValueForColor } from '../../lib/modules/utils/color-utils';
 
 describe('color-utils', () => {
     describe('checkValueForColor', () => {

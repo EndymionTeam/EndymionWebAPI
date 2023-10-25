@@ -21,9 +21,10 @@
    "files": [
       "src/endymion.ts",
       "src/endymion/endymion-api.ts",
+      "src/endymion/endymion-core.ts",
       "src/tags/a-cube.element.ts"
     ],
   "exclude":[
-    "./test/**/*.spec.ts"
+    "./src/**/*.spec.ts"
   ]
 }

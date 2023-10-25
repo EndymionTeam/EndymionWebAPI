@@ -2,8 +2,8 @@ import  { EndymionApi, rgb, rgba }  from './endymion/endymion-api';
 import ACube from './tags/a-cube.element';
 import { GenerateSupporStyles, GenerateTransparentMeta } from './utils/dom-utils';
 import { EndymionDebug } from './utils/debug'
-GenerateSupporStyles();
-GenerateTransparentMeta();
+GenerateSupporStyles(document);
+GenerateTransparentMeta(document);
 
 customElements.define('a-cube', ACube);
 

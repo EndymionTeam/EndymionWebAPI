@@ -1,19 +1,19 @@
 import { assert, expect } from "chai";
-import { EndymionApi } from "../lib/modules/endymion-api/endymion-api";
+import { EndymionCore } from "../../lib/modules/endymion/endymion-core";
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 var sinon = require("sinon");
 
 let window = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`).window;
-let endymion:EndymionApi;
+let endymion:EndymionCore;
 let spyOnCreateAction:any;
 let spyOnSendAction:any;
 let stubP = { x: 0, y: 0, z: 0 };
 
-describe('Endymion', () => {
+describe('Endymion Core', () => {
     it('should create an instance', () => {
-        assert.isOk(new EndymionApi("vuplex", window));
-        endymion = new EndymionApi("vuplex", window);
+        assert.isOk(new EndymionCore("vuplex", window));
+        endymion = new EndymionCore("vuplex", window);
         spyOnCreateAction = sinon.spy(endymion, "createAction");
         spyOnSendAction = sinon.spy(endymion, "sendAction");
     });
@@ -24,7 +24,7 @@ describe('Endymion', () => {
         });
     
         it('should return an action', () => {
-            const endymion = new EndymionApi("vuplex", new JSDOM(`<!DOCTYPE html><p>Hello world</p>`).window);
+            const endymion = new EndymionCore("vuplex", new JSDOM(`<!DOCTYPE html><p>Hello world</p>`).window);
             let action = endymion.createAction("create-primitive", {
                 id: 1,
                 primitive: "cube",

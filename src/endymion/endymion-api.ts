@@ -2,7 +2,7 @@ import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap } from '
 import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
-import { getCurrentProtocol, getCurrentHost } from '../utils/nav-utils';
+import { Win } from '../utils/nav-utils';
 export class EndymionApi{
     objectId: number = 0;
     primitive!: Primitive;
@@ -17,14 +17,16 @@ export class EndymionApi{
     index:number = 0;
     animationName:string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
-    constructor(){
+    win:Win;
+    constructor(interf:string = 'vuplex', w:Window = window){
         this.primitive = 'cube';
         this.position = {x:0, y:0, z:0};
         this.rotation = {x:0, y:0, z:0};
         this.scale = {x:1, y:1, z:1};
         this.color = {r:255, g:255, b:255, a:1};
-        this.core = new EndymionCore();
+        this.core = new EndymionCore(interf, w);
         this.url = '';
+        this.win = new Win(w);
     }
     /**
      * Sets the primitive of the EndymionApi instance.
@@ -40,8 +42,16 @@ export class EndymionApi{
      * @param position - The new position to set.
      * @returns The updated EndymionApi instance.
      */
-    public setPosition = (position:Position):EndymionApi => {
-        this.position = position;
+    public setPosition = (x:Position | number, y:number = -100000, z:Number = -100000):EndymionApi => {
+        if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
+            if(y === -100000 && z === -100000){
+                this.position = {x:x, y:x, z:x};
+                return this;
+            }
+            this.position = {x, y, z};
+            return this;
+        }
+        this.position = x as Position;
         return this;
     }
     /**
@@ -76,8 +86,16 @@ export class EndymionApi{
      * @param rotation The rotation to set.
      * @returns The updated EndymionApi instance.
      */
-    public setRotation = (rotation:Rotation):EndymionApi => {
-        this.rotation = rotation;
+    public setRotation = (x:Rotation | number, y:number = -100000, z:number = -100000):EndymionApi => {
+        if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
+            if(y === -100000 && z === -100000){
+                this.rotation = {x:x, y:x, z:x};
+                return this;
+            }
+            this.rotation = {x, y, z};
+            return this;
+        }
+        this.rotation = x as Rotation;
         return this;
     }
     /**
@@ -112,8 +130,16 @@ export class EndymionApi{
      * @param scale The scale to set.
      * @returns The updated EndymionApi instance.
      */
-    public setScale = (scale:Scale):EndymionApi => {
-        this.scale = scale;
+    public setScale = (x:Scale | number, y:number = -1, z:number = -1):EndymionApi => {
+        if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
+            if(y === -1 && z === -1){
+                this.scale = {x:x, y:x, z:x};
+                return this;
+            }
+            this.scale = {x, y, z};
+            return this;
+        }
+        this.scale = x as Scale;
         return this;
     }
     /**
@@ -316,7 +342,7 @@ export class EndymionApi{
             this.url = url;
             return this;
         }
-        this.url = `${getCurrentProtocol()}//${getCurrentHost()}/${url}`
+        this.url = `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`
         return this;
     }
 
