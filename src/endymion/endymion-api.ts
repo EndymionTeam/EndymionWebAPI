@@ -37,10 +37,19 @@ export class EndymionApi{
         this.primitive = primitive;
         return this;
     }
+
     /**
-     * Sets the position of the EndymionApi instance.
-     * @param position - The new position to set.
-     * @returns The updated EndymionApi instance.
+     * Sets the position of the EndymionApi object.
+     * @param x - The x-coordinate of the position, or a Position object containing all three coordinates.
+     * @param y - The y-coordinate of the position. Defaults to -100000 if not provided.
+     * @param z - The z-coordinate of the position. Defaults to -100000 if not provided.
+     * @returns The updated EndymionApi object.
+     * 
+     * @example
+     * // Sets the position of the EndymionApi object to 1, 2, 3.
+     * endymion.setPosition(1, 2, 3);           set position to {x:1, y:2, z:3}
+     * endymion.setPosition({x:1, y:2, z:3});   set position to {x:1, y:2, z:3}
+     * endymion.setPosition(1);                 set position to {x:1, y:1, z:1}
      */
     public setPosition = (x:Position | number, y:number = -100000, z:Number = -100000):EndymionApi => {
         if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
@@ -81,10 +90,19 @@ export class EndymionApi{
         this.position.z = z;
         return this;
     }
+
     /**
-     * Sets the rotation of the EndymionApi instance.
-     * @param rotation The rotation to set.
-     * @returns The updated EndymionApi instance.
+     * Sets the rotation of the EndymionApi object.
+     * @param x - The x-axis rotation value or a Rotation object containing all three rotation values.
+     * @param y - The y-axis rotation value. Defaults to -100000 if not provided.
+     * @param z - The z-axis rotation value. Defaults to -100000 if not provided.
+     * @returns The updated EndymionApi object.
+     * 
+     * @example
+     * // Sets the rotation of the EndymionApi object to 1, 2, 3.
+     * endymion.setRotation(1, 2, 3);           set rotation to {x:1, y:2, z:3}
+     * endymion.setRotation({x:1, y:2, z:3});   set rotation to {x:1, y:2, z:3}
+     * endymion.setRotation(1);                 set rotation to {x:1, y:1, z:1}
      */
     public setRotation = (x:Rotation | number, y:number = -100000, z:number = -100000):EndymionApi => {
         if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
@@ -125,10 +143,19 @@ export class EndymionApi{
         this.rotation.z = z;
         return this;
     }   
+
     /**
-     * Sets the scale of the EndymionApi instance.
-     * @param scale The scale to set.
-     * @returns The updated EndymionApi instance.
+     * Sets the scale of the EndymionApi object.
+     * @param x - The x scale value or a Scale object.
+     * @param y - The y scale value. Optional if x is a Scale object.
+     * @param z - The z scale value. Optional if x is a Scale object.
+     * @returns The EndymionApi object.
+     * 
+     * @example
+     * // Sets the scale of the EndymionApi object to 1, 2, 3.
+     * endymion.setScale(1, 2, 3);           set scale to {x:1, y:2, z:3}
+     * endymion.setScale({x:1, y:2, z:3});   set scale to {x:1, y:2, z:3}
+     * endymion.setScale(1);                 set scale to {x:1, y:1, z:1}
      */
     public setScale = (x:Scale | number, y:number = -1, z:number = -1):EndymionApi => {
         if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
@@ -218,6 +245,7 @@ export class EndymionApi{
 
     /**
      * Renders an entity and returns an EntityMap object.
+     * it must be called after all other methods have been called.
      * @returns {EntityMap} The rendered entity as an EntityMap object.
      */
     public render = (): EntityMap => {
@@ -240,7 +268,8 @@ export class EndymionApi{
 
     /**
      * Applies the changes made to the entity and returns the updated entity map.
-     * @returns The updated entity map with the new color.
+     * * it must be called after all other methods have been called and on rendered entity.
+     * @returns {EntityMap} The updated entity map with the new color.
      */
     public apply = (): EntityMap => {
         this.entity = this.mapEntity(this);
