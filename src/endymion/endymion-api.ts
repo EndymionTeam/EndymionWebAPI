@@ -317,13 +317,14 @@ export class EndymionApi{
     }
 
     /**
-     * Plays the animation for the current object.
-     * @returns void
+     * Plays an animation on the specified entity.
+     * @param index The index of the animation to play.
+     * @returns The EndymionApi instance.
      */
-    public play = (index:number, name:string):EndymionApi => {
+    public playAnimation = (index:number):EndymionApi => {
         this.animation = true;
         this.index = index;
-        this.animationName = name;
+        this.animationName = "";
         return this;
     }
     
