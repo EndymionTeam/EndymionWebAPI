@@ -2,6 +2,7 @@ import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap } from '
 import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
+import { getCurrentProtocol, getCurrentHost } from '../utils/nav-utils';
 export class EndymionApi{
     objectId: number = 0;
     primitive!: Primitive;
@@ -16,7 +17,6 @@ export class EndymionApi{
     index:number = 0;
     animationName:string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
-
     constructor(){
         this.primitive = 'cube';
         this.position = {x:0, y:0, z:0};
@@ -312,7 +312,11 @@ export class EndymionApi{
      */
     public loadAsset = (url:string):EndymionApi => {
         this.primitive = 'gltf';
-        this.url = url;
+        if(url.includes('http')){
+            this.url = url;
+            return this;
+        }
+        this.url = `${getCurrentProtocol()}//${getCurrentHost()}/${url}`
         return this;
     }
 
@@ -337,6 +341,7 @@ export class EndymionApi{
             scale: config.scale
         } as Entity;
     }
+
 
 }
 export { rgba, rgb };
