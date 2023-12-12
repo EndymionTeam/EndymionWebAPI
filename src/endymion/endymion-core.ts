@@ -1,6 +1,7 @@
 
 import { Subject } from 'rxjs';
-import { Primitive, Position, Rotation, Scale, TransformType, TransformGreatness, Color, ActionName, action } from './endymion.types';
+import { Primitive, Position, Rotation, Scale, TransformType, 
+            TransformGreatness, Color, ActionName, action, message } from './endymion.types';
 
 class EndymionCore {
     communicationInterface:any;
@@ -30,6 +31,15 @@ class EndymionCore {
             this.messageIn.next(event.data);
         });
                
+    }
+
+    /**
+     * Send message to Endymion Browser Application
+     * @param message message to send of type message
+     * @returns objectId
+     */
+    public sendMessage = (message: message)=>{
+        this.communicationInterface.postMessage(message);
     }
     /**
      * Create action for request to Endymion Browser Application    

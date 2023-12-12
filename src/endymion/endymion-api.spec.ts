@@ -18,6 +18,15 @@ describe('Endymion Api', () => {
         assert.isOk(new EndymionApi('vuplex', fakeWindow));
     });
 
+    describe("sendMessage method", ()=>{
+        it('should call postMessage method', () => {
+            endymion = new EndymionApi('vuplex', fakeWindow);
+            spyOnCoreSendAction = sinon.spy(endymion.core, "sendMessage");
+            endymion.core.sendMessage({ origin: "test", data: { test:"test" }});
+            assert.isTrue(spyOnCoreSendAction.called);
+        });
+    });
+
     describe("render method", ()=>{
         it('should return an EntityMap object', () => {
             endymion = new EndymionApi('vuplex', fakeWindow);

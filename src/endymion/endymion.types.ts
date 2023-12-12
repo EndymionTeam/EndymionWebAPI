@@ -90,3 +90,12 @@ export interface action {
     name: ActionName,
     payload: any
 }
+
+/**
+ * Represents a message object with an origin and data.
+ * @typedef {origin:string, data:any} message
+ */
+export type message = {
+    origin: string,
+    data: any
+}

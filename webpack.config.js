@@ -1,4 +1,5 @@
 const path = require('path');
+const pkg = require('./package.json');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 var config = {
@@ -7,7 +8,7 @@ var config = {
     },
     output: {
         path: path.resolve(__dirname, 'compiled'),
-        filename: '[name].js'
+        filename: '[name].' + pkg.version + '.js'
     },
     plugins:[
       new CleanWebpackPlugin()

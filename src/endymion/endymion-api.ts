@@ -1,4 +1,4 @@
-import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap } from './endymion.types';
+import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap, message } from './endymion.types';
 import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
@@ -27,6 +27,14 @@ export class EndymionApi{
         this.core = new EndymionCore(interf, w);
         this.url = '';
         this.win = new Win(w);
+    }
+
+    /**
+     * Sends a message to the Endymion Browser Application.
+     * @param message - The message to send.
+     */
+    public sendMessage = (message: message) => {
+        this.core.sendMessage(message);
     }
     /**
      * Sets the primitive of the EndymionApi instance.
