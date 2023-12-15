@@ -3,6 +3,7 @@ import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
 import { Win } from '../utils/nav-utils';
+import { Observable } from 'rxjs';
 export class EndymionApi{
     objectId: number = 0;
     primitive!: Primitive;
@@ -35,6 +36,16 @@ export class EndymionApi{
      */
     public sendMessage = (message: message) => {
         this.core.sendMessage(message);
+    }
+
+    /**
+     * subscribe a message from Endymion Browser Application
+     * @param callback - callback function
+     * @param actPayload - Definition of asset to create.
+     * @returns The action object.
+     */
+    public onMessage = ():Observable<message> => {
+        return this.core.messageIn$ as Observable<message>;
     }
     /**
      * Sets the primitive of the EndymionApi instance.
