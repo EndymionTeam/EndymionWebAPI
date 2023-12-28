@@ -40,9 +40,6 @@ export class EndymionApi{
 
     /**
      * subscribe a message from Endymion Browser Application
-     * @param callback - callback function
-     * @param actPayload - Definition of asset to create.
-     * @returns The action object.
      */
     public onMessage = ():Observable<message> => {
         return this.core.messageIn$ as Observable<message>;
