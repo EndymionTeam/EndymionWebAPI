@@ -1,6 +1,6 @@
 {
   "name": "endymion",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Endymion library for augmented reality",
   "main": "./lib/endymion.js",
   "types": "./lib/endymion.d.ts",
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "setup": "npm install",
-    "build:compiled": "npx webpack --config webpack.config.js",
+    "build:cdn": "npx webpack --config webpack.config.js",
     "build": "tsc --project tsconfig.module.json",
     "watch": "tsc --project tsconfig.module.json --watch",
     "test": "npm run build && mocha --require ts-node/register src/**/*.spec.ts",

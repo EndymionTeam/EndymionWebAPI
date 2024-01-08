@@ -1,9 +1,9 @@
-import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap, message } from './endymion.types';
+import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap, message, webViewParent, webViewPayload } from './endymion.types';
 import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
 import { Win } from '../utils/nav-utils';
-import { Observable } from 'rxjs';
+import { EndymionIncomingWebApi } from './endymion-incoming-api';
 export class EndymionApi{
     objectId: number = 0;
     primitive!: Primitive;
@@ -12,6 +12,7 @@ export class EndymionApi{
     scale!: Scale;
     color!: Color;
     core!: EndymionCore;
+    incomingApi!: EndymionIncomingWebApi;
     entity!: Entity;
     url!: string;
     animation:boolean = false;
@@ -19,6 +20,8 @@ export class EndymionApi{
     animationName:string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
     win:Win;
+    webView:Map<string, webViewPayload> = new Map();
+    
     constructor(interf:string = 'vuplex', w:Window = window){
         this.primitive = 'cube';
         this.position = {x:0, y:0, z:0};
@@ -26,6 +29,7 @@ export class EndymionApi{
         this.scale = {x:1, y:1, z:1};
         this.color = {r:255, g:255, b:255, a:1};
         this.core = new EndymionCore(interf, w);
+        this.incomingApi = new EndymionIncomingWebApi(interf, w);
         this.url = '';
         this.win = new Win(w);
     }
@@ -37,12 +41,13 @@ export class EndymionApi{
     public sendMessage = (message: message) => {
         this.core.sendMessage(message);
     }
-
     /**
-     * subscribe a message from Endymion Browser Application
+     * Registers a message handler function for a specific handler name.
+     * @param handlerName - The name of the handler.
+     * @param handlerFunction - The function to be executed when a message with the specified handler name is received.
      */
-    public onMessage = ():Observable<message> => {
-        return this.core.messageIn$ as Observable<message>;
+    public onMessage = (handlerName:string, handlerFunction:Function):void => {
+        this.incomingApi.addHandler(handlerName, handlerFunction);
     }
     /**
      * Sets the primitive of the EndymionApi instance.
@@ -53,7 +58,6 @@ export class EndymionApi{
         this.primitive = primitive;
         return this;
     }
-
     /**
      * Sets the position of the EndymionApi object.
      * @param x - The x-coordinate of the position, or a Position object containing all three coordinates.
@@ -403,6 +407,37 @@ export class EndymionApi{
         return this;
     }
     
+    /**
+     * Creates a web view with the specified URL, ID, and parent.
+     * 
+     * @param url The URL of the web view.
+     * @param id The ID of the web view (optional).
+     * @param parent The parent of the web view (optional).
+     * @returns The ID of the created web view.
+     */
+    public createWebView = (url:string, id:string = '', parent:webViewParent = undefined):string => {
+        let { webViewId, webViewPayload } = this.core.createWebview({id:id, url:url, parent:parent} as webViewPayload);
+        this.webView.set(webViewId, webViewPayload);
+        return webViewId;
+    } 
+
+    /**
+     * Destroys a web view object with the specified ID.
+     * @param id The ID of the web view object to destroy.
+     */
+    public destroyWebView = (id:string):void => {
+        this.core.destroyObject(id);
+    }
+    /**
+     * Sets the active state of an actor.
+     * 
+     * @param id - The ID of the actor.
+     * @param activated - The desired active state of the actor.
+     */
+    public actorSetActive = (id:string, activated: boolean):void => {
+        this.core.actorSetActive({id:id, activated:activated});
+    }
+
     private mapEntity = (config:EndymionApi): Entity=> {
         return {
             id: config.objectId,

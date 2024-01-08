@@ -7,7 +7,7 @@ var config = {
         endymion:'./src/endymion.ts',
     },
     output: {
-        path: path.resolve(__dirname, 'compiled'),
+        path: path.resolve(__dirname, 'cdn'),
         filename: '[name].' + pkg.version + '.js'
     },
     plugins:[

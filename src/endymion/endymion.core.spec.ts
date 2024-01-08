@@ -74,12 +74,15 @@ describe('Endymion Core', () => {
     });
     
     describe("destroyObject Method", ()=>{
-        it('should throw error if object id is negative', () => {
-            assert.throws(()=>endymion.destroyObject(-1), Error, "objectId is not valid");
-        });
         it('should sendAction method called 1 time', () => {
             endymion.destroyObject(1);
             assert.isTrue(spyOnSendAction.called);
+        });
+    });
+    describe('destroyAll Method', ()=>{
+        it('should send action with action setted to "destroy-allobjects"', ()=>{
+            endymion.destroyAllObjects();
+            assert.isTrue(spyOnSendAction.calledWith("destroy-allobjects"));
         });
     });
     describe("createObject Method", ()=>{

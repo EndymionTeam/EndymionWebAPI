@@ -1,6 +1,6 @@
 import { assert, expect } from "chai";
 import { EndymionApi } from "../../lib/modules/endymion/endymion-api";
-import { EntityMap } from "../../lib/modules/endymion/endymion.types";
+import { EntityMap, webViewParent } from "../../lib/modules/endymion/endymion.types";
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 var sinon = require("sinon");
@@ -410,6 +410,59 @@ describe('Endymion Api', () => {
             assert.equal(actual.index, 2);
         });
     });
+    describe('destroyWebView Method', ()=>{
+        it('should send action with action setted to "destroy-object"', ()=>{
+            let spyOnCoreSendAction = sinon.spy(endymion.core, "sendAction");
+            endymion.destroyWebView('fakeId');
+            let actual = spyOnCoreSendAction.args[0][1];
+            assert.isTrue(spyOnCoreSendAction.calledWith("destroy-object"));
+            assert.equal(actual.id, 'fakeId');
+        });
+    });
 
+    describe("createWebView method", () => {
+        it("should create a web view and return its ID", () => {
+            const url = "https://example.com";
+            const id = "webview1";
+            const parent = { id: "parent1", transform: "p" } as webViewParent;
+    
+            const webViewId = endymion.createWebView(url, id, parent);
+    
+            assert.isString(webViewId);
+            assert.isNotEmpty(webViewId);
+    
+            const webViewPayload = endymion.webView.get(webViewId);
+            assert.isObject(webViewPayload);
+            assert.propertyVal(webViewPayload, "id", id);
+            assert.propertyVal(webViewPayload, "url", url);
+            assert.deepEqual(webViewPayload?.parent, parent);
+        });
+    
+        it("should create a web view with default ID if not provided", () => {
+            const url = "https://example.com";
+    
+            const webViewId = endymion.createWebView(url);
+    
+            assert.isString(webViewId);
+            assert.isNotEmpty(webViewId);
+    
+            const webViewPayload = endymion.webView.get(webViewId);
+            assert.isObject(webViewPayload);
+            assert.property(webViewPayload, "id");
+            assert.propertyVal(webViewPayload, "url", url);
+            assert.isUndefined(webViewPayload?.parent);
+        });
+    });
+    describe("actorSetActive method", () => {
+        it("should call core.actorSetActive method with correct parameters", () => {
+            let spyOnCoreActorSetActive = sinon.spy(endymion.core, "actorSetActive");
+            const id = "test-id";
+            const activated = true;
+            endymion.actorSetActive(id, activated);
+            let actualArgs = spyOnCoreActorSetActive.args[0][0]
+            assert.equal(actualArgs.id, id);
+            assert.equal(actualArgs.activated, activated);
 
+        });
+    });
 });

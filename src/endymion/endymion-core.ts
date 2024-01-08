@@ -1,13 +1,10 @@
 
-import { Subject } from 'rxjs';
 import { Primitive, Position, Rotation, Scale, TransformType, 
-            TransformGreatness, Color, ActionName, action, message } from './endymion.types';
+            TransformGreatness, Color, ActionName, action, message, webViewPayload, actorSetActivePayload } from './endymion.types';
 
 class EndymionCore {
     communicationInterface:any;
     window:Window
-    messageIn = new Subject();
-    messageIn$ = this.messageIn.asObservable();
     objectId = 0;
     defaultPosition:Position = {x:0, y:0, z:0};
     defaultRotation:Rotation = {x:0, y:0, z:0};
@@ -25,12 +22,7 @@ class EndymionCore {
                 this.communicationInterface.postMessage = (message:any) => {};
                 this.communicationInterface.addEventListener = (message:any) => {};
 
-            }
-
-        this.communicationInterface.addEventListener('message', (event:any)=>{
-            this.messageIn.next(event.data);
-        });
-               
+            }               
     }
 
     /**
@@ -90,8 +82,7 @@ class EndymionCore {
      * 
      * @param objectId 
      */
-    public destroyObject = (objectId:number)=>{
-        if(objectId < 0) throw new Error('objectId is not valid');
+    public destroyObject = (objectId:number | string)=>{
         this.sendAction(
             'destroy-object',
             {
@@ -99,6 +90,14 @@ class EndymionCore {
             }
         );
     }
+    /**
+     * Destroys all objects.
+     */
+    public destroyAllObjects(){ 
+			this.sendAction(
+                'destroy-allobjects', { }
+            );
+	}
     /**
      * Create primitive object in Endymion Browser Application      
      * It is a wrapper for sendAction configured for 'create-primitive'     
@@ -243,6 +242,30 @@ class EndymionCore {
         );
        
     }
+
+    /**
+     * Creates a webview with the specified payload.
+     * @param payload The payload for creating the webview.
+     */
+    /**
+     * Creates a webview with the given payload.
+     * @param payload The payload for creating the webview.
+     * @returns The ID of the created webview.
+     */
+    public createWebview = (payload: webViewPayload):{ webViewId:string, webViewPayload:webViewPayload }=>{
+        payload.id = payload.id == '' ? 'webview_' + this.objectId++ : payload.id;
+        this.sendAction('webview-create', payload);
+        return { webViewId: payload.id, webViewPayload: payload};
+    }
+
+    /**
+     * Sets the active actor.
+     * @param payload The payload containing the information about the actor to set as active.
+     */
+    public actorSetActive = (payload: actorSetActivePayload):void=>{
+        this.sendAction('actor-setactive', payload);
+    }
+        
 }
 
 function isInt(value: string | number) {

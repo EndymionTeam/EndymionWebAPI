@@ -44,7 +44,9 @@ export type Color = { r:number, g:number, b:number, a:number };
  * Represents the name of an action that can be performed in Endymion.
  * @typedef {'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf' | 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim'} ActionName
  */
-export type ActionName = 'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf' | 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim';
+export type ActionName = 'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf' 
+                        | 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects'
+                        | 'webview-create' | 'actor-setactive';
 
 /**
  * Represents an entity in the Endymion system.
@@ -98,4 +100,47 @@ export interface action {
 export type message = {
     origin: string,
     data: any
+}
+
+/**
+ * Represents the possible transformations for a webview parent.
+ * - 'p': Position transformation
+ * - 'r': Rotation transformation
+ * - 's': Scale transformation
+ * - 'pr': Position and rotation transformations
+ * - 'ps': Position and scale transformations
+ * - 'rs': Rotation and scale transformations
+ * - 'prs': Position, rotation, and scale transformations
+ */
+export type webviewParentTransform = 'p' | 'r' | 's' | 'pr' | 'ps' | 'rs' | 'prs';
+
+/**
+ * Represents the parent of a web view.
+ */
+export type webViewParent = { id:string, transform:webviewParentTransform } | undefined;
+
+/**
+ * Represents the payload for a web view.
+ */
+export type webViewPayload = {
+    /**
+     * The ID of the web view.
+     */
+    id: string,
+    /**
+     * The URL of the web view.
+     */
+    url: string,
+    /**
+     * The parent of the web view.
+     */
+    parent: webViewParent
+}
+
+/**
+ * Payload for setting the active state of an actor.
+ */
+export type actorSetActivePayload = {
+    id: string,
+    activated: boolean
 }
