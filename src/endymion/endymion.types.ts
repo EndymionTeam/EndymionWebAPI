@@ -117,7 +117,7 @@ export type webviewParentTransform = 'p' | 'r' | 's' | 'pr' | 'ps' | 'rs' | 'prs
 /**
  * Represents the parent of a web view.
  */
-export type webViewParent = { id:string, transform:webviewParentTransform } | undefined;
+export type webViewParent = { id:string, inherit_transform:webviewParentTransform } | undefined;
 
 /**
  * Represents the payload for a web view.
