@@ -46,7 +46,7 @@ export type Color = { r:number, g:number, b:number, a:number };
  */
 export type ActionName = 'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf' 
                         | 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects'
-                        | 'webview-create' | 'actor-setactive';
+                        | 'webview-create' | 'actor-setactive' | 'set-aimable';
 
 /**
  * Represents an entity in the Endymion system.

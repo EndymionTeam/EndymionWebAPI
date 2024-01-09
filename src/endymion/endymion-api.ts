@@ -438,6 +438,16 @@ export class EndymionApi{
         this.core.actorSetActive({id:id, activated:activated});
     }
 
+    /**
+     * Sets the aimable property of an object.
+     * @param id - The ID of the object.
+     * @param aimable - The aimable value to set.
+     * @param radius - The radius value (optional, default is 0.1).
+     */
+    public setAimable = (id:string, aimable:boolean, radius:number = 0.1):void => {
+        this.core.setAimable(id, aimable, radius);
+    }
+
     private mapEntity = (config:EndymionApi): Entity=> {
         return {
             id: config.objectId,

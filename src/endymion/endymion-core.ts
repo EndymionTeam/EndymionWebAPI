@@ -265,6 +265,16 @@ class EndymionCore {
     public actorSetActive = (payload: actorSetActivePayload):void=>{
         this.sendAction('actor-setactive', payload);
     }
+
+    /**
+     * Sets the aimable property of an object.
+     * @param objectId - The ID of the object.
+     * @param aimable - Whether the object is aimable or not.
+     * @param radius - The radius of the aimable area (optional, default value is 0.1).
+     */
+    public setAimable(objectId:string, aimable:boolean, radius:number = 0.1):void{
+        this.sendAction('set-aimable', { id: objectId, enabled: aimable, radius:radius});
+    }
         
 }
 
