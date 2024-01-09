@@ -273,7 +273,7 @@ class EndymionCore {
      * @param radius - The radius of the aimable area (optional, default value is 0.1).
      */
     public setAimable(objectId:string, aimable:boolean, radius:number = 0.1):void{
-        this.sendAction('set-aimable', { id: objectId, enabled: aimable, radius:radius});
+        this.sendAction('object-setaimable', { id: objectId, enabled: aimable, radius:radius});
     }
         
 }
