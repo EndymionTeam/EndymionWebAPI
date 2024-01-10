@@ -3,7 +3,7 @@
  * @typedef {('cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad')} Primitive
  * @memberof EndymionApi
  */
-export type Primitive = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf';
+export type Primitive = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview';
 
 /**
  * Represents a position in 3D space with x, y, and z coordinates.
@@ -83,6 +83,8 @@ export type EntityMap = {
     color: Color,
     /** The url of the gltf file to be imported. */
     url?: string    
+    /** detail of parent of webview */
+    parent?: webViewParent
 }
 /**
  * Represents an action object with a name and payload.

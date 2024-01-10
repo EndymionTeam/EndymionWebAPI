@@ -12,6 +12,7 @@ export class EndymionApi{
     scale!: Scale;
     color!: Color;
     core!: EndymionCore;
+    webViewParent!: webViewParent;
     incomingApi!: EndymionIncomingWebApi;
     entity!: Entity;
     url!: string;
@@ -20,7 +21,7 @@ export class EndymionApi{
     animationName:string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
     win:Win;
-    webView:Map<string, webViewPayload> = new Map();
+    webViewMap:Map<string, webViewPayload> = new Map();
     
     constructor(interf:string = 'vuplex', w:Window = window){
         this.primitive = 'cube';
@@ -278,12 +279,15 @@ export class EndymionApi{
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
             }
+        }else if(this.primitive === 'webview'){
+            this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
+            this.core.sendAction('update-transform', {scale:this.scale, id:this.objectId});
         }else{
             this.core.sendAction('create-primitive',this.entity);
             this.core.setColor(this.entity.id, this.color);
         }
-        this.renderedEntities.set(this.entity.id, {...this.entity, color:this.color, url:this.url});
-        return {...this.entity, color:this.color};
+        this.renderedEntities.set(this.entity.id, {...this.entity, color:this.color, url:this.url, parent:this.webViewParent});
+        return {...this.entity, color:this.color, parent:this.webViewParent };
     }
 
     /**
@@ -299,11 +303,14 @@ export class EndymionApi{
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
             }
+        }else if(this.primitive === 'webview'){
+            this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
+            this.core.sendAction('update-transform', this.entity);
         }else{
             this.core.sendAction('update-transform', this.entity);
             this.core.setColor(this.entity.id, this.color);
         }
-        return {...this.entity, color:this.color};
+        return {...this.entity, color:this.color, parent:this.webViewParent };
     }
 
     /**
@@ -407,8 +414,20 @@ export class EndymionApi{
         return this;
     }
     
+    public webView = (url:string):EndymionApi => {
+        this.primitive = 'webview';
+        this.url = url;
+        return this;
+    }
+
+    public setWebViewParent = (parent:webViewParent):EndymionApi => {
+        this.webViewParent = parent;
+        return this;
+    }
+
     /**
      * Creates a web view with the specified URL, ID, and parent.
+     * WILL BE REMOVED IN FAVOR OF CHAINABLE WEBVIEW METHOD
      * 
      * @param url The URL of the web view.
      * @param id The ID of the web view (optional).
@@ -417,7 +436,7 @@ export class EndymionApi{
      */
     public createWebView = (url:string, id:string = '', parent:webViewParent = undefined):string => {
         let { webViewId, webViewPayload } = this.core.createWebview({id:id, url:url, parent:parent} as webViewPayload);
-        this.webView.set(webViewId, webViewPayload);
+        this.webViewMap.set(webViewId, webViewPayload);
         return webViewId;
     } 
 

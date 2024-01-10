@@ -253,7 +253,6 @@ class EndymionCore {
      * @returns The ID of the created webview.
      */
     public createWebview = (payload: webViewPayload):{ webViewId:string, webViewPayload:webViewPayload }=>{
-        payload.id = payload.id == '' ? 'webview_' + this.objectId++ : payload.id;
         this.sendAction('webview-create', payload);
         return { webViewId: payload.id, webViewPayload: payload};
     }
