@@ -16,6 +16,9 @@ export class EndymionApi{
     incomingApi!: EndymionIncomingWebApi;
     entity!: Entity;
     url!: string;
+    statusActivated!: boolean;
+    target!: boolean;
+    radius!: number;
     animation:boolean = false;
     index:number = 0;
     animationName:string = '';
@@ -32,6 +35,9 @@ export class EndymionApi{
         this.core = new EndymionCore(interf, w);
         this.incomingApi = new EndymionIncomingWebApi(interf, w);
         this.url = '';
+        this.statusActivated = false;
+        this.target = false;
+        this.radius = 0.1;
         this.win = new Win(w);
     }
 
@@ -282,12 +288,14 @@ export class EndymionApi{
         }else if(this.primitive === 'webview'){
             this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
             this.core.sendAction('update-transform', {scale:this.scale, id:this.objectId});
+            this.core.actorSetActive({id:this.objectId.toString(), activated:this.statusActivated});
         }else{
             this.core.sendAction('create-primitive',this.entity);
             this.core.setColor(this.entity.id, this.color);
+            this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
         }
         this.renderedEntities.set(this.entity.id, {...this.entity, color:this.color, url:this.url, parent:this.webViewParent});
-        return {...this.entity, color:this.color, parent:this.webViewParent };
+        return {...this.entity, color:this.color, parent:this.webViewParent, actorActivated:this.statusActivated, target:this.target, radius:this.radius };
     }
 
     /**
@@ -306,11 +314,13 @@ export class EndymionApi{
         }else if(this.primitive === 'webview'){
             this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
             this.core.sendAction('update-transform', this.entity);
+            this.core.actorSetActive({id:this.objectId.toString(), activated:this.statusActivated});
         }else{
             this.core.sendAction('update-transform', this.entity);
             this.core.setColor(this.entity.id, this.color);
+            this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
         }
-        return {...this.entity, color:this.color, parent:this.webViewParent };
+        return {...this.entity, color:this.color, parent:this.webViewParent, actorActivated:this.statusActivated, target:this.target, radius:this.radius };
     }
 
     /**
@@ -382,6 +392,10 @@ export class EndymionApi{
                 this.rotation = entityMap.rotation;
                 this.scale = entityMap.scale;
                 this.color = entityMap.color;
+                this.webViewParent = entityMap.parent;
+                this.statusActivated = entityMap.actorActivated as boolean;
+                this.target = entityMap.target as boolean;
+                this.radius = entityMap.radius as number;
             }
         }
         return this;
@@ -426,26 +440,22 @@ export class EndymionApi{
     }
 
     /**
-     * Creates a web view with the specified URL, ID, and parent.
-     * WILL BE REMOVED IN FAVOR OF CHAINABLE WEBVIEW METHOD
-     * 
-     * @param url The URL of the web view.
-     * @param id The ID of the web view (optional).
-     * @param parent The parent of the web view (optional).
-     * @returns The ID of the created web view.
+     * Destroys the EndymionApi object.
+     * @returns The destroyed EndymionApi object.
      */
-    public createWebView = (url:string, id:string = '', parent:webViewParent = undefined):string => {
-        let { webViewId, webViewPayload } = this.core.createWebview({id:id, url:url, parent:parent} as webViewPayload);
-        this.webViewMap.set(webViewId, webViewPayload);
-        return webViewId;
-    } 
-
+    public destroy = ():EndymionApi => {
+        this.core.destroyObject(this.objectId.toString());
+        return this;
+    }
     /**
-     * Destroys a web view object with the specified ID.
-     * @param id The ID of the web view object to destroy.
+     * Destroys all objects in the Endymion API.
      */
-    public destroyWebView = (id:string):void => {
-        this.core.destroyObject(id);
+    public destroyAll = ():void => {
+        this.core.destroyAllObjects();
+    }
+    public actorSetStatus = (activated: boolean):EndymionApi=>{
+        this.statusActivated = activated;
+        return this;
     }
     /**
      * Sets the active state of an actor.
@@ -467,6 +477,24 @@ export class EndymionApi{
         this.core.setAimable(id, aimable, radius);
     }
 
+    /**
+     * Makes the object targetable.
+     * @param radius The radius of the targetable area.
+     * @returns The modified EndymionApi object.
+     */
+    public targetable = (radius:number = 0.1):EndymionApi => {
+        this.target = true;
+        this.radius = radius;
+        return this;
+    }
+    /**
+     * Makes the EndymionApi instance untargatable.
+     * @returns The modified EndymionApi instance.
+     */
+    public untargatable = ():EndymionApi => {
+        this.target = false;
+        return this;
+    }
     private mapEntity = (config:EndymionApi): Entity=> {
         return {
             id: config.objectId,

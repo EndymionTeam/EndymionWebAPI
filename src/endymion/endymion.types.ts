@@ -84,7 +84,13 @@ export type EntityMap = {
     /** The url of the gltf file to be imported. */
     url?: string    
     /** detail of parent of webview */
-    parent?: webViewParent
+    parent?: webViewParent,
+    /** detail of active state of actor */
+    actorActivated?: boolean,
+    /** detail of aimable state of object */
+    target?: boolean
+    /** radius of viewfinder */
+    radius?: number
 }
 /**
  * Represents an action object with a name and payload.
