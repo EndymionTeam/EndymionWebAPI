@@ -35,7 +35,7 @@ export class EndymionApi{
         this.core = new EndymionCore(interf, w);
         this.incomingApi = new EndymionIncomingWebApi(interf, w);
         this.url = '';
-        this.statusActivated = false;
+        this.statusActivated = true;
         this.target = false;
         this.radius = 0.1;
         this.win = new Win(w);
@@ -285,6 +285,9 @@ export class EndymionApi{
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
             }
+            if(this.target){
+                this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
+            }
         }else if(this.primitive === 'webview'){
             this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
             this.core.sendAction('update-transform', {scale:this.scale, id:this.objectId});
@@ -310,6 +313,9 @@ export class EndymionApi{
             if(this.animation){
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
+            }
+            if(this.target){
+                this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
             }
         }else if(this.primitive === 'webview'){
             this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
