@@ -25,6 +25,7 @@ export class EndymionApi{
     renderedEntities: Map<number, EntityMap> = new Map();
     win:Win;
     webViewMap:Map<string, webViewPayload> = new Map();
+    private filterCount:Map<string, number> = new Map();
     
     constructor(interf:string = 'vuplex', w:Window = window){
         this.primitive = 'cube';
@@ -55,6 +56,19 @@ export class EndymionApi{
      */
     public onMessage = (handlerName:string, handlerFunction:Function):void => {
         this.incomingApi.addHandler(handlerName, handlerFunction);
+    }
+
+    public on = (handlerName:string, handlerFunction:Function, skipEvent:boolean = false, skipCount:number = 0):EndymionApi => {
+        if(handlerName === 'target'){
+            this.target = true;
+            this.radius = 0.1;
+            this.incomingApi.addHandler(`object-onaim_${this.objectId}`, handlerFunction, skipEvent, skipCount);
+            return this;
+        }
+        this.target = true;
+        this.radius = 0.1;
+        this.incomingApi.addHandler(`${handlerName}_${this.objectId}`, handlerFunction, skipEvent, skipCount);
+        return this;
     }
     /**
      * Sets the primitive of the EndymionApi instance.
@@ -318,9 +332,10 @@ export class EndymionApi{
                 this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
             }
         }else if(this.primitive === 'webview'){
-            this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
             this.core.sendAction('update-transform', this.entity);
-            this.core.actorSetActive({id:this.objectId.toString(), activated:this.statusActivated});
+            if(this.statusActivated){
+                this.core.actorSetActive({id:this.objectId.toString(), activated:this.statusActivated});
+            }
         }else{
             this.core.sendAction('update-transform', this.entity);
             this.core.setColor(this.entity.id, this.color);

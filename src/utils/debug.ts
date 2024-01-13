@@ -24,11 +24,14 @@ export function EndymionDebug(id:string | undefined) {
 
 }
     
-export function consoleLog(message: object) {
+export function consoleLog(message: object, time: number = 20) {
     var debugBox = document.getElementById("debug-box") as HTMLDivElement;
-    debugBox.innerHTML = JSON.stringify(message);
+    var text = document.createTextNode(JSON.stringify(message));
+    var p = document.createElement('p');
+    p.appendChild(text);
+    debugBox.appendChild(p);
     debugBox.style.display = 'block';
     setTimeout(() => {
         debugBox.style.display = 'none';
-    }, 20000);
+    }, time*1000);
 }

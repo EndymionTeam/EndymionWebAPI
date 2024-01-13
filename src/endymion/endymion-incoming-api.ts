@@ -3,6 +3,7 @@ export class EndymionIncomingWebApi
     window:Window;
     handlers: Map<string, Function> = new Map();
     communicationInterface:any;
+    skipMap: Map<string, { skipCount:number, skipValue:number }> = new Map();
     constructor(commInterface: string = 'vuplex', w:Window = window){
         this.window = w;
         this.communicationInterface = (this.window as any)[commInterface];
@@ -24,13 +25,27 @@ export class EndymionIncomingWebApi
         
             if (!name || !payload) return;
             var handler = that.handlers.get(name);
-            if (!handler) return;
+            if (!handler) {
+                name = `${name}_${payload.id}`;
+                handler = that.handlers.get(name);
+                if(!handler) return;
+                var skip = that.skipMap.get(name);
+                if(skip !== undefined){
+                    if(skip.skipValue < skip.skipCount){
+                        skip.skipValue++;
+                        return;
+                    }
+                }
+            }
             handler(payload);
         });
     }
     
-    addHandler(name:string, funct:Function) 
+    addHandler(name:string, funct:Function, skipEvent:boolean = false, skipCount:number = 0) 
     {
         this.handlers.set(name, funct);
+        if(skipEvent){
+            this.skipMap.set(name, { skipCount:skipCount, skipValue:0 });
+        }
     }
 }
