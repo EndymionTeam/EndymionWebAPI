@@ -8,6 +8,7 @@ export function GenerateSupporStyles(doc: Document) {
         background-color: transparent!important;
         font-size: 48px;
       };`
+      style.id = 'endymion-background-style';
       doc.head.appendChild(style);
 }
 
@@ -19,4 +20,11 @@ export function GenerateTransparentMeta(doc: Document) {
     meta.setAttribute("name", "transparent");
     meta.setAttribute("content", "true");
     doc.head.appendChild(meta);
+}
+
+export function removeSupportStyle(){
+    const style = document.getElementById('endymion-background-style');
+    if(style !== null){
+        style.remove();
+    }
 }

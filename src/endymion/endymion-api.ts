@@ -4,7 +4,7 @@ import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
 import { Win } from '../utils/nav-utils';
 import { EndymionIncomingWebApi } from './endymion-incoming-api';
-export class EndymionApi{
+export class EndymionApi {
     objectId: number = 0;
     primitive!: Primitive;
     position!: Position;
@@ -19,20 +19,20 @@ export class EndymionApi{
     statusActivated!: boolean;
     target!: boolean;
     radius!: number;
-    animation:boolean = false;
-    index:number = 0;
-    animationName:string = '';
+    animation: boolean = false;
+    index: number = 0;
+    animationName: string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
-    win:Win;
-    webViewMap:Map<string, webViewPayload> = new Map();
-    private filterCount:Map<string, number> = new Map();
-    
-    constructor(interf:string = 'vuplex', w:Window = window){
+    win: Win;
+    webViewMap: Map<string, webViewPayload> = new Map();
+    private filterCount: Map<string, number> = new Map();
+
+    constructor(interf: string = 'vuplex', w: Window = window) {
         this.primitive = 'cube';
-        this.position = {x:0, y:0, z:0};
-        this.rotation = {x:0, y:0, z:0};
-        this.scale = {x:1, y:1, z:1};
-        this.color = {r:255, g:255, b:255, a:1};
+        this.position = { x: 0, y: 0, z: 0 };
+        this.rotation = { x: 0, y: 0, z: 0 };
+        this.scale = { x: 1, y: 1, z: 1 };
+        this.color = { r: 255, g: 255, b: 255, a: 1 };
         this.core = new EndymionCore(interf, w);
         this.incomingApi = new EndymionIncomingWebApi(interf, w);
         this.url = '';
@@ -54,12 +54,12 @@ export class EndymionApi{
      * @param handlerName - The name of the handler.
      * @param handlerFunction - The function to be executed when a message with the specified handler name is received.
      */
-    public onMessage = (handlerName:string, handlerFunction:Function):void => {
+    public onMessage = (handlerName: string, handlerFunction: Function): void => {
         this.incomingApi.addHandler(handlerName, handlerFunction);
     }
 
-    public on = (handlerName:string, handlerFunction:Function, skipEvent:boolean = false, skipCount:number = 0):EndymionApi => {
-        if(handlerName === 'target'){
+    public on = (handlerName: string, handlerFunction: Function, skipEvent: boolean = false, skipCount: number = 0): EndymionApi => {
+        if (handlerName === 'target') {
             this.target = true;
             this.radius = 0.1;
             this.incomingApi.addHandler(`object-onaim_${this.objectId}`, handlerFunction, skipEvent, skipCount);
@@ -75,7 +75,7 @@ export class EndymionApi{
      * @param primitive - The primitive to set.
      * @returns The updated EndymionApi instance.
      */
-    public setPrimitive = (primitive:Primitive):EndymionApi => {
+    public setPrimitive = (primitive: Primitive): EndymionApi => {
         this.primitive = primitive;
         return this;
     }
@@ -92,13 +92,13 @@ export class EndymionApi{
      * endymion.setPosition({x:1, y:2, z:3});   set position to {x:1, y:2, z:3}
      * endymion.setPosition(1);                 set position to {x:1, y:1, z:1}
      */
-    public setPosition = (x:Position | number, y:number = -100000, z:Number = -100000):EndymionApi => {
-        if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
-            if(y === -100000 && z === -100000){
-                this.position = {x:x, y:x, z:x};
+    public setPosition = (x: Position | number, y: number = -100000, z: Number = -100000): EndymionApi => {
+        if (typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
+            if (y === -100000 && z === -100000) {
+                this.position = { x: x, y: x, z: x };
                 return this;
             }
-            this.position = {x, y, z};
+            this.position = { x, y, z };
             return this;
         }
         this.position = x as Position;
@@ -109,7 +109,7 @@ export class EndymionApi{
      * @param x - The new x-coordinate value.
      * @returns The updated EndymionApi object.
      */
-    public setPosX = (x:number):EndymionApi => {
+    public setPosX = (x: number): EndymionApi => {
         this.position.x = x;
         return this;
     }
@@ -118,7 +118,7 @@ export class EndymionApi{
      * @param y - The new y-coordinate value.
      * @returns The updated EndymionApi object.
      */
-    public setPosY = (y:number):EndymionApi => {
+    public setPosY = (y: number): EndymionApi => {
         this.position.y = y;
         return this;
     }
@@ -127,7 +127,7 @@ export class EndymionApi{
      * @param z - The new z position value.
      * @returns The updated EndymionApi object.
      */
-    public setPosZ = (z:number):EndymionApi => {
+    public setPosZ = (z: number): EndymionApi => {
         this.position.z = z;
         return this;
     }
@@ -145,13 +145,13 @@ export class EndymionApi{
      * endymion.setRotation({x:1, y:2, z:3});   set rotation to {x:1, y:2, z:3}
      * endymion.setRotation(1);                 set rotation to {x:1, y:1, z:1}
      */
-    public setRotation = (x:Rotation | number, y:number = -100000, z:number = -100000):EndymionApi => {
-        if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
-            if(y === -100000 && z === -100000){
-                this.rotation = {x:x, y:x, z:x};
+    public setRotation = (x: Rotation | number, y: number = -100000, z: number = -100000): EndymionApi => {
+        if (typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
+            if (y === -100000 && z === -100000) {
+                this.rotation = { x: x, y: x, z: x };
                 return this;
             }
-            this.rotation = {x, y, z};
+            this.rotation = { x, y, z };
             return this;
         }
         this.rotation = x as Rotation;
@@ -162,7 +162,7 @@ export class EndymionApi{
      * @param x - The value to set the x-axis rotation to.
      * @returns The updated EndymionApi instance.
      */
-    public setRotX = (x:number):EndymionApi => {
+    public setRotX = (x: number): EndymionApi => {
         this.rotation.x = x;
         return this;
     }
@@ -171,7 +171,7 @@ export class EndymionApi{
      * @param y The new rotation value in radians.
      * @returns The updated EndymionApi object.
      */
-    public setRotY = (y:number):EndymionApi => {
+    public setRotY = (y: number): EndymionApi => {
         this.rotation.y = y;
         return this;
     }
@@ -180,10 +180,10 @@ export class EndymionApi{
      * @param z - The rotation value in radians.
      * @returns The updated EndymionApi object.
      */
-    public setRotZ = (z:number):EndymionApi => {
+    public setRotZ = (z: number): EndymionApi => {
         this.rotation.z = z;
         return this;
-    }   
+    }
 
     /**
      * Sets the scale of the EndymionApi object.
@@ -198,13 +198,13 @@ export class EndymionApi{
      * endymion.setScale({x:1, y:2, z:3});   set scale to {x:1, y:2, z:3}
      * endymion.setScale(1);                 set scale to {x:1, y:1, z:1}
      */
-    public setScale = (x:Scale | number, y:number = -1, z:number = -1):EndymionApi => {
-        if(typeof x ==='number' && typeof y === 'number' && typeof z === 'number'){
-            if(y === -1 && z === -1){
-                this.scale = {x:x, y:x, z:x};
+    public setScale = (x: Scale | number, y: number = -1, z: number = -1): EndymionApi => {
+        if (typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
+            if (y === -1 && z === -1) {
+                this.scale = { x: x, y: x, z: x };
                 return this;
             }
-            this.scale = {x, y, z};
+            this.scale = { x, y, z };
             return this;
         }
         this.scale = x as Scale;
@@ -215,7 +215,7 @@ export class EndymionApi{
      * @param x - The new scale value for the x-axis.
      * @returns The updated EndymionApi instance.
      */
-    public setScaleX = (x:number):EndymionApi => {
+    public setScaleX = (x: number): EndymionApi => {
         this.scale.x = x;
         return this;
     }
@@ -224,7 +224,7 @@ export class EndymionApi{
      * @param y - The new scale value for the y-axis.
      * @returns The updated EndymionApi object.
      */
-    public setScaleY = (y:number):EndymionApi => {
+    public setScaleY = (y: number): EndymionApi => {
         this.scale.y = y;
         return this;
     }
@@ -233,7 +233,7 @@ export class EndymionApi{
      * @param z - The z scale value to set.
      * @returns The updated EndymionApi object.
      */
-    public setScaleZ = (z:number):EndymionApi => {
+    public setScaleZ = (z: number): EndymionApi => {
         this.scale.z = z;
         return this;
     }
@@ -242,31 +242,31 @@ export class EndymionApi{
      * @param color - The color to set. Can be a Color object or a string in the format of a hex, rgb, or rgba value.
      * @returns The updated EndymionApi object.
      */
-    public setColor = (color:Color | string):EndymionApi => {
-        if(typeof color === 'string'){
-            if(color.includes('#')){
+    public setColor = (color: Color | string): EndymionApi => {
+        if (typeof color === 'string') {
+            if (color.includes('#')) {
                 this.color = hexToRGB(color) as Color;
             }
-            if(color.includes('rgb')){
-                const rgb = color.replace('rgb(','').replace(')','').split(',');
-                this.color = {r:parseInt(rgb[0]), g:parseInt(rgb[1]), b:parseInt(rgb[2]), a:1};
+            if (color.includes('rgb')) {
+                const rgb = color.replace('rgb(', '').replace(')', '').split(',');
+                this.color = { r: parseInt(rgb[0]), g: parseInt(rgb[1]), b: parseInt(rgb[2]), a: 1 };
             }
-            if(color.includes('rgba')){
-                const rgb = color.replace('rgba(','').replace(')','').split(',');
-                this.color = {r:parseInt(rgb[0]), g:parseInt(rgb[1]), b:parseInt(rgb[2]), a:parseFloat(rgb[3])};
+            if (color.includes('rgba')) {
+                const rgb = color.replace('rgba(', '').replace(')', '').split(',');
+                this.color = { r: parseInt(rgb[0]), g: parseInt(rgb[1]), b: parseInt(rgb[2]), a: parseFloat(rgb[3]) };
             }
-            if(namedColor().has(color.toUpperCase())){
+            if (namedColor().has(color.toUpperCase())) {
                 var hexColor = namedColor().get(color.toUpperCase()) as string;
                 this.color = hexToRGB(hexColor) as Color;
             }
         }
-        if(typeof color === 'object' 
-                && color !== null 
-                && color !== undefined 
-                && color.hasOwnProperty('r') 
-                && color.hasOwnProperty('g') 
-                && color.hasOwnProperty('b') 
-                && color.hasOwnProperty('a')){
+        if (typeof color === 'object'
+            && color !== null
+            && color !== undefined
+            && color.hasOwnProperty('r')
+            && color.hasOwnProperty('g')
+            && color.hasOwnProperty('b')
+            && color.hasOwnProperty('a')) {
             this.color = color;
         }
         return this;
@@ -278,8 +278,8 @@ export class EndymionApi{
      * @returns The updated EndymionApi object.
      * @throws An error if the opacity value is not between 0 and 1.
      */
-    public setOpacity = (opacity:number):EndymionApi => {
-        if(opacity <0 || opacity > 1) throw new Error('Opacity must be between 0 and 1');
+    public setOpacity = (opacity: number): EndymionApi => {
+        if (opacity < 0 || opacity > 1) throw new Error('Opacity must be between 0 and 1');
         this.color.a = opacity;
         return this;
     }
@@ -292,27 +292,27 @@ export class EndymionApi{
     public render = (): EntityMap => {
         this.objectId += 1;
         this.entity = this.mapEntity(this);
-        if(this.primitive === 'gltf'){
+        if (this.primitive === 'gltf') {
             this.core.importGltf(this.objectId, this.url);
             this.core.sendAction('update-transform', this.entity);
-            if(this.animation){
+            if (this.animation) {
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
             }
-            if(this.target){
+            if (this.target) {
                 this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
             }
-        }else if(this.primitive === 'webview'){
-            this.core.createWebview({id:this.objectId.toString(), url:this.url, parent:this.webViewParent});
-            this.core.sendAction('update-transform', {scale:this.scale, id:this.objectId});
-            this.core.actorSetActive({id:this.objectId.toString(), activated:this.statusActivated});
-        }else{
-            this.core.sendAction('create-primitive',this.entity);
+        } else if (this.primitive === 'webview') {
+            this.core.createWebview({ id: this.objectId.toString(), url: this.url, parent: this.webViewParent });
+            this.core.sendAction('update-transform', { scale: this.scale, id: this.objectId });
+            this.core.actorSetActive({ id: this.objectId.toString(), activated: this.statusActivated });
+        } else {
+            this.core.sendAction('create-primitive', this.entity);
             this.core.setColor(this.entity.id, this.color);
             this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
         }
-        this.renderedEntities.set(this.entity.id, {...this.entity, color:this.color, url:this.url, parent:this.webViewParent});
-        return {...this.entity, color:this.color, parent:this.webViewParent, actorActivated:this.statusActivated, target:this.target, radius:this.radius };
+        this.renderedEntities.set(this.entity.id, { ...this.entity, color: this.color, url: this.url, parent: this.webViewParent });
+        return { ...this.entity, color: this.color, parent: this.webViewParent, actorActivated: this.statusActivated, target: this.target, radius: this.radius };
     }
 
     /**
@@ -322,26 +322,26 @@ export class EndymionApi{
      */
     public apply = (): EntityMap => {
         this.entity = this.mapEntity(this);
-        if(this.primitive === 'gltf'){
+        if (this.primitive === 'gltf') {
             this.core.sendAction('update-transform', this.entity);
-            if(this.animation){
+            if (this.animation) {
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
             }
-            if(this.target){
+            if (this.target) {
                 this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
             }
-        }else if(this.primitive === 'webview'){
+        } else if (this.primitive === 'webview') {
             this.core.sendAction('update-transform', this.entity);
-            if(this.statusActivated){
-                this.core.actorSetActive({id:this.objectId.toString(), activated:this.statusActivated});
+            if (this.statusActivated) {
+                this.core.actorSetActive({ id: this.objectId.toString(), activated: this.statusActivated });
             }
-        }else{
+        } else {
             this.core.sendAction('update-transform', this.entity);
             this.core.setColor(this.entity.id, this.color);
             this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
         }
-        return {...this.entity, color:this.color, parent:this.webViewParent, actorActivated:this.statusActivated, target:this.target, radius:this.radius };
+        return { ...this.entity, color: this.color, parent: this.webViewParent, actorActivated: this.statusActivated, target: this.target, radius: this.radius };
     }
 
     /**
@@ -403,11 +403,11 @@ export class EndymionApi{
      * @param entity - The entity to set the properties from.
      * @returns The updated EndymionApi instance.
      */
-    public with = (entity:EntityMap): EndymionApi => {
-        if(entity !== undefined){
+    public with = (entity: EntityMap): EndymionApi => {
+        if (entity !== undefined) {
             this.objectId = entity.id;
             var entityMap = this.renderedEntities.get(entity.id);
-            if(entityMap){
+            if (entityMap) {
                 this.primitive = entityMap.primitive;
                 this.position = entityMap.position;
                 this.rotation = entityMap.rotation;
@@ -421,15 +421,15 @@ export class EndymionApi{
         }
         return this;
     }
-    
+
     /**
      * Loads an asset from the specified URL.
      * @param url The URL of the asset to load.
      * @returns The EndymionApi instance.
      */
-    public loadAsset = (url:string):EndymionApi => {
+    public loadAsset = (url: string): EndymionApi => {
         this.primitive = 'gltf';
-        if(url.includes('http')){
+        if (url.includes('http')) {
             this.url = url;
             return this;
         }
@@ -442,20 +442,20 @@ export class EndymionApi{
      * @param index The index of the animation to play.
      * @returns The EndymionApi instance.
      */
-    public playAnimation = (index:number):EndymionApi => {
+    public playAnimation = (index: number): EndymionApi => {
         this.animation = true;
         this.index = index;
         this.animationName = "";
         return this;
     }
-    
-    public webView = (url:string):EndymionApi => {
+
+    public webView = (url: string): EndymionApi => {
         this.primitive = 'webview';
         this.url = url;
         return this;
     }
 
-    public setWebViewParent = (parent:webViewParent):EndymionApi => {
+    public setWebViewParent = (parent: webViewParent): EndymionApi => {
         this.webViewParent = parent;
         return this;
     }
@@ -464,17 +464,17 @@ export class EndymionApi{
      * Destroys the EndymionApi object.
      * @returns The destroyed EndymionApi object.
      */
-    public destroy = ():EndymionApi => {
+    public destroy = (): EndymionApi => {
         this.core.destroyObject(this.objectId.toString());
         return this;
     }
     /**
      * Destroys all objects in the Endymion API.
      */
-    public destroyAll = ():void => {
+    public destroyAll = (): void => {
         this.core.destroyAllObjects();
     }
-    public actorSetStatus = (activated: boolean):EndymionApi=>{
+    public actorSetStatus = (activated: boolean): EndymionApi => {
         this.statusActivated = activated;
         return this;
     }
@@ -484,8 +484,8 @@ export class EndymionApi{
      * @param id - The ID of the actor.
      * @param activated - The desired active state of the actor.
      */
-    public actorSetActive = (id:string, activated: boolean):void => {
-        this.core.actorSetActive({id:id, activated:activated});
+    public actorSetActive = (id: string, activated: boolean): void => {
+        this.core.actorSetActive({ id: id, activated: activated });
     }
 
     /**
@@ -494,7 +494,7 @@ export class EndymionApi{
      * @param aimable - The aimable value to set.
      * @param radius - The radius value (optional, default is 0.1).
      */
-    public setAimable = (id:string, aimable:boolean, radius:number = 0.1):void => {
+    public setAimable = (id: string, aimable: boolean, radius: number = 0.1): void => {
         this.core.setAimable(id, aimable, radius);
     }
 
@@ -503,7 +503,7 @@ export class EndymionApi{
      * @param radius The radius of the targetable area.
      * @returns The modified EndymionApi object.
      */
-    public targetable = (radius:number = 0.1):EndymionApi => {
+    public targetable = (radius: number = 0.1): EndymionApi => {
         this.target = true;
         this.radius = radius;
         return this;
@@ -512,11 +512,11 @@ export class EndymionApi{
      * Makes the EndymionApi instance untargatable.
      * @returns The modified EndymionApi instance.
      */
-    public untargatable = ():EndymionApi => {
+    public untargatable = (): EndymionApi => {
         this.target = false;
         return this;
     }
-    private mapEntity = (config:EndymionApi): Entity=> {
+    private mapEntity = (config: EndymionApi): Entity => {
         return {
             id: config.objectId,
             primitive: config.primitive,
