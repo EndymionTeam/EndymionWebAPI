@@ -1,7 +1,7 @@
 
 import {
-    Primitive, Position, Rotation, Scale, TransformType,
-    TransformGreatness, Color, ActionName, action, message, webViewPayload, actorSetActivePayload
+    PrimitiveType, Position, Rotation, Scale, TransformType,
+    TransformGreatness, Color, ActionName, Action, message, webViewPayload, actorSetActivePayload
 } from './endymion.types';
 
 class EndymionCore {
@@ -15,18 +15,30 @@ class EndymionCore {
     constructor(commInterface: string = 'vuplex', w: Window = window) {
         this.window = w;
         this.communicationInterface = (this.window as any)[commInterface];
-
+        (this.window as any).EnSpace = {
+            ...(this.window as any).EnSpace,
+            environment: 'web-view'
+        };
         if (this.communicationInterface == undefined
             || this.communicationInterface === ''
             || this.communicationInterface === null) {
             //polyfill for vuplex for execution in browser
+            (this.window as any).EnSpace = {
+                ...(this.window as any).EnSpace,
+                environment: 'web-browser'
+            };
             this.communicationInterface = {};
-            this.communicationInterface.postMessage = (message: any) => { console.log(message) };
+            this.communicationInterface.postMessage = (message: any) => { /*console.log(message)*/ };
             this.communicationInterface.addEventListener = (message: any) => { };
-
         }
     }
-
+    getObjectId = (): number => {
+        (window as any).EnSpace.objectId++;
+        return (window as any).EnSpace.objectId;
+    }
+    getEnvironment = (): string => {
+        return (window as any).EnSpace.environment;
+    }
     /**
      * Send message to Endymion Browser Application
      * @param message message to send of type message
@@ -42,14 +54,14 @@ class EndymionCore {
      * @param actPayload Definition of asset to create
      * @returns action object
      */
-    public createAction = (actName: ActionName, actPayload: any): action => {
+    public createAction = (actName: ActionName, actPayload: any): Action => {
         if (actName == undefined || actName == null) throw new Error('actName is not defined');
         if (actPayload == undefined || actPayload == null) throw new Error('actPayload is not defined');
         var act = {
             name: actName,
             payload: actPayload
         };
-        return act as action;
+        return act as Action;
     }
     /**
      * Send action to Endymion Browser Application      
@@ -73,7 +85,7 @@ class EndymionCore {
      * @param actionArray Array of actions
      * @returns void
      */
-    public sendActions = (actionArray: action[]): void => {
+    public sendActions = (actionArray: Action[]): void => {
         if (actionArray == undefined || actionArray == null || typeof actionArray !== 'object' || actionArray.length == 0) throw new Error('actionArray is not defined');
         var jsonAction = this.createAction('multi-action', actionArray);
         this.communicationInterface.postMessage(jsonAction);
@@ -111,7 +123,7 @@ class EndymionCore {
      * @param scale typeof scale
      */
     public createObject = (objectId: number,
-        primitive: Primitive,
+        primitive: PrimitiveType,
         position: Position,
         rotation: Rotation,
         scale: Scale

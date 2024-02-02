@@ -3,7 +3,7 @@
  * @typedef {('cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad')} Primitive
  * @memberof EndymionApi
  */
-export type Primitive = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview';
+export type PrimitiveType = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview';
 
 /**
  * Represents a position in 3D space with x, y, and z coordinates.
@@ -46,7 +46,7 @@ export type Color = { r:number, g:number, b:number, a:number };
  */
 export type ActionName = 'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf' 
                         | 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects'
-                        | 'webview-create' | 'actor-setactive' | 'object-setaimable';
+                        | 'webview-create' | 'actor-setactive' | 'object-setaimable' | 'update-transform';
 
 /**
  * Represents an entity in the Endymion system.
@@ -56,7 +56,7 @@ export type Entity = {
     /** The unique identifier of the entity. */
     id: number,
     /** The primitive shape of the entity. */
-    primitive: Primitive,
+    primitive: PrimitiveType,
     /** The position of the entity in 3D space. */
     position: Position,
     /** The rotation of the entity in 3D space. */
@@ -72,7 +72,7 @@ export type EntityMap = {
     /** The unique identifier of the entity. */
     id: number,
     /** The primitive shape of the entity. */
-    primitive: Primitive,
+    primitive: PrimitiveType,
     /** The position of the entity in 3D space. */
     position: Position,
     /** The rotation of the entity in 3D space. */
@@ -96,7 +96,7 @@ export type EntityMap = {
  * Represents an action object with a name and payload.
  * @typedef {name:ActionName, payload:any} action
  */
-export interface action {
+export interface Action {
     name: ActionName,
     payload: any
 }

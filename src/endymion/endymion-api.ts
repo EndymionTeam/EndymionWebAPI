@@ -1,4 +1,4 @@
-import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap, message, webViewParent, webViewPayload } from './endymion.types';
+import { PrimitiveType, Position, Rotation, Scale, Color, Entity, EntityMap, message, webViewParent, webViewPayload } from './endymion.types';
 import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
@@ -6,7 +6,7 @@ import { Win } from '../utils/nav-utils';
 import { EndymionIncomingWebApi } from './endymion-incoming-api';
 export class EndymionApi {
     objectId: number = 0;
-    primitive!: Primitive;
+    primitive!: PrimitiveType;
     position!: Position;
     rotation!: Rotation;
     scale!: Scale;
@@ -75,7 +75,7 @@ export class EndymionApi {
      * @param primitive - The primitive to set.
      * @returns The updated EndymionApi instance.
      */
-    public setPrimitive = (primitive: Primitive): EndymionApi => {
+    public setPrimitive = (primitive: PrimitiveType): EndymionApi => {
         this.primitive = primitive;
         return this;
     }

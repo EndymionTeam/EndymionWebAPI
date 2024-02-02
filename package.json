@@ -1,6 +1,6 @@
 {
   "name": "endymion",
-  "version": "1.8.5",
+  "version": "2.0.0",
   "description": "Endymion library for augmented reality",
   "main": "./lib/endymion.js",
   "types": "./lib/endymion.d.ts",
@@ -11,6 +11,7 @@
   },
   "scripts": {
     "setup": "npm install",
+    "build:cdn:dev": "npx webpack --config webpack.config.js --mode development",
     "build:cdn": "npx webpack --config webpack.config.js",
     "build": "tsc --project tsconfig.module.json",
     "watch": "tsc --project tsconfig.module.json --watch",
