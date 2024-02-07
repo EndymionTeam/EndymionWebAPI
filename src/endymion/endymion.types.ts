@@ -62,7 +62,11 @@ export type Entity = {
     /** The rotation of the entity in 3D space. */
     rotation: Rotation,
     /** The scale of the entity in 3D space. */
-    scale: Scale
+    scale: Scale,
+    /** defina if entity is targetable. */
+    targetable: boolean,
+    /** defina if entity is active. */
+    active: boolean
 }
 /**
  * Represents an entity map with its properties.
