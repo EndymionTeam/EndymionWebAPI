@@ -168,6 +168,8 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-setactive', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
     }
+
+    //TODO aggiungere la gestione dei messaggi da vuplex as esempio quando l'oggetto viene mirato
 }
 
 function isInt(value: string | number) {
@@ -178,4 +180,3 @@ function isInt(value: string | number) {
     x = parseFloat(value as string);
     return (x | 0) === x;
 }
-

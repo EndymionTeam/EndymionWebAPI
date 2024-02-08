@@ -63,6 +63,7 @@ class EndymionCore {
         };
         return act as Action;
     }
+
     /**
      * Send action to Endymion Browser Application      
      * It is a wrapper for createAction and vuplex.postMessage      
