@@ -1,7 +1,8 @@
 
+import { enError, enLog, enAlert, enOnWindowError } from '../utils/debug';
 import {
-    PrimitiveType, Position, Rotation, Scale, TransformType,
-    TransformGreatness, Color, ActionName, Action, message, webViewPayload, actorSetActivePayload
+    PrimitiveType, Position, Rotation, Scale, Color, ActionName, Action, message,
+    webViewPayload, actorSetActivePayload
 } from './endymion.types';
 
 class EndymionCore {
@@ -15,14 +16,9 @@ class EndymionCore {
     constructor(commInterface: string = 'vuplex', w: Window = window) {
         this.window = w;
         this.communicationInterface = (this.window as any)[commInterface];
-        (this.window as any).EnSpace = {
-            ...(this.window as any).EnSpace,
-            environment: 'web-view'
-        };
         if (this.communicationInterface == undefined
             || this.communicationInterface === ''
             || this.communicationInterface === null) {
-            //polyfill for vuplex for execution in browser
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-browser'
@@ -30,7 +26,17 @@ class EndymionCore {
             this.communicationInterface = {};
             this.communicationInterface.postMessage = (message: any) => { /*console.log(message)*/ };
             this.communicationInterface.addEventListener = (message: any) => { };
+            return;
         }
+
+        (this.window as any).EnSpace = {
+            ...(this.window as any).EnSpace,
+            environment: 'web-view'
+        };
+        (this.window as any).console.log = enLog;
+        (this.window as any).console.error = enError;
+        (this.window as any).alert = enAlert;
+        (this.window as any).onerror = enOnWindowError;
     }
     getObjectId = (): number => {
         (window as any).EnSpace.objectId++;
@@ -38,6 +44,15 @@ class EndymionCore {
     }
     getEnvironment = (): string => {
         return (window as any).EnSpace.environment;
+    }
+    enableDebug = () => {
+        (window as any).EnSpace.debugMode = true;
+    }
+    disableDebug = () => {
+        (window as any).EnSpace.debugMode = false;
+    }
+    isDebugMode = (): boolean => {
+        return (window as any).EnSpace.debugMode;
     }
     /**
      * Send message to Endymion Browser Application
@@ -55,8 +70,8 @@ class EndymionCore {
      * @returns action object
      */
     public createAction = (actName: ActionName, actPayload: any): Action => {
-        if (actName == undefined || actName == null) throw new Error('actName is not defined');
-        if (actPayload == undefined || actPayload == null) throw new Error('actPayload is not defined');
+        if (actName == undefined || actName == null) throw new Error('[core][createAction] - actName is not defined');
+        if (actPayload == undefined || actPayload == null) throw new Error('[core][createAction] - actPayload is not defined');
         var act = {
             name: actName,
             payload: actPayload
@@ -73,9 +88,10 @@ class EndymionCore {
      * @returns void
      */
     public sendAction = (name: ActionName, payload: any): void => {
-        if (name == undefined || name == null) throw new Error('name is not defined');
-        if (payload == undefined || payload == null) throw new Error('payload is not defined');
+        if (name == undefined || name == null) throw new Error('[core][sendAction] - name is not defined');
+        if (payload == undefined || payload == null) throw new Error('[core][sendAction] - payload is not defined');
         let jsonAction = this.createAction(name, payload);
+        if(this.isDebugMode()) console.log(jsonAction);
         this.communicationInterface.postMessage(jsonAction);
     }
     /**
@@ -87,8 +103,12 @@ class EndymionCore {
      * @returns void
      */
     public sendActions = (actionArray: Action[]): void => {
-        if (actionArray == undefined || actionArray == null || typeof actionArray !== 'object' || actionArray.length == 0) throw new Error('actionArray is not defined');
+        if (actionArray == undefined
+            || actionArray == null
+            || typeof actionArray !== 'object'
+            || actionArray.length == 0) throw new Error('[core][sendActions] - actionArray is not defined');
         var jsonAction = this.createAction('multi-action', actionArray);
+        if(this.isDebugMode()) console.log(jsonAction);
         this.communicationInterface.postMessage(jsonAction);
     }
     /**
@@ -129,7 +149,7 @@ class EndymionCore {
         rotation: Rotation,
         scale: Scale
     ): void => {
-        if (objectId < 0) throw new Error('objectId is not valid');
+        if (objectId < 0) throw new Error('[core][createObject] - objectId is not valid');
         this.sendAction(
             'create-primitive',
             {
@@ -150,8 +170,11 @@ class EndymionCore {
      * @returns void
      */
     public importGltf = (objectId: number, source: string): void => {
-        if (objectId < 0) throw new Error('objectId is not valid');
-        if (source == undefined || source == null || typeof source !== 'string' || source.length == 0) throw new Error('source is not defined');
+        if (objectId < 0) throw new Error('[core][importGltf] - objectId is not valid');
+        if (source == undefined
+            || source == null
+            || typeof source !== 'string'
+            || source.length == 0) throw new Error('[core][importGltf] - source is not defined');
         this.sendAction(
             'import-gltf',
             {
@@ -161,36 +184,36 @@ class EndymionCore {
         );
     }
 
-    /**
-     * Set a transformation to object       
-     * 
-     * WARNING: not usable because cannot set sigle greatness at time               
-     * we have must set all greatness at time       
-     * 
-     * @param objectId 
-     * @param type typeof TransformType - delta|absolute
-     * @param greatness typeof position|rotation|scale
-     * @param value typeof position|rotation|scale
-     * @returns {objectId:number, action:any}
-     */
-    public updateTransform = (objectId: number,
-        type: TransformType,
-        greatness: TransformGreatness,
-        value: Position | Rotation | Scale): { objectId: number, action: any } => {
+    // /**
+    //  * Set a transformation to object       
+    //  * 
+    //  * WARNING: not usable because cannot set sigle greatness at time               
+    //  * we have must set all greatness at time       
+    //  * 
+    //  * @param objectId 
+    //  * @param type typeof TransformType - delta|absolute
+    //  * @param greatness typeof position|rotation|scale
+    //  * @param value typeof position|rotation|scale
+    //  * @returns {objectId:number, action:any}
+    //  */
+    // public updateTransform = (objectId: number,
+    //     type: TransformType,
+    //     greatness: TransformGreatness,
+    //     value: Position | Rotation | Scale): { objectId: number, action: any } => {
 
-        let request = { id: objectId, type: type };
-        if (greatness === 'position') (request as any)['position'] = value;
-        if (greatness === 'rotation') (request as any)['rotation'] = value;
-        if (greatness === 'scale') (request as any)['scale'] = value;
-        let action = this.createAction(
-            'update-transform',
-            request
-        );
-        return {
-            objectId: objectId,
-            action: action
-        }
-    }
+    //     let request = { id: objectId, type: type };
+    //     if (greatness === 'position') (request as any)['position'] = value;
+    //     if (greatness === 'rotation') (request as any)['rotation'] = value;
+    //     if (greatness === 'scale') (request as any)['scale'] = value;
+    //     let action = this.createAction(
+    //         'update-transform',
+    //         request
+    //     );
+    //     return {
+    //         objectId: objectId,
+    //         action: action
+    //     }
+    // }
     /**
      * Set color to object      
      * 
@@ -199,20 +222,20 @@ class EndymionCore {
      * @returns void
      */
     public setColor = (objectId: number, color: Color): void => {
-        if (objectId < 0) throw new Error('objectId is not valid');
-        if (color.r < 0) throw new Error('r color value is not valid');
-        if (color.g < 0) throw new Error('g color value is not valid');
-        if (color.b < 0) throw new Error('b color value is not valid');
-        if (color.a < 0) throw new Error('a color value is not valid');
+        if (objectId < 0) throw new Error('[core][setColor] - objectId is not valid');
+        if (color.r < 0) throw new Error('[core][setColor] - r color value is not valid');
+        if (color.g < 0) throw new Error('[core][setColor] - g color value is not valid');
+        if (color.b < 0) throw new Error('[core][setColor] - b color value is not valid');
+        if (color.a < 0) throw new Error('[core][setColor] - a color value is not valid');
 
-        if (color.r > 255) throw new Error('r color value must be minor or equal to 255');
-        if (color.g > 255) throw new Error('g color value must be minor or equal to 255');
-        if (color.b > 255) throw new Error('b color value must be minor or equal to 255');
-        if (color.a > 1) throw new Error('a color value must be minor or equal to 1');
+        if (color.r > 255) throw new Error('[core][setColor] - r color value must be minor or equal to 255');
+        if (color.g > 255) throw new Error('[core][setColor] - g color value must be minor or equal to 255');
+        if (color.b > 255) throw new Error('[core][setColor] - b color value must be minor or equal to 255');
+        if (color.a > 1) throw new Error('[core][setColor] - a color value must be minor or equal to 1');
 
-        if (!isInt(color.r)) throw new Error('r color value must be an integer');
-        if (!isInt(color.g)) throw new Error('g color value must be an integer');
-        if (!isInt(color.b)) throw new Error('b color value must be an integer');
+        if (!isInt(color.r)) throw new Error('[core][setColor] - r color value must be an integer');
+        if (!isInt(color.g)) throw new Error('[core][setColor] - g color value must be an integer');
+        if (!isInt(color.b)) throw new Error('[core][setColor] - b color value must be an integer');
 
         this.sendAction(
             'set-color',

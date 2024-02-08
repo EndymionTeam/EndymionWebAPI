@@ -11,10 +11,10 @@ export class EnWebview extends BaseEntity {
     }
 
     override setColor(color: Color): BaseEntity {
-        throw new Error("Method not allowed on EnWebview");
+        throw new Error("[en-webview][setColor] - Method not allowed on EnWebview");
     }
     override setOpacity(value: number): BaseEntity {
-        throw new Error("Method not allowed on EnWebview");
+        throw new Error("[en-webview][setOpacity] - Method not allowed on EnWebview");
     }
     setUrl(url: string): EnWebview {
         this.url = url;
@@ -25,7 +25,7 @@ export class EnWebview extends BaseEntity {
         return this;
     }
     override create(): EnWebview {
-        if (!this.url) throw new Error('url is required');
+        if (!this.url) throw new Error('[en-webview][create] - url is required');
         this.entity.id = this.id;
         this.actions = [
             { name: 'webview-create', payload: { id: this.id, url: this.url, parent: this.webViewParent } },

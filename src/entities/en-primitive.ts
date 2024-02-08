@@ -2,6 +2,7 @@ import { Color, Action, Entity } from "../endymion/endymion.types";
 import { EndymionCore } from "../endymion/endymion-core";
 import { Subject } from "rxjs";
 import { Win } from "../utils/nav-utils";
+import { hexToRGB, namedColor } from "../utils/color-utils";
 type enEvent = {
     name: string,
     type: string,
@@ -82,7 +83,7 @@ export class BaseEntity {
         });
     }
     create() {
-        if (this.isCreated) throw new Error('Entity already created');
+        if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
         try {
             this.core.sendActions(this.actions);
             this.created.next(this.actions);
@@ -94,7 +95,7 @@ export class BaseEntity {
         }
     }
     apply() {
-        if (!this.isCreated) throw new Error('Entity not created');
+        if (!this.isCreated) throw new Error('[en-primitive][apply] - Entity not created');
         try {
             this.core.sendActions(this.actions);
             this.applyed.next(this.actions);
@@ -130,30 +131,57 @@ export class BaseEntity {
         this.scaleUpdated.next(this.entity.scale);
         return this;
     }
-    setColor(color: Color): BaseEntity {
-        if (color.r < 0) throw new Error('r color value is not valid');
-        if (color.g < 0) throw new Error('g color value is not valid');
-        if (color.b < 0) throw new Error('b color value is not valid');
-        if (color.a < 0) throw new Error('a color value is not valid');
+    setColor(color: Color | string): BaseEntity {
+        let selectedColor: Color = { r: 0, g: 0, b: 0, a: 1 };
+        if (typeof color === 'string') {
+            if (color.includes('#')) {
+                selectedColor = hexToRGB(color) as Color;
+            }
+            if (color.includes('rgb')) {
+                const rgb = color.replace('rgb(', '').replace(')', '').split(',');
+                selectedColor = { r: parseInt(rgb[0]), g: parseInt(rgb[1]), b: parseInt(rgb[2]), a: 1 };
+            }
+            if (color.includes('rgba')) {
+                const rgb = color.replace('rgba(', '').replace(')', '').split(',');
+                selectedColor = { r: parseInt(rgb[0]), g: parseInt(rgb[1]), b: parseInt(rgb[2]), a: parseFloat(rgb[3]) };
+            }
+            if (namedColor().has(color.toUpperCase())) {
+                var hexColor = namedColor().get(color.toUpperCase()) as string;
+                selectedColor = hexToRGB(hexColor) as Color;
+            }
+        }
+        if (typeof color === 'object'
+            && color !== null
+            && color !== undefined
+            && color.hasOwnProperty('r')
+            && color.hasOwnProperty('g')
+            && color.hasOwnProperty('b')
+            && color.hasOwnProperty('a')) {
+            selectedColor = color;
+        }
+        if (selectedColor.r < 0) throw new Error('[en-primitive][setcolor] - r color value is not valid');
+        if (selectedColor.g < 0) throw new Error('[en-primitive][setcolor] - g color value is not valid');
+        if (selectedColor.b < 0) throw new Error('[en-primitive][setcolor] - b color value is not valid');
+        if (selectedColor.a < 0) throw new Error('[en-primitive][setcolor] - a color value is not valid');
 
-        if (color.r > 255) throw new Error('r color value must be minor or equal to 255');
-        if (color.g > 255) throw new Error('g color value must be minor or equal to 255');
-        if (color.b > 255) throw new Error('b color value must be minor or equal to 255');
-        if (color.a > 1) throw new Error('a color value must be minor or equal to 1');
+        if (selectedColor.r > 255) throw new Error('[en-primitive][setcolor] - r color value must be minor or equal to 255');
+        if (selectedColor.g > 255) throw new Error('[en-primitive][setcolor] - g color value must be minor or equal to 255');
+        if (selectedColor.b > 255) throw new Error('[en-primitive][setcolor] - b color value must be minor or equal to 255');
+        if (selectedColor.a > 1) throw new Error('[en-primitive][setcolor] - a color value must be minor or equal to 1');
 
-        if (!isInt(color.r)) throw new Error('r color value must be an integer');
-        if (!isInt(color.g)) throw new Error('g color value must be an integer');
-        if (!isInt(color.b)) throw new Error('b color value must be an integer');
+        if (!isInt(selectedColor.r)) throw new Error('[en-primitive][setcolor] - r color value must be an integer');
+        if (!isInt(selectedColor.g)) throw new Error('[en-primitive][setcolor] - g color value must be an integer');
+        if (!isInt(selectedColor.b)) throw new Error('[en-primitive][setcolor] - b color value must be an integer');
 
-        this.color = { r: color.r / 255, g: color.g / 255, b: color.b / 255, a: color.a };
+        this.color = { r: selectedColor.r / 255, g: selectedColor.g / 255, b: selectedColor.b / 255, a: selectedColor.a };
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.color } })
         this.colorUpdated.next(this.color);
         return this;
     }
 
     setOpacity(value: number) {
-        if (value < 0) throw new Error('opacity value is not valid');
-        if (value > 1) throw new Error('opacity value must be minor or equal to 1');
+        if (value < 0) throw new Error('[en-primitive][setOpacity] - opacity value is not valid');
+        if (value > 1) throw new Error('[en-primitive][setOpacity] - opacity value must be minor or equal to 1');
         this.color.a = value;
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.color } })
         this.colorUpdated.next(this.color);

@@ -12,7 +12,7 @@
   "scripts": {
     "setup": "npm install",
     "build:cdn:dev": "npx webpack --config webpack.config.js --mode development",
-    "build:cdn": "npx webpack --config webpack.config.js",
+    "build:cdn": "npx webpack --config webpack.config.js --watch",
     "build": "tsc --project tsconfig.module.json",
     "watch": "tsc --project tsconfig.module.json --watch",
     "test": "npm run build && mocha --require ts-node/register src/**/*.spec.ts",

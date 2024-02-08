@@ -10,13 +10,13 @@ export class EnAsset extends BaseEntity {
     }
 
     override create(): EnAsset {
-        throw new Error("Method not allowed on EnAsset");
+        throw new Error("s[en-asset][create]Method not allowed on EnAsset");
     }
     override setColor(color: Color): BaseEntity {
-        throw new Error("Method not allowed on EnAsset");
+        throw new Error("[en-asset][setColor] - Method not allowed on EnAsset");
     }
     override setOpacity(value: number): BaseEntity {
-        throw new Error("Method not allowed on EnAsset");
+        throw new Error("[en-asset][setOpacity] - Method not allowed on EnAsset");
     }
 
     setAnimation(animationIndex: number) {
