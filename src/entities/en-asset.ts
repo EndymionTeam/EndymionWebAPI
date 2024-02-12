@@ -1,9 +1,19 @@
+import { Subject } from "rxjs";
 import { Color, PrimitiveType } from "../endymion/endymion.types";
 import { BaseEntity } from "./en-primitive";
 
 export class EnAsset extends BaseEntity {
     type: PrimitiveType = 'gltf';
-    animationIndex: number = -1;
+    private animationIndex: number = -1;
+    private animationUpdated: Subject<number> = new Subject<number>();
+    private animationPlaying: Subject<boolean> = new Subject<boolean>();
+    private animationPaused: Subject<boolean> = new Subject<boolean>();
+    private animationStopped: Subject<boolean> = new Subject<boolean>();
+    animationUpdated$ = this.animationUpdated.asObservable();
+    animationPlaying$ = this.animationPlaying.asObservable();
+    animationPaused$ = this.animationPaused.asObservable();
+    animationStopped$ = this.animationStopped.asObservable();
+
     constructor() {
         super();
         this.entity.primitive = this.type;
@@ -19,20 +29,64 @@ export class EnAsset extends BaseEntity {
         throw new Error("[en-asset][setOpacity] - Method not allowed on EnAsset");
     }
 
-    setAnimation(animationIndex: number) {
+    setAnim(animationIndex: number) {
         this.animationIndex = animationIndex;
+        this.animationUpdated.next(animationIndex);
         return this;
+    }
+    playAnim() {
+        if (this.animationIndex > -1) {
+            this.actions.push({
+                api: '2',
+                name: 'gltf-play-anim',
+                payload: {
+                    id: this.id,
+                    index: this.animationIndex
+                }
+            });
+            this.apply();
+            this.animationPlaying.next(true);
+            this.animationPaused.next(false);
+            this.animationStopped.next(false);
+        }
+    }
+    stopAnim() {
+        this.actions.push({
+            api: '2',
+            name: 'gltf-stop-anim',
+            payload: {
+                id: this.id
+            }
+        });
+        this.apply();
+        this.animationPlaying.next(false);
+        this.animationPaused.next(false);
+        this.animationStopped.next(true);
+    }
+    pauseAnim() {
+        this.actions.push({
+            api: '2',
+            name: 'gltf-pause-anim',
+            payload: {
+                id: this.id
+            }
+        });
+        this.apply();
+        this.animationPlaying.next(false);
+        this.animationPaused.next(true);
+        this.animationStopped.next(false);
     }
 
     load(url: string): EnAsset {
         url = url.includes('http')
             ? url
             : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`
-            
+
         this.entity.id = this.id;
         this.actions = [
-            { name: 'import-gltf', payload: { id: this.id, url: url } },
+            { api: '2', name: 'import-gltf', payload: { id: this.id, url: url } },
             {
+                api: '2',
                 name: 'update-transform', payload: {
                     id: this.id,
                     type: 'absolute',
@@ -41,16 +95,6 @@ export class EnAsset extends BaseEntity {
                     scale: this.entity.scale
                 }
             }]
-        if (this.animationIndex > -1) {
-            this.actions.push({
-                name: 'play-anim',
-                payload: {
-                    id: this.id,
-                    index: this.animationIndex,
-                    //name: animationName
-                }
-            });
-        }
         super.create();
         return this;
     }

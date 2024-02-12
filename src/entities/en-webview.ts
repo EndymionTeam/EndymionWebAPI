@@ -28,8 +28,9 @@ export class EnWebview extends BaseEntity {
         if (!this.url) throw new Error('[en-webview][create] - url is required');
         this.entity.id = this.id;
         this.actions = [
-            { name: 'webview-create', payload: { id: this.id, url: this.url, parent: this.webViewParent } },
+            { api: '2', name: 'webview-create', payload: { id: this.id, url: this.url, parent: this.webViewParent } },
             {
+                api: '2',
                 name: 'update-transform', payload: {
                     id: this.id,
                     type: 'absolute',

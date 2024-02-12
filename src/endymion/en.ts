@@ -7,6 +7,7 @@ import { EnCapsule } from '../entities/en-capsule';
 import { EnPlane } from '../entities/en-plane';
 import { EnQuad } from '../entities/en-quad';
 import { EnWebview } from '../entities/en-webview';
+import { EnShapeLine } from '../entities/en-shape-line';
 
 export class En {
     core: EndymionCore;
@@ -14,18 +15,19 @@ export class En {
         this.core = new EndymionCore(commInterface, w);
     }
     enableDebug = () => {
-     this.core.enableDebug();
+        this.core.enableDebug();
     }
     disableDebug = () => {
         this.core.disableDebug();
     }
     asset = (): EnAsset => new EnAsset();
-    capsule = (): EnCapsule => new EnCapsule;
-    cube = (): EnCube => new EnCube;
-    cylinder = (): EnCylinder => new EnCylinder;
-    plane = (): EnPlane => new EnPlane;
-    quad = (): EnQuad => new EnQuad;
-    sphere = (): EnSphere => new EnSphere;
-    webview = (): EnWebview => new EnWebview;
+    capsule = (): EnCapsule => new EnCapsule();
+    cube = (): EnCube => new EnCube();
+    cylinder = (): EnCylinder => new EnCylinder();
+    plane = (): EnPlane => new EnPlane();
+    quad = (): EnQuad => new EnQuad();
+    sphere = (): EnSphere => new EnSphere();
+    webview = (): EnWebview => new EnWebview();
+    line = (): EnShapeLine => new EnShapeLine();
 
 }

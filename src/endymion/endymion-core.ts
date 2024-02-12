@@ -59,7 +59,7 @@ class EndymionCore {
      * @param message message to send of type message
      * @returns objectId
      */
-    public sendMessage = (message: message) => {
+    sendMessage = (message: message) => {
         this.communicationInterface.postMessage(message);
     }
     /**
@@ -69,7 +69,7 @@ class EndymionCore {
      * @param actPayload Definition of asset to create
      * @returns action object
      */
-    public createAction = (actName: ActionName, actPayload: any): Action => {
+    createAction = (actName: ActionName, actPayload: any): Action => {
         if (actName == undefined || actName == null) throw new Error('[core][createAction] - actName is not defined');
         if (actPayload == undefined || actPayload == null) throw new Error('[core][createAction] - actPayload is not defined');
         var act = {
@@ -87,11 +87,11 @@ class EndymionCore {
      * @param payload Definition of action
      * @returns void
      */
-    public sendAction = (name: ActionName, payload: any): void => {
+    sendAction = (name: ActionName, payload: any): void => {
         if (name == undefined || name == null) throw new Error('[core][sendAction] - name is not defined');
         if (payload == undefined || payload == null) throw new Error('[core][sendAction] - payload is not defined');
         let jsonAction = this.createAction(name, payload);
-        if(this.isDebugMode()) console.log(jsonAction);
+        if (this.isDebugMode()) console.log(jsonAction);
         this.communicationInterface.postMessage(jsonAction);
     }
     /**
@@ -102,13 +102,13 @@ class EndymionCore {
      * @param actionArray Array of actions
      * @returns void
      */
-    public sendActions = (actionArray: Action[]): void => {
+    sendActions = (actionArray: Action[]): void => {
         if (actionArray == undefined
             || actionArray == null
             || typeof actionArray !== 'object'
             || actionArray.length == 0) throw new Error('[core][sendActions] - actionArray is not defined');
         var jsonAction = this.createAction('multi-action', actionArray);
-        if(this.isDebugMode()) console.log(jsonAction);
+        if (this.isDebugMode()) console.log(jsonAction);
         this.communicationInterface.postMessage(jsonAction);
     }
     /**
@@ -117,7 +117,7 @@ class EndymionCore {
      * 
      * @param objectId 
      */
-    public destroyObject = (objectId: number | string) => {
+    destroyObject = (objectId: number | string) => {
         this.sendAction(
             'destroy-object',
             {
@@ -128,7 +128,7 @@ class EndymionCore {
     /**
      * Destroys all objects.
      */
-    public destroyAllObjects() {
+    destroyAllObjects() {
         this.sendAction(
             'destroy-allobjects', {}
         );
@@ -143,7 +143,7 @@ class EndymionCore {
      * @param rotation typeof rotation
      * @param scale typeof scale
      */
-    public createObject = (objectId: number,
+    createObject = (objectId: number,
         primitive: PrimitiveType,
         position: Position,
         rotation: Rotation,
@@ -169,7 +169,7 @@ class EndymionCore {
      * @param source typeof string - url of gltf file
      * @returns void
      */
-    public importGltf = (objectId: number, source: string): void => {
+    importGltf = (objectId: number, source: string): void => {
         if (objectId < 0) throw new Error('[core][importGltf] - objectId is not valid');
         if (source == undefined
             || source == null
@@ -184,44 +184,14 @@ class EndymionCore {
         );
     }
 
-    // /**
-    //  * Set a transformation to object       
-    //  * 
-    //  * WARNING: not usable because cannot set sigle greatness at time               
-    //  * we have must set all greatness at time       
-    //  * 
-    //  * @param objectId 
-    //  * @param type typeof TransformType - delta|absolute
-    //  * @param greatness typeof position|rotation|scale
-    //  * @param value typeof position|rotation|scale
-    //  * @returns {objectId:number, action:any}
-    //  */
-    // public updateTransform = (objectId: number,
-    //     type: TransformType,
-    //     greatness: TransformGreatness,
-    //     value: Position | Rotation | Scale): { objectId: number, action: any } => {
-
-    //     let request = { id: objectId, type: type };
-    //     if (greatness === 'position') (request as any)['position'] = value;
-    //     if (greatness === 'rotation') (request as any)['rotation'] = value;
-    //     if (greatness === 'scale') (request as any)['scale'] = value;
-    //     let action = this.createAction(
-    //         'update-transform',
-    //         request
-    //     );
-    //     return {
-    //         objectId: objectId,
-    //         action: action
-    //     }
-    // }
     /**
-     * Set color to object      
-     * 
-     * @param objectId 
-     * @param color typeof color - {r:number, g:number, b:number, a:number} in range 0-255
-     * @returns void
-     */
-    public setColor = (objectId: number, color: Color): void => {
+  * Set color to object      
+  * 
+  * @param objectId 
+  * @param color typeof color - {r:number, g:number, b:number, a:number} in range 0-255
+  * @returns void
+  */
+    setColor = (objectId: number, color: Color): void => {
         if (objectId < 0) throw new Error('[core][setColor] - objectId is not valid');
         if (color.r < 0) throw new Error('[core][setColor] - r color value is not valid');
         if (color.g < 0) throw new Error('[core][setColor] - g color value is not valid');
@@ -256,7 +226,7 @@ class EndymionCore {
      * 
      * @returns void
      */
-    public playHaptic(): void {
+    playHaptic(): void {
         this.sendAction(
             'play-haptic',
             {}
@@ -269,7 +239,7 @@ class EndymionCore {
      * @param animationName 
      * @returns void
      */
-    public playAnimation = (objectId: number, index: number, animationName: string): void => {
+    playAnimation = (objectId: number, index: number, animationName: string): void => {
         this.sendAction(
             'play-anim',
             {
@@ -279,6 +249,34 @@ class EndymionCore {
             }
         );
 
+    }
+    /**
+     * stop animation on object       
+     * 
+     * @param objectId 
+     * @returns void
+     */
+    stopAnimation = (objectId: number, index: number): void => {
+        this.sendAction(
+            'gltf-stop-anim',
+            {
+                id: objectId,
+            }
+        );
+    }
+    /**
+     * pause animation on object       
+     * 
+     * @param objectId 
+     * @returns void
+     */
+    pauseAnimation = (objectId: number, index: number): void => {
+        this.sendAction(
+            'gltf-pause-anim',
+            {
+                id: objectId,
+            }
+        );
     }
 
     /**
@@ -290,7 +288,7 @@ class EndymionCore {
      * @param payload The payload for creating the webview.
      * @returns The ID of the created webview.
      */
-    public createWebview = (payload: webViewPayload): { webViewId: string, webViewPayload: webViewPayload } => {
+    createWebview = (payload: webViewPayload): { webViewId: string, webViewPayload: webViewPayload } => {
         this.sendAction('webview-create', payload);
         return { webViewId: payload.id, webViewPayload: payload };
     }
@@ -299,7 +297,7 @@ class EndymionCore {
      * Sets the active actor.
      * @param payload The payload containing the information about the actor to set as active.
      */
-    public actorSetActive = (payload: actorSetActivePayload): void => {
+    actorSetActive = (payload: actorSetActivePayload): void => {
         this.sendAction('actor-setactive', payload);
     }
 
@@ -309,10 +307,20 @@ class EndymionCore {
      * @param aimable - Whether the object is aimable or not.
      * @param radius - The radius of the aimable area (optional, default value is 0.1).
      */
-    public setAimable(objectId: string, aimable: boolean, radius: number = 0.1): void {
+    setAimable(objectId: string, aimable: boolean, radius: number = 0.1): void {
         this.sendAction('object-setaimable', { id: objectId, enabled: aimable, radius: radius });
     }
 
+    line(objectId: string, points: Array<Position>, thickness: number, color: Color, transform: any) {
+        this.sendAction('shape-line-create', {
+            api: 2,
+            id: objectId,
+            points: points,
+            thickness: thickness,
+            color: color,
+            transform: transform
+        });
+    }
 }
 
 function isInt(value: string | number) {

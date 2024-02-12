@@ -1,6 +1,6 @@
-import { Color, Action, Entity } from "../endymion/endymion.types";
+import { Color, Action, Entity, MessageName, MessagePayload, MessageIncoming as IncomingMessage } from "../endymion/endymion.types";
 import { EndymionCore } from "../endymion/endymion-core";
-import { Subject } from "rxjs";
+import { Subject, tap } from "rxjs";
 import { Win } from "../utils/nav-utils";
 import { hexToRGB, namedColor } from "../utils/color-utils";
 type enEvent = {
@@ -12,30 +12,18 @@ export class BaseEntity {
     protected win: Win;
     private isCreated: boolean = false;
     private updated: Subject<enEvent> = new Subject<enEvent>();
-    public updated$ = this.updated.asObservable();
     private colorUpdated: Subject<Color> = new Subject<Color>();
-    public colorUpdated$ = this.colorUpdated.asObservable();
     private positionUpdated: Subject<{ x: number, y: number, z: number }> = new Subject<{ x: number, y: number, z: number }>();
-    public positionUpdated$ = this.positionUpdated.asObservable();
     private rotationUpdated: Subject<{ x: number, y: number, z: number }> = new Subject<{ x: number, y: number, z: number }>();
-    public rotationUpdated$ = this.rotationUpdated.asObservable();
     private scaleUpdated: Subject<{ x: number, y: number, z: number }> = new Subject<{ x: number, y: number, z: number }>();
-    public scaleUpdated$ = this.scaleUpdated.asObservable();
-    public setTargetableUpdated: Subject<{ enabled: boolean, radius: number }> = new Subject<{ enabled: boolean, radius: number }>();
-    public setTargetableUpdated$ = this.setTargetableUpdated.asObservable();
-    public setActiveUpdated: Subject<boolean> = new Subject<boolean>();
-    public setActiveUpdated$ = this.setActiveUpdated.asObservable();
-
     private created: Subject<Action[]> = new Subject<Action[]>();
-    public created$ = this.created.asObservable();
-    public applyed: Subject<Action[]> = new Subject<Action[]>();
-    public applyed$ = this.applyed.asObservable();
     private applyError: Subject<any> = new Subject<any>();
-    public applyError$ = this.applyError.asObservable();
     private createdError: Subject<any> = new Subject<any>();
-    public createdError$ = this.createdError.asObservable();
-    public error: Subject<any> = new Subject<any>();
-    public error$ = this.error.asObservable();
+    private setTargetableUpdated: Subject<{ enabled: boolean, radius: number }> = new Subject<{ enabled: boolean, radius: number }>();
+    private message: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private targetted: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private clicked: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private webViewVisible: Subject<IncomingMessage> = new Subject<IncomingMessage>();
 
     protected get id() {
         return this.core.getObjectId();
@@ -53,34 +41,83 @@ export class BaseEntity {
     protected color: Color = { r: 0, g: 0, b: 0, a: 1 };
     protected core: EndymionCore;
     protected actions: Array<Action> = [];
+
+    updated$ = this.updated.asObservable();
+    colorUpdated$ = this.colorUpdated.asObservable();
+    positionUpdated$ = this.positionUpdated.asObservable();
+    rotationUpdated$ = this.rotationUpdated.asObservable();
+    scaleUpdated$ = this.scaleUpdated.asObservable();
+    setTargetableUpdated$ = this.setTargetableUpdated.asObservable();
+    setActiveUpdated: Subject<boolean> = new Subject<boolean>();
+    setActiveUpdated$ = this.setActiveUpdated.asObservable();
+    created$ = this.created.asObservable();
+    applyed: Subject<Action[]> = new Subject<Action[]>();
+    applyed$ = this.applyed.asObservable();
+    applyError$ = this.applyError.asObservable();
+    createdError$ = this.createdError.asObservable();
+    error: Subject<any> = new Subject<any>();
+    error$ = this.error.asObservable();
+    targetted$ = this.targetted.asObservable();
+    clicked$ = this.clicked.asObservable();
+    webViewVisible$ = this.webViewVisible.asObservable();
+    message$ = this.message.asObservable().pipe(
+        tap(message => console.log('message', message)),
+        tap(message => {
+            switch (message.name) {
+                case 'actor-on-aim':
+                    this.targetted.next(message);
+                    break;
+                case 'actor-on-click':
+                    this.clicked.next(message);
+                    break;
+                case 'webview-visible':
+                    this.webViewVisible.next(message);
+                    break;
+            }
+        })
+    ).subscribe(r => r);
+
     constructor() {
         this.core = new EndymionCore();
         this.win = new Win(this.core.window);
-        this.updated$.subscribe((event) => {
+        var that = this;
+        this.core.communicationInterface.addEventListener('message', function (event: any) {
+            let jsonStr = event.data;
+            let json = JSON.parse(jsonStr);
+            let name: MessageName = json.name;
+            let payload: MessagePayload = json.payload;
+            if (!name || !payload) return;
+            if ((payload as any).id == that.entity.id) {
+                that.message.next({ name: name, type: 'message', payload: payload });
+            }
+        });
+
+        this.updated$.pipe(tap(event => {
             if (this.isCreated) {
                 if (event.type == 'update') {
                     switch (event.name) {
                         case 'position':
-                            this.actions.push({ name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', position: event.payload.position } })
+                            this.actions.push({ api: '2', name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', position: event.payload.position } })
                             break;
                         case 'rotation':
-                            this.actions.push({ name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', rotation: event.payload.rotation } })
+                            this.actions.push({ api: '2', name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', rotation: event.payload.rotation } })
                             break;
                         case 'scale':
-                            this.actions.push({ name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', scale: event.payload.scale } })
+                            this.actions.push({ api: '2', name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', scale: event.payload.scale } })
                             break;
                         case 'color':
-                            this.actions.push({ name: 'set-color', payload: { id: this.entity.id, color: event.payload.color } });
+                            this.actions.push({ api: '2', name: 'set-color', payload: { id: this.entity.id, color: event.payload.color } });
                             break;
                         case 'object-setaimable':
-                            this.actions.push({ name: 'object-setaimable', payload: { id: this.entity.id, enabled: event.payload.enabled, radius: event.payload.radius } });
+                            this.actions.push({ api: '2', name: 'object-setaimable', payload: { id: this.entity.id, enabled: event.payload.enabled, radius: event.payload.radius } });
                             break;
                         case 'actor-setactive':
-                            this.actions.push({ name: 'actor-setactive', payload: { id: this.entity.id, activated: event.payload.activated } });
+                            this.actions.push({ api: '2', name: 'actor-setactive', payload: { id: this.entity.id, activated: event.payload.activated } });
+                            break;
                     }
                 }
             }
-        });
+        })).subscribe(r => r);
     }
     create() {
         if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
@@ -107,7 +144,7 @@ export class BaseEntity {
     }
     destroy() {
         try {
-            this.actions.push({ name: 'destroy-object', payload: { id: this.entity.id } });
+            this.actions.push({ api: '2', name: 'destroy-object', payload: { id: this.entity.id } });
             this.core.sendActions(this.actions);
         } catch (e) {
             this.error.next({ method: 'destroy', error: e });
@@ -176,6 +213,7 @@ export class BaseEntity {
         this.color = { r: selectedColor.r / 255, g: selectedColor.g / 255, b: selectedColor.b / 255, a: selectedColor.a };
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.color } })
         this.colorUpdated.next(this.color);
+
         return this;
     }
 
@@ -196,8 +234,6 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-setactive', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
     }
-
-    //TODO aggiungere la gestione dei messaggi da vuplex as esempio quando l'oggetto viene mirato
 }
 
 function isInt(value: string | number) {

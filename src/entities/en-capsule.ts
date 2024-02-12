@@ -7,12 +7,12 @@ export class EnCapsule extends BaseEntity {
         super();
         this.entity.primitive = this.type;
     }
-    
+
     create(): EnCapsule {
         this.entity.id = this.id;
         this.actions = [
-            { name: 'create-primitive', payload: this.entity },
-            { name: 'set-color', payload: { id: this.entity.id, color: this.color }}
+            { api: '2', name: 'create-primitive', payload: this.entity },
+            { api: '2', name: 'set-color', payload: { id: this.entity.id, color: this.color } }
         ]
         super.create();
         return this;
