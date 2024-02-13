@@ -23,6 +23,7 @@ export class EndymionApi {
     index: number = 0;
     animationName: string = '';
     renderedEntities: Map<number, EntityMap> = new Map();
+    isClickable: boolean = false;
     win: Win;
     webViewMap: Map<string, webViewPayload> = new Map();
     private filterCount: Map<string, number> = new Map();
@@ -63,6 +64,10 @@ export class EndymionApi {
             this.target = true;
             this.radius = 0.1;
             this.incomingApi.addHandler(`object-onaim_${this.objectId}`, handlerFunction, skipEvent, skipCount);
+            return this;
+        }
+        if(handlerName === 'click') {
+            this.incomingApi.addHandler(`actor-on-click_${this.objectId}`, handlerFunction, skipEvent, skipCount);
             return this;
         }
         this.target = true;
@@ -301,6 +306,7 @@ export class EndymionApi {
             }
             if (this.target) {
                 this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
+                this.core.setClickable(this.entity.id.toString(), this.isClickable);
             }
         } else if (this.primitive === 'webview') {
             this.core.createWebview({ id: this.objectId.toString(), url: this.url, parent: this.webViewParent });
@@ -310,6 +316,7 @@ export class EndymionApi {
             this.core.sendAction('create-primitive', this.entity);
             this.core.setColor(this.entity.id, this.color);
             this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
+            this.core.setClickable(this.entity.id.toString(), this.isClickable);
         }
         this.renderedEntities.set(this.entity.id, { ...this.entity, color: this.color, url: this.url, parent: this.webViewParent });
         return { ...this.entity, color: this.color, parent: this.webViewParent, actorActivated: this.statusActivated, target: this.target, radius: this.radius };
@@ -506,6 +513,10 @@ export class EndymionApi {
     public targetable = (radius: number = 0.1): EndymionApi => {
         this.target = true;
         this.radius = radius;
+        return this;
+    }
+    public setClickable = (clickable: boolean): EndymionApi => {
+        this.isClickable = clickable;
         return this;
     }
     /**

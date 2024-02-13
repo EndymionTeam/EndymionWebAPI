@@ -277,6 +277,10 @@ class EndymionCore {
         this.sendAction('object-setaimable', { id: objectId, enabled: aimable, radius: radius });
     }
 
+    public setClickable(objectId: string, clickable: boolean): void {
+        this.sendAction('actor-set-clickable', { id: objectId, enabled: clickable });
+    }
+
 }
 
 function isInt(value: string | number) {

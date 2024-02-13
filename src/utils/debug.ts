@@ -13,7 +13,6 @@ export function EndymionDebug(id:string | undefined) {
         var div = document.createElement('div');
         div.id = "debug-box";
         div.style.width = '100%';
-        div.style.height = '300px';
         div.style.backgroundColor = 'white';
         div.style.border = '1px solid black';
         div.style.overflow = 'scroll';
