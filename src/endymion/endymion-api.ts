@@ -300,14 +300,15 @@ export class EndymionApi {
         if (this.primitive === 'gltf') {
             this.core.importGltf(this.objectId, this.url);
             this.core.sendAction('update-transform', this.entity);
+            this.core.setClickable(this.entity.id.toString(), this.isClickable);
             if (this.animation) {
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
             }
             if (this.target) {
                 this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
-                this.core.setClickable(this.entity.id.toString(), this.isClickable);
             }
+           
         } else if (this.primitive === 'webview') {
             this.core.createWebview({ id: this.objectId.toString(), url: this.url, parent: this.webViewParent });
             this.core.sendAction('update-transform', { scale: this.scale, id: this.objectId });
@@ -331,6 +332,7 @@ export class EndymionApi {
         this.entity = this.mapEntity(this);
         if (this.primitive === 'gltf') {
             this.core.sendAction('update-transform', this.entity);
+            this.core.setClickable(this.entity.id.toString(), this.isClickable);
             if (this.animation) {
                 this.core.playAnimation(this.objectId, this.index, this.animationName);
                 this.animation = false;
@@ -347,6 +349,7 @@ export class EndymionApi {
             this.core.sendAction('update-transform', this.entity);
             this.core.setColor(this.entity.id, this.color);
             this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
+            this.core.setClickable(this.entity.id.toString(), this.isClickable);
         }
         return { ...this.entity, color: this.color, parent: this.webViewParent, actorActivated: this.statusActivated, target: this.target, radius: this.radius };
     }
