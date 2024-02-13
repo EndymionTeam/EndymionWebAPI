@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
-import { Color, PrimitiveType } from "../endymion/endymion.types";
+import { Color, PrimitiveType } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-primitive";
 
 export class EnAsset extends BaseEntity {
@@ -84,12 +84,11 @@ export class EnAsset extends BaseEntity {
 
         this.entity.id = this.id;
         this.actions = [
-            { api: '2', name: 'import-gltf', payload: { id: this.id, url: url } },
+            { api: '2', name: 'gltf-create', payload: { id: this.id, url: url } },
             {
                 api: '2',
-                name: 'update-transform', payload: {
+                name: 'actor-set-transform', payload: {
                     id: this.id,
-                    type: 'absolute',
                     rotation: this.entity.rotation,
                     position: this.entity.position,
                     scale: this.entity.scale

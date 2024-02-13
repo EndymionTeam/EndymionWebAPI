@@ -1,4 +1,4 @@
-import { Coordinates, PrimitiveType } from "../endymion/endymion.types";
+import { Coordinates, PrimitiveType } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-primitive";
 
 export class EnShapeLine extends BaseEntity {

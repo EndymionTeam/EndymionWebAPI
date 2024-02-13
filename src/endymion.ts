@@ -1,4 +1,3 @@
-import { EndymionApi, rgb, rgba } from './endymion/endymion-api';
 import { En } from './endymion/en';
 import ACube from './tags/a-cube.element';
 import { GenerateSupporStyles, GenerateTransparentMeta, removeSupportStyle } from './utils/dom-utils';
@@ -8,17 +7,14 @@ GenerateTransparentMeta(document);
 
 customElements.define('a-cube', ACube);
 
-(window as any).endymion = new EndymionApi();
+
 (window as any).en = new En();
 (window as any).endymionDebug = EndymionDebug;
-(window as any).consoleLog = consoleLog;
 (window as any).removeSupportStyle = removeSupportStyle;
-(window as any).rgb = rgb;
-(window as any).rgba = rgba;
 (window as any).EnSpace = {
     objectId: 0,
     environment: 'web-browser',
     debugMode: false
 }
 
-export { EndymionApi, ACube, En, rgb, rgba };
+export { ACube, En };

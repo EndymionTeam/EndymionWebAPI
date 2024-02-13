@@ -1,4 +1,4 @@
-import { Color, PrimitiveType, webViewParent as WebViewParent } from "../endymion/endymion.types";
+import { Color, PrimitiveType, webViewParent as WebViewParent } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-primitive";
 
 export class EnWebview extends BaseEntity {
@@ -31,7 +31,7 @@ export class EnWebview extends BaseEntity {
             { api: '2', name: 'webview-create', payload: { id: this.id, url: this.url, parent: this.webViewParent } },
             {
                 api: '2',
-                name: 'update-transform', payload: {
+                name: 'actor-set-transform', payload: {
                     id: this.id,
                     type: 'absolute',
                     rotation: this.entity.rotation,

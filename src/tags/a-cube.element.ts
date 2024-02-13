@@ -1,5 +1,5 @@
-import { EndymionCore } from '../endymion/endymion-core';
-import { Color } from '../endymion/endymion.types';
+import { EndymionCore } from '../endymion/endymion-core-v2';
+import { Color } from '../endymion/endymion-v2.types';
 import { checkValueForColor } from '../utils/color-utils';
 class ACube extends HTMLElement{
     

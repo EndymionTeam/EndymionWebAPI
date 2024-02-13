@@ -1,5 +1,5 @@
-import { Color, Action, Entity, MessageName, MessagePayload, MessageIncoming as IncomingMessage } from "../endymion/endymion.types";
-import { EndymionCore } from "../endymion/endymion-core";
+import { Color, Action, Entity, MessageName, MessagePayload, MessageIncoming as IncomingMessage } from "../endymion/endymion-v2.types";
+import { EndymionCore } from "../endymion/endymion-core-v2";
 import { Subject, tap } from "rxjs";
 import { Win } from "../utils/nav-utils";
 import { hexToRGB, namedColor } from "../utils/color-utils";
@@ -17,13 +17,18 @@ export class BaseEntity {
     private rotationUpdated: Subject<{ x: number, y: number, z: number }> = new Subject<{ x: number, y: number, z: number }>();
     private scaleUpdated: Subject<{ x: number, y: number, z: number }> = new Subject<{ x: number, y: number, z: number }>();
     private created: Subject<Action[]> = new Subject<Action[]>();
+    private applyed: Subject<Action[]> = new Subject<Action[]>();
     private applyError: Subject<any> = new Subject<any>();
+    private error: Subject<any> = new Subject<any>();
     private createdError: Subject<any> = new Subject<any>();
     private setTargetableUpdated: Subject<{ enabled: boolean, radius: number }> = new Subject<{ enabled: boolean, radius: number }>();
     private message: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private targetted: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private clicked: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private webViewVisible: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private isClickable: Subject<boolean> = new Subject<boolean>();
+    private hapticPlay: Subject<boolean> = new Subject<boolean>();
+    private destroyed: Subject<boolean> = new Subject<boolean>();
 
     protected get id() {
         return this.core.getObjectId();
@@ -34,13 +39,35 @@ export class BaseEntity {
         position: { x: 0, y: 0, z: 0 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: { x: 1, y: 1, z: 1 },
-        targetable: false,
-        active: false
-
     };
+
     protected color: Color = { r: 0, g: 0, b: 0, a: 1 };
     protected core: EndymionCore;
-    protected actions: Array<Action> = [];
+    private _actions: Action[] = [];
+    protected get actions() {
+        return this._actions;
+    }
+    protected set actions(actions: Action[]) {
+        if (!actions) throw new Error(`[en-primitive][actions] - value is not valid - ${actions}`);
+        if(actions.length === 0) {
+            this._actions = [];
+            return;
+        }
+        this._actions.map(action => {
+            action.payload.id = this.entity.id;
+        });
+        actions.map(action => {
+            let findend = this._actions.findIndex(a => a.name === action.name
+                && a.payload.id === action.payload.id);
+            if (findend < 0) {
+                this._actions.unshift(action);
+            }
+        })
+    }
+    protected clickable: boolean = false;
+    protected active: boolean = false;
+    protected targetable: boolean = false;
+    protected playHaptic: boolean = false;
 
     updated$ = this.updated.asObservable();
     colorUpdated$ = this.colorUpdated.asObservable();
@@ -51,23 +78,33 @@ export class BaseEntity {
     setActiveUpdated: Subject<boolean> = new Subject<boolean>();
     setActiveUpdated$ = this.setActiveUpdated.asObservable();
     created$ = this.created.asObservable();
-    applyed: Subject<Action[]> = new Subject<Action[]>();
     applyed$ = this.applyed.asObservable();
     applyError$ = this.applyError.asObservable();
     createdError$ = this.createdError.asObservable();
-    error: Subject<any> = new Subject<any>();
     error$ = this.error.asObservable();
     targetted$ = this.targetted.asObservable();
     clicked$ = this.clicked.asObservable();
     webViewVisible$ = this.webViewVisible.asObservable();
+    isClickable$ = this.isClickable.asObservable();
+    hapticPlay$ = this.hapticPlay.asObservable();
+    destroyed$ = this.destroyed.asObservable();
+
     message$ = this.message.asObservable().pipe(
-        tap(message => console.log('message', message)),
+        tap(message => { if (this.core.isDebugMode()) console.log('message', message); }),
         tap(message => {
             switch (message.name) {
                 case 'actor-on-aim':
+                    if(this.playHaptic){
+                        this.core.playHaptic();
+                        this.hapticPlay.next(true);
+                    } 
                     this.targetted.next(message);
                     break;
                 case 'actor-on-click':
+                    if(this.playHaptic){
+                        this.core.playHaptic();
+                        this.hapticPlay.next(true);
+                    } 
                     this.clicked.next(message);
                     break;
                 case 'webview-visible':
@@ -91,33 +128,6 @@ export class BaseEntity {
                 that.message.next({ name: name, type: 'message', payload: payload });
             }
         });
-
-        this.updated$.pipe(tap(event => {
-            if (this.isCreated) {
-                if (event.type == 'update') {
-                    switch (event.name) {
-                        case 'position':
-                            this.actions.push({ api: '2', name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', position: event.payload.position } })
-                            break;
-                        case 'rotation':
-                            this.actions.push({ api: '2', name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', rotation: event.payload.rotation } })
-                            break;
-                        case 'scale':
-                            this.actions.push({ api: '2', name: 'update-transform', payload: { id: this.entity.id, type: 'absolute', scale: event.payload.scale } })
-                            break;
-                        case 'color':
-                            this.actions.push({ api: '2', name: 'set-color', payload: { id: this.entity.id, color: event.payload.color } });
-                            break;
-                        case 'object-setaimable':
-                            this.actions.push({ api: '2', name: 'object-setaimable', payload: { id: this.entity.id, enabled: event.payload.enabled, radius: event.payload.radius } });
-                            break;
-                        case 'actor-setactive':
-                            this.actions.push({ api: '2', name: 'actor-setactive', payload: { id: this.entity.id, activated: event.payload.activated } });
-                            break;
-                    }
-                }
-            }
-        })).subscribe(r => r);
     }
     create() {
         if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
@@ -144,8 +154,9 @@ export class BaseEntity {
     }
     destroy() {
         try {
-            this.actions.push({ api: '2', name: 'destroy-object', payload: { id: this.entity.id } });
+            this.actions.push({ api: '2', name: 'actor-destroy', payload: { id: this.entity.id } });
             this.core.sendActions(this.actions);
+            this.destroyed.next(true);
         } catch (e) {
             this.error.next({ method: 'destroy', error: e });
         }
@@ -154,18 +165,48 @@ export class BaseEntity {
         this.entity.position = { x: x, y: y, z: z };
         this.updated.next({ name: 'position', type: 'update', payload: { position: this.entity.position } })
         this.positionUpdated.next(this.entity.position);
+        if(this.isCreated) {
+            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { position: this.entity.position } } });
+        }
+        return this;
+    }
+    addPos(x: number, y: number, z: number): BaseEntity {
+        this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
+        this.updated.next({ name: 'position-delta', type: 'update', payload: { position: { x, y, z } } });
+        this.positionUpdated.next(this.entity.position);
+        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { position: this.entity.position } } });
         return this;
     }
     setRot(x: number, y: number, z: number): BaseEntity {
         this.entity.rotation = { x: x, y: y, z: z };
         this.updated.next({ name: 'rotation', type: 'update', payload: { rotation: this.entity.rotation } })
         this.rotationUpdated.next(this.entity.rotation);
+        if(this.isCreated) {
+            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { rotation: this.entity.rotation } } });
+        }
+        return this;
+    }
+    addRot(x: number, y: number, z: number): BaseEntity {
+        this.entity.rotation = { x: this.entity.rotation.x + x, y: this.entity.rotation.y + y, z: this.entity.rotation.z + z };
+        this.updated.next({ name: 'rotation-delta', type: 'update', payload: { rotation: { x, y, z } } });
+        this.rotationUpdated.next(this.entity.rotation);
+        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { rotation: this.entity.rotation } } });
         return this;
     }
     setScale(x: number, y: number, z: number): BaseEntity {
         this.entity.scale = { x: x, y: y, z: z };
         this.updated.next({ name: 'scale', type: 'update', payload: { scale: this.entity.scale } })
         this.scaleUpdated.next(this.entity.scale);
+        if(this.isCreated) {
+            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { scale: this.entity.scale } } });
+        }
+        return this;
+    }
+    addScale(x: number, y: number, z: number): BaseEntity {
+        this.entity.scale = { x: this.entity.scale.x + x, y: this.entity.scale.y + y, z: this.entity.scale.z + z };
+        this.updated.next({ name: 'scale-delta', type: 'update', payload: { scale: { x, y, z } } });
+        this.scaleUpdated.next(this.entity.scale);
+        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { scale: this.entity.scale } } });
         return this;
     }
     setColor(color: Color | string): BaseEntity {
@@ -213,27 +254,44 @@ export class BaseEntity {
         this.color = { r: selectedColor.r / 255, g: selectedColor.g / 255, b: selectedColor.b / 255, a: selectedColor.a };
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.color } })
         this.colorUpdated.next(this.color);
-
+        this.actions.push({ api: '2', name: 'primitive-set-color', payload: { id: this.entity.id, color: this.color } });
         return this;
     }
 
-    setOpacity(value: number) {
+    setOpacity(value: number): BaseEntity {
         if (value < 0) throw new Error('[en-primitive][setOpacity] - opacity value is not valid');
         if (value > 1) throw new Error('[en-primitive][setOpacity] - opacity value must be minor or equal to 1');
         this.color.a = value;
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.color } })
         this.colorUpdated.next(this.color);
+        return this;
     }
-    setTargetable(value: boolean, radius: number = 0.1) {
-        this.entity.targetable = value;
-        this.updated.next({ name: 'object-setaimable', type: 'update', payload: { enabled: value, radius: radius } });
+    setTargetable(value: boolean, radius: number = 0.1): BaseEntity {
+        this.targetable = value;
+        this.updated.next({ name: 'actor-set-aimable', type: 'update', payload: { enabled: value, radius: radius } });
         this.setTargetableUpdated.next({ enabled: value, radius: radius });
+        this.actions.push({ api: '2', name: 'actor-set-aimable', payload: { id: this.entity.id, enabled: this.targetable, radius: radius } });
+        return this;
     }
-    setActive(value: boolean) {
-        this.entity.active = value;
+    setActive(value: boolean): BaseEntity {
+        this.active = value;
         this.updated.next({ name: 'actor-setactive', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
+        this.actions.push({ api: '2', name: 'actor-setactive', payload: { id: this.entity.id, activated: this.active } });
+        return this;
     }
+    setClickable(value: boolean): BaseEntity {
+        this.clickable = value;
+        this.updated.next({ name: 'actor-setclickable', type: 'update', payload: { clickable: value } });
+        this.isClickable.next(value);
+        this.actions.push({ api: '2', name: 'actor-set-clickable', payload: { id: this.entity.id, enabled: this.clickable } });
+        return this;
+    }
+    setHapticFeedback(value: boolean): BaseEntity {
+        this.playHaptic = value;
+        return this;
+    }
+    //aggiungere setPlayHaptic
 }
 
 function isInt(value: string | number) {

@@ -1,4 +1,4 @@
-import { EndymionCore } from './endymion-core';
+import { EndymionCore } from './endymion-core-v2';
 import { EnCube } from '../entities/en-cube';
 import { EnSphere } from '../entities/en-sphere';
 import { EnCylinder } from '../entities/en-cylinder';

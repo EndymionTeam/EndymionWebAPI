@@ -3,9 +3,9 @@ import { enError, enLog, enAlert, enOnWindowError } from '../utils/debug';
 import {
     PrimitiveType, Position, Rotation, Scale, Color, ActionName, Action, message,
     webViewPayload, actorSetActivePayload
-} from './endymion.types';
+} from './endymion-v2.types';
 
-class EndymionCore {
+class EndymionCoreV2 {
     communicationInterface: any;
     window: Window
     objectId = 0;
@@ -65,7 +65,7 @@ class EndymionCore {
     /**
      * Create action for request to Endymion Browser Application    
      *
-     * @param actName Action Name, for example: 'create-primitive'
+     * @param actName Action Name, for example: 'primitive-create'
      * @param actPayload Definition of asset to create
      * @returns action object
      */
@@ -73,6 +73,7 @@ class EndymionCore {
         if (actName == undefined || actName == null) throw new Error('[core][createAction] - actName is not defined');
         if (actPayload == undefined || actPayload == null) throw new Error('[core][createAction] - actPayload is not defined');
         var act = {
+            api: "2",
             name: actName,
             payload: actPayload
         };
@@ -83,7 +84,7 @@ class EndymionCore {
      * Send action to Endymion Browser Application      
      * It is a wrapper for createAction and vuplex.postMessage      
      *
-     * @param name Action Name, for example: 'create-primitive'
+     * @param name Action Name, for example: 'primitive-create'
      * @param payload Definition of action
      * @returns void
      */
@@ -107,7 +108,7 @@ class EndymionCore {
             || actionArray == null
             || typeof actionArray !== 'object'
             || actionArray.length == 0) throw new Error('[core][sendActions] - actionArray is not defined');
-        var jsonAction = this.createAction('multi-action', actionArray);
+        var jsonAction = this.createAction('api-multi-action', actionArray);
         if (this.isDebugMode()) console.log(jsonAction);
         this.communicationInterface.postMessage(jsonAction);
     }
@@ -119,7 +120,7 @@ class EndymionCore {
      */
     destroyObject = (objectId: number | string) => {
         this.sendAction(
-            'destroy-object',
+            'actor-destroy',
             {
                 id: objectId
             }
@@ -130,12 +131,12 @@ class EndymionCore {
      */
     destroyAllObjects() {
         this.sendAction(
-            'destroy-allobjects', {}
+            'actor-destroy-all', {}
         );
     }
     /**
      * Create primitive object in Endymion Browser Application      
-     * It is a wrapper for sendAction configured for 'create-primitive'     
+     * It is a wrapper for sendAction configured for 'primitive-create'     
      * 
      * @param objectId typeof number
      * @param primitive typeof primitive
@@ -151,7 +152,7 @@ class EndymionCore {
     ): void => {
         if (objectId < 0) throw new Error('[core][createObject] - objectId is not valid');
         this.sendAction(
-            'create-primitive',
+            'primitive-create',
             {
                 id: objectId,
                 primitive: primitive,
@@ -163,7 +164,7 @@ class EndymionCore {
     }
     /**
      * Create primitive object in Endymion Browser Application      
-     * It is a wrapper for sendAction configured for 'create-primitive'     
+     * It is a wrapper for sendAction configured for 'primitive-create'     
      * 
      * @param objectId typeof number
      * @param source typeof string - url of gltf file
@@ -176,7 +177,7 @@ class EndymionCore {
             || typeof source !== 'string'
             || source.length == 0) throw new Error('[core][importGltf] - source is not defined');
         this.sendAction(
-            'import-gltf',
+            'gltf-create',
             {
                 id: objectId,
                 url: source
@@ -208,7 +209,7 @@ class EndymionCore {
         if (!isInt(color.b)) throw new Error('[core][setColor] - b color value must be an integer');
 
         this.sendAction(
-            'set-color',
+            'primitive-set-color',
             {
                 id: objectId,
                 color: {
@@ -228,7 +229,7 @@ class EndymionCore {
      */
     playHaptic(): void {
         this.sendAction(
-            'play-haptic',
+            'device-play-haptic',
             {}
         );
     }
@@ -241,7 +242,7 @@ class EndymionCore {
      */
     playAnimation = (objectId: number, index: number, animationName: string): void => {
         this.sendAction(
-            'play-anim',
+            'gltf-play-anim',
             {
                 id: objectId,
                 index: index,
@@ -308,7 +309,7 @@ class EndymionCore {
      * @param radius - The radius of the aimable area (optional, default value is 0.1).
      */
     setAimable(objectId: string, aimable: boolean, radius: number = 0.1): void {
-        this.sendAction('object-setaimable', { id: objectId, enabled: aimable, radius: radius });
+        this.sendAction('actor-set-aimable', { id: objectId, enabled: aimable, radius: radius });
     }
 
     line(objectId: string, points: Array<Position>, thickness: number, color: Color, transform: any) {
@@ -332,7 +333,7 @@ function isInt(value: string | number) {
     return (x | 0) === x;
 }
 
-export { EndymionCore };
+export { EndymionCoreV2 as EndymionCore };
 
 
 

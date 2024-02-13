@@ -46,11 +46,25 @@ export type Color = { r: number, g: number, b: number, a: number };
 
 /**
  * Represents the name of an action that can be performed in Endymion.
- * @typedef {'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf'| 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-setactive' | 'object-setaimable' | 'shape-line-create' | 'update-transform'} ActionName
+ * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'| 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-setactive' | 'object-setaimable' | 'shape-line-create' | 'actor-set-transform'} ActionName
  */
-export type ActionName = 'multi-action' | 'create-primitive' | 'create-object' | 'destroy-object' | 'import-gltf'
-    | 'update-transform' | 'set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' | 'gltf-play-anim' | 'gltf-stop-anim' | 'gltf-pause-anim'
-    | 'webview-create' | 'actor-setactive' | 'object-setaimable' | 'shape-line-create' | 'update-transform';
+export type ActionName = 'api-multi-action'
+    | 'actor-add-transform'
+    | 'actor-set-transform'
+    | 'actor-destroy'
+    | 'actor-destroy-all'
+    | 'actor-setactive'
+    | 'actor-set-aimable'
+    | 'actor-set-clickable'
+    | 'device-play-haptic'
+    | 'gltf-create'
+    | 'gltf-play-anim'
+    | 'gltf-pause-anim'
+    | 'gltf-stop-anim'
+    | 'primitive-create'
+    | 'primitive-set-color'
+    | 'shape-line-create'
+    | 'webview-create';
 
 /**
  * Represents an entity in the Endymion system.
@@ -68,9 +82,6 @@ export type Entity = {
     /** The scale of the entity in 3D space. */
     scale: Scale,
     /** defina if entity is targetable. */
-    targetable: boolean,
-    /** defina if entity is active. */
-    active: boolean
 }
 /**
  * Represents an entity map with its properties.
