@@ -1,5 +1,5 @@
 import { Color, PrimitiveType, webViewParent as WebViewParent } from "../endymion/endymion-v2.types";
-import { BaseEntity } from "./en-primitive";
+import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {
     type: PrimitiveType = 'webview';
