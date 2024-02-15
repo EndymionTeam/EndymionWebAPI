@@ -5,8 +5,8 @@ export class EnWebview extends BaseEntity {
     type: PrimitiveType = 'webview';
     webViewParent!: WebViewParent;
     url: string = '';
-    constructor() {
-        super();
+    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
+        super(commInterface, w);
         this.entity.primitive = this.type;
     }
 

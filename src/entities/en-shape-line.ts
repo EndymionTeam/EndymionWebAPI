@@ -10,8 +10,8 @@ export class EnShapeLine extends BaseEntity {
     }];
 
     private thickness: number = 1;
-    constructor() {
-        super();
+    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
+        super(commInterface, w);
         this.entity.primitive = this.type;
     }
     setPoints(points: Coordinates[]): EnShapeLine {

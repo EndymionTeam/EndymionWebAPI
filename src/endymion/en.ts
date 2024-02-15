@@ -20,14 +20,14 @@ export class En {
     disableDebug = () => {
         this.core.disableDebug();
     }
-    asset = (): EnAsset => new EnAsset();
-    capsule = (): EnCapsule => new EnCapsule();
+    asset = (): EnAsset => new EnAsset(this.commInterface, this.w);
+    capsule = (): EnCapsule => new EnCapsule(this.commInterface, this.w);
     cube = (): EnCube => new EnCube(this.commInterface, this.w);
-    cylinder = (): EnCylinder => new EnCylinder();
-    plane = (): EnPlane => new EnPlane();
-    quad = (): EnQuad => new EnQuad();
-    sphere = (): EnSphere => new EnSphere();
-    webview = (): EnWebview => new EnWebview();
-    line = (): EnShapeLine => new EnShapeLine();
+    cylinder = (): EnCylinder => new EnCylinder(this.commInterface, this.w);
+    plane = (): EnPlane => new EnPlane(this.commInterface, this.w);
+    quad = (): EnQuad => new EnQuad(this.commInterface, this.w);
+    sphere = (): EnSphere => new EnSphere(this.commInterface, this.w);
+    webview = (): EnWebview => new EnWebview(this.commInterface, this.w);
+    line = (): EnShapeLine => new EnShapeLine(this.commInterface, this.w);
 
 }

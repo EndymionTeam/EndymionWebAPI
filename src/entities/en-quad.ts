@@ -3,8 +3,8 @@ import { BaseEntity } from "./en-base-entity";
 
 export class EnQuad extends BaseEntity {
     type: PrimitiveType = 'quad';
-    constructor() {
-        super();
+    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
+        super(commInterface, w);
         this.entity.primitive = this.type;
     }
 

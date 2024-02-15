@@ -14,8 +14,8 @@ export class EnAsset extends BaseEntity {
     animationPaused$ = this.animationPaused.asObservable();
     animationStopped$ = this.animationStopped.asObservable();
 
-    constructor() {
-        super();
+    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
+        super(commInterface, w);
         this.entity.primitive = this.type;
     }
 

@@ -89,6 +89,22 @@ export class BaseEntity {
     hapticPlay$ = this.hapticPlay.asObservable();
     destroyed$ = this.destroyed.asObservable();
 
+    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
+        this.core = new EndymionCore(commInterface, w);
+        this.win = new Win(this.core.window);
+        var that = this;
+        this.core.communicationInterface.addEventListener('message', function (event: any) {
+            let jsonStr = event.data;
+            let json = JSON.parse(jsonStr);
+            let name: MessageName = json.name;
+            let payload: MessagePayload = json.payload;
+            if (!name || !payload) return;
+            if ((payload as any).id == that.entity.id) {
+                that.message.next({ name: name, type: 'message', payload: payload });
+            }
+        });
+    }
+
     message$ = this.message.asObservable().pipe(
         tap(message => { if (this.core.isDebugMode()) console.log('message', message); }),
         tap(message => {
@@ -114,21 +130,7 @@ export class BaseEntity {
         })
     ).subscribe(r => r);
 
-    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
-        this.core = new EndymionCore(commInterface, w);
-        this.win = new Win(this.core.window);
-        var that = this;
-        this.core.communicationInterface.addEventListener('message', function (event: any) {
-            let jsonStr = event.data;
-            let json = JSON.parse(jsonStr);
-            let name: MessageName = json.name;
-            let payload: MessagePayload = json.payload;
-            if (!name || !payload) return;
-            if ((payload as any).id == that.entity.id) {
-                that.message.next({ name: name, type: 'message', payload: payload });
-            }
-        });
-    }
+
     create() {
         if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
         try {
@@ -163,7 +165,7 @@ export class BaseEntity {
     }
     setPos(x: number, y: number, z: number): BaseEntity {
         this.entity.position = { x: x, y: y, z: z };
-        this.updated.next({ name: 'position', type: 'update', payload: { position: this.entity.position } })
+        this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { position: this.entity.position } })
         this.positionUpdated.next(this.entity.position);
         if(this.isCreated) {
             this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { position: this.entity.position } } });
@@ -172,14 +174,14 @@ export class BaseEntity {
     }
     addPos(x: number, y: number, z: number): BaseEntity {
         this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
-        this.updated.next({ name: 'position-delta', type: 'update', payload: { position: { x, y, z } } });
+        this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { position: { x, y, z } } });
         this.positionUpdated.next(this.entity.position);
         this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { position: this.entity.position } } });
         return this;
     }
     setRot(x: number, y: number, z: number): BaseEntity {
         this.entity.rotation = { x: x, y: y, z: z };
-        this.updated.next({ name: 'rotation', type: 'update', payload: { rotation: this.entity.rotation } })
+        this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { rotation: this.entity.rotation } })
         this.rotationUpdated.next(this.entity.rotation);
         if(this.isCreated) {
             this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { rotation: this.entity.rotation } } });
@@ -188,14 +190,14 @@ export class BaseEntity {
     }
     addRot(x: number, y: number, z: number): BaseEntity {
         this.entity.rotation = { x: this.entity.rotation.x + x, y: this.entity.rotation.y + y, z: this.entity.rotation.z + z };
-        this.updated.next({ name: 'rotation-delta', type: 'update', payload: { rotation: { x, y, z } } });
+        this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { rotation: { x, y, z } } });
         this.rotationUpdated.next(this.entity.rotation);
         this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { rotation: this.entity.rotation } } });
         return this;
     }
     setScale(x: number, y: number, z: number): BaseEntity {
         this.entity.scale = { x: x, y: y, z: z };
-        this.updated.next({ name: 'scale', type: 'update', payload: { scale: this.entity.scale } })
+        this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { scale: this.entity.scale } })
         this.scaleUpdated.next(this.entity.scale);
         if(this.isCreated) {
             this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { scale: this.entity.scale } } });
@@ -204,7 +206,7 @@ export class BaseEntity {
     }
     addScale(x: number, y: number, z: number): BaseEntity {
         this.entity.scale = { x: this.entity.scale.x + x, y: this.entity.scale.y + y, z: this.entity.scale.z + z };
-        this.updated.next({ name: 'scale-delta', type: 'update', payload: { scale: { x, y, z } } });
+        this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { scale: { x, y, z } } });
         this.scaleUpdated.next(this.entity.scale);
         this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { scale: this.entity.scale } } });
         return this;
@@ -282,7 +284,7 @@ export class BaseEntity {
     }
     setClickable(value: boolean): BaseEntity {
         this.clickable = value;
-        this.updated.next({ name: 'actor-setclickable', type: 'update', payload: { clickable: value } });
+        this.updated.next({ name: 'actor-set-clickable', type: 'update', payload: { clickable: value } });
         this.isClickable.next(value);
         this.actions.push({ api: '2', name: 'actor-set-clickable', payload: { id: this.entity.id, enabled: this.clickable } });
         return this;
@@ -291,7 +293,6 @@ export class BaseEntity {
         this.playHaptic = value;
         return this;
     }
-    //aggiungere setPlayHaptic
 }
 
 function isInt(value: string | number) {
