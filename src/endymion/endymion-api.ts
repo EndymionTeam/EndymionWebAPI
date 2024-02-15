@@ -1,4 +1,4 @@
-import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap, message, webViewParent, webViewPayload } from './endymion.types';
+import { Primitive, Position, Rotation, Scale, Color, Entity, EntityMap, message, webViewParent, webViewPayload, Coordinate } from './endymion.types';
 import { EndymionCore } from './endymion-core';
 import { hexToRGB, namedColor } from '../utils/color-utils';
 import { rgba, rgb } from '../utils/color-utils';
@@ -14,6 +14,8 @@ export class EndymionApi {
     core!: EndymionCore;
     webViewParent!: webViewParent;
     incomingApi!: EndymionIncomingWebApi;
+    thickness: number = 4;
+    points: Coordinate[] = [];
     entity!: Entity;
     url!: string;
     statusActivated!: boolean;
@@ -66,7 +68,7 @@ export class EndymionApi {
             this.incomingApi.addHandler(`object-onaim_${this.objectId}`, handlerFunction, skipEvent, skipCount);
             return this;
         }
-        if(handlerName === 'click') {
+        if (handlerName === 'click') {
             this.incomingApi.addHandler(`actor-on-click_${this.objectId}`, handlerFunction, skipEvent, skipCount);
             return this;
         }
@@ -308,12 +310,31 @@ export class EndymionApi {
             if (this.target) {
                 this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
             }
-           
+
         } else if (this.primitive === 'webview') {
             this.core.createWebview({ id: this.objectId.toString(), url: this.url, parent: this.webViewParent });
             this.core.sendAction('update-transform', { scale: this.scale, id: this.objectId });
             this.core.actorSetActive({ id: this.objectId.toString(), activated: this.statusActivated });
-        } else {
+        } else if (this.primitive == 'shape-line') {
+            this.core.communicationInterface.postMessage(
+                {
+                    api: 2,
+                    name: 'shape-line-create',
+                    payload: {
+                        id: this.objectId,
+                        thickness: this.thickness,
+                        color: this.color,
+                        points: this.points,
+                        transform: {
+                            position: this.entity.position,
+                            rotation: this.entity.rotation,
+                            scale: this.entity.scale
+                        }
+                    }
+                }
+            );
+        }
+        else {
             this.core.sendAction('create-primitive', this.entity);
             this.core.setColor(this.entity.id, this.color);
             this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
@@ -345,7 +366,26 @@ export class EndymionApi {
             if (this.statusActivated) {
                 this.core.actorSetActive({ id: this.objectId.toString(), activated: this.statusActivated });
             }
-        } else {
+        } else if (this.primitive == 'shape-line') {
+            this.core.communicationInterface.postMessage(
+                {
+                    api: 2,
+                    name: 'shape-line-create',
+                    payload: {
+                        id: this.objectId,
+                        thickness: this.thickness,
+                        color: this.color,
+                        points: this.points,
+                        transform: {
+                            position: this.entity.position,
+                            rotation: this.entity.rotation,
+                            scale: this.entity.scale
+                        }
+                    }
+                }
+            );
+        }
+        else {
             this.core.sendAction('update-transform', this.entity);
             this.core.setColor(this.entity.id, this.color);
             this.core.setAimable(this.entity.id.toString(), this.target, this.radius);
@@ -405,6 +445,23 @@ export class EndymionApi {
      */
     public quad = (): EndymionApi => {
         this.primitive = 'quad';
+        return this;
+    }
+
+    public shapeLine = (): EndymionApi => {
+        this.primitive = 'shape-line';
+        return this;
+    }
+    public setTickness = (thickness: number): EndymionApi => {
+        this.thickness = thickness;
+        return this;
+    }
+    setPoints = (points: Coordinate[]): EndymionApi => {
+        this.points = points;
+        return this;
+    }
+    addPoint = (point: Position): EndymionApi => {
+        this.points.push(point);
         return this;
     }
 
@@ -539,6 +596,8 @@ export class EndymionApi {
             scale: config.scale
         } as Entity;
     }
+
+
 
 
 }

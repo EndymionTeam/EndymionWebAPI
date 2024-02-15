@@ -3,7 +3,7 @@
  * @typedef {('cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad')} Primitive
  * @memberof EndymionApi
  */
-export type Primitive = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview';
+export type Primitive = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview' | 'shape-line';
 
 /**
  * Represents a position in 3D space with x, y, and z coordinates.
@@ -20,9 +20,11 @@ export type Rotation = { x:number, y:number, z:number };
  * @typedef {x:number, y:number, z:number} Scale
  */
 export type Scale = { x:number, y:number, z:number};
-
-
-
+/**
+ * Represents a coordinate in 3D space with x, y, and z coordinates.
+ * @typedef {x:number, y:number, z:number} coordinate
+ */
+export type Coordinate = { x:number, y:number, z:number};
 /**
  * The type of transformation to be applied.
  * @typedef {'delta' | 'absolute'} TransformType
