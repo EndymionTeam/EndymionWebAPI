@@ -452,7 +452,7 @@ export class EndymionApi {
         this.primitive = 'shape-line';
         return this;
     }
-    public setTickness = (thickness: number): EndymionApi => {
+    public setThickness = (thickness: number): EndymionApi => {
         this.thickness = thickness;
         return this;
     }
