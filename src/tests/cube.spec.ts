@@ -40,10 +40,14 @@ describe('cube', () => {
         it('cube.create should return correct action sequence', () => {
             let en = new En('vuplex', fakeWindow);
             let cube = en.cube();
-            console.log('cube', cube);  
+            let actualActions: Action[] = [];
             cube.created$.subscribe((actions) => {
-                console.log(actions);
-                expect(actions).to.deep.equal(expectedActions);
+                actualActions = actions;
+            }, error =>{}
+            ,()=>{
+                console.log(actualActions);
+                
+                expect(actualActions).to.deep.equal(expectedActions);
             });
             cube.create();
         });

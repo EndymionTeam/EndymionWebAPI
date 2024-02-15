@@ -11,7 +11,7 @@ import { EnShapeLine } from '../entities/en-shape-line';
 
 export class En {
     core: EndymionCore;
-    constructor(commInterface: string = 'vuplex', w: Window = window) {
+    constructor(private commInterface: string = 'vuplex', private w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
     }
     enableDebug = () => {
@@ -22,7 +22,7 @@ export class En {
     }
     asset = (): EnAsset => new EnAsset();
     capsule = (): EnCapsule => new EnCapsule();
-    cube = (): EnCube => new EnCube();
+    cube = (): EnCube => new EnCube(this.commInterface, this.w);
     cylinder = (): EnCylinder => new EnCylinder();
     plane = (): EnPlane => new EnPlane();
     quad = (): EnQuad => new EnQuad();

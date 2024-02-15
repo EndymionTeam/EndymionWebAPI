@@ -114,8 +114,8 @@ export class BaseEntity {
         })
     ).subscribe(r => r);
 
-    constructor() {
-        this.core = new EndymionCore();
+    constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
+        this.core = new EndymionCore(commInterface, w);
         this.win = new Win(this.core.window);
         var that = this;
         this.core.communicationInterface.addEventListener('message', function (event: any) {

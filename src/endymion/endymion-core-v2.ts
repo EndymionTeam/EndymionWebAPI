@@ -39,20 +39,20 @@ class EndymionCoreV2 {
         (this.window as any).onerror = enOnWindowError;
     }
     getObjectId = (): number => {
-        (window as any).EnSpace.objectId++;
-        return (window as any).EnSpace.objectId;
+        (this.window as any).EnSpace.objectId++;
+        return (this.window as any).EnSpace.objectId;
     }
     getEnvironment = (): string => {
-        return (window as any).EnSpace.environment;
+        return (this.window as any).EnSpace.environment;
     }
     enableDebug = () => {
-        (window as any).EnSpace.debugMode = true;
+        (this.window as any).EnSpace.debugMode = true;
     }
     disableDebug = () => {
-        (window as any).EnSpace.debugMode = false;
+        (this.window as any).EnSpace.debugMode = false;
     }
     isDebugMode = (): boolean => {
-        return (window as any).EnSpace.debugMode;
+        return (this.window as any).EnSpace.debugMode;
     }
     /**
      * Send message to Endymion Browser Application
