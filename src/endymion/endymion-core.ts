@@ -8,6 +8,7 @@ class EndymionCore {
     communicationInterface: any;
     window: Window
     objectId = 0;
+    messageStack: any[] = [];
     defaultPosition: Position = { x: 0, y: 0, z: 0 };
     defaultRotation: Rotation = { x: 0, y: 0, z: 0 };
     defaultScale: Scale = { x: 1, y: 1, z: 1 };
@@ -19,9 +20,24 @@ class EndymionCore {
         if (this.communicationInterface == undefined
             || this.communicationInterface === ''
             || this.communicationInterface === null) {
-            //polyfill for vuplex for execution in browser
+            console.log('EndymionCore: Communication Interface not found');
+            console.log('EndymionCore: Adding listener for interface ready event');
+            console.log('EndymionCore: save message in stack until interface is ready');
+            window.addEventListener('vuplexready', ()=>{
+                console.log('EndymionCore: Interface ready');
+                this.communicationInterface = (this.window as any)[commInterface];
+                this.messageStack.forEach((message) => {
+                    this.communicationInterface.postMessage(message);
+                });
+                this.messageStack = [];
+            
+            });
             this.communicationInterface = {};
-            this.communicationInterface.postMessage = (message: any) => { console.log(message) };
+            this.communicationInterface.postMessage = (message: any) => {
+                 console.log('this message go to stack util interface is ready',message);
+                 this.messageStack.push(message);
+            };
+
             this.communicationInterface.addEventListener = (message: any) => { };
 
         }
