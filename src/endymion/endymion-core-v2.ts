@@ -3,6 +3,7 @@ import { enError, enLog, enAlert, enOnWindowError } from '../utils/debug';
 import { Position, Rotation, Scale, Color, ActionName, Action } from './endymion-v2.types';
 
 class EndymionCoreV2 {
+    private messageStack: any[] = [];
     protected objectId = 0;
     protected defaultPosition: Position = { x: 0, y: 0, z: 0 };
     protected defaultRotation: Rotation = { x: 0, y: 0, z: 0 };
@@ -21,8 +22,25 @@ class EndymionCoreV2 {
                 ...(this.window as any).EnSpace,
                 environment: 'web-browser'
             };
+            window.addEventListener('vuplexready', () => {
+                this.communicationInterface = (this.window as any)[commInterface];
+                this.messageStack.forEach((message) => {
+                    this.communicationInterface.postMessage(message);
+                });
+                this.messageStack = [];
+                (this.window as any).EnSpace = {
+                    ...(this.window as any).EnSpace,
+                    environment: 'web-view'
+                };
+                (this.window as any).console.log = enLog;
+                (this.window as any).console.error = enError;
+                (this.window as any).alert = enAlert;
+                (this.window as any).onerror = enOnWindowError;
+            });
             this.communicationInterface = {};
-            this.communicationInterface.postMessage = (message: any) => { /*console.log(message)*/ };
+            this.communicationInterface.postMessage = (message: any) => {
+                this.messageStack.push(message);
+            };
             this.communicationInterface.addEventListener = (message: any) => { };
             return;
         }
@@ -115,7 +133,7 @@ class EndymionCoreV2 {
         );
     }
 
-    playHaptic = ()=>{
+    playHaptic = () => {
         this.sendAction('device-play-haptic', {});
     }
 
