@@ -65,7 +65,7 @@ export class BaseEntity {
         })
     }
     protected clickable: boolean = false;
-    protected active: boolean = false;
+    protected active: boolean = true;
     protected targetable: boolean = false;
     protected playHaptic: boolean = false;
 
@@ -164,6 +164,10 @@ export class BaseEntity {
         }
     }
     setPos(x: number, y: number, z: number): BaseEntity {
+        if(typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
+        if(typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
+        if(typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
+
         this.entity.position = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { position: this.entity.position } })
         this.positionUpdated.next(this.entity.position);
@@ -173,6 +177,10 @@ export class BaseEntity {
         return this;
     }
     addPos(x: number, y: number, z: number): BaseEntity {
+        if(typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
+        if(typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
+        if(typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
+        
         this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { position: { x, y, z } } });
         this.positionUpdated.next(this.entity.position);
@@ -212,6 +220,7 @@ export class BaseEntity {
         return this;
     }
     setColor(color: Color | string): BaseEntity {
+        if(color === undefined) throw new Error('[en-primitive][setcolor] - color value is not valid');
         let selectedColor: Color = { r: 0, g: 0, b: 0, a: 1 };
         if (typeof color === 'string') {
             if (color.includes('#')) {
