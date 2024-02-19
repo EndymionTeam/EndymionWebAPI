@@ -36,7 +36,7 @@ Easy interact with Endymion browser using HTML5 and javascript
 
 
 # Create Primitives
-## Creations
+## Creation
 Primitives are created in three phases        
 - 1 Getting Intance by endymion library
 - 2 Apply pre settings
@@ -70,7 +70,7 @@ Primitive "hello world!" is as simple cube create
 ```
 It create a white cube centered on the marker and with same marker dimensions.      
 
-## modify
+## Modify
 After creation you can modify entity applying same methods used in creation phase ending chained        
 methods with 'apply()'.
 
@@ -132,6 +132,8 @@ On Entity you can use this methods
 |                                                   | entity                                |                                                            |
 | destroy()                                         | destroy entity                        |                                                            |
 
+NB. create(), apply() and destroy() methods cannot be followed by settings methods.        
+Them can only used as terminal methods.
 
 ### Avalilable Events Subscription
 
