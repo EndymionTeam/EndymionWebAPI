@@ -61,6 +61,9 @@ class EndymionCoreV2 {
     getEnvironment = (): string => {
         return (this.window as any).EnSpace.environment;
     }
+    getApiVersion = (): string => {
+        return (this.window as any).EnSpace.apiVersion;
+    }
     enableDebug = () => {
         (this.window as any).EnSpace.debugMode = true;
     }

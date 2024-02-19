@@ -168,7 +168,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { position: this.entity.position } })
         this.positionUpdated.next(this.entity.position);
         if(this.isCreated) {
-            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { position: this.entity.position } } });
+            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
         }
         return this;
     }
@@ -176,7 +176,7 @@ export class BaseEntity {
         this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { position: { x, y, z } } });
         this.positionUpdated.next(this.entity.position);
-        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { position: this.entity.position } } });
+        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
         return this;
     }
     setRot(x: number, y: number, z: number): BaseEntity {
@@ -184,7 +184,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { rotation: this.entity.rotation } })
         this.rotationUpdated.next(this.entity.rotation);
         if(this.isCreated) {
-            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { rotation: this.entity.rotation } } });
+            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation  } });
         }
         return this;
     }
@@ -192,7 +192,7 @@ export class BaseEntity {
         this.entity.rotation = { x: this.entity.rotation.x + x, y: this.entity.rotation.y + y, z: this.entity.rotation.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { rotation: { x, y, z } } });
         this.rotationUpdated.next(this.entity.rotation);
-        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { rotation: this.entity.rotation } } });
+        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  rotation: this.entity.rotation  } });
         return this;
     }
     setScale(x: number, y: number, z: number): BaseEntity {
@@ -200,7 +200,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { scale: this.entity.scale } })
         this.scaleUpdated.next(this.entity.scale);
         if(this.isCreated) {
-            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), transform: { scale: this.entity.scale } } });
+            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
         }
         return this;
     }
@@ -208,7 +208,7 @@ export class BaseEntity {
         this.entity.scale = { x: this.entity.scale.x + x, y: this.entity.scale.y + y, z: this.entity.scale.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { scale: { x, y, z } } });
         this.scaleUpdated.next(this.entity.scale);
-        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), transform: { scale: this.entity.scale } } });
+        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
         return this;
     }
     setColor(color: Color | string): BaseEntity {
@@ -259,7 +259,6 @@ export class BaseEntity {
         this.actions.push({ api: '2', name: 'primitive-set-color', payload: { id: this.entity.id, color: this.color } });
         return this;
     }
-
     setOpacity(value: number): BaseEntity {
         if (value < 0) throw new Error('[en-primitive][setOpacity] - opacity value is not valid');
         if (value > 1) throw new Error('[en-primitive][setOpacity] - opacity value must be minor or equal to 1');

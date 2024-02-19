@@ -14,7 +14,8 @@ customElements.define('a-cube', ACube);
 (window as any).EnSpace = {
     objectId: 0,
     environment: 'web-browser',
-    debugMode: false
+    debugMode: false,
+    apiVersion: '2.0.0',
 }
 
 export { ACube, En };

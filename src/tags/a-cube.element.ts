@@ -5,38 +5,38 @@ class ACube extends HTMLElement{
     
     endy:EndymionCore = new EndymionCore();
     objectId:number = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
-
+    
     static observedAttributes = ["color"];
 
     constructor(){
         super();
     }
 
-    connectedCallback(){
-        this.endy.createObject(this.objectId, 'cube', {x: 0, y: 0, z: 0}, {x: 45, y: 45, z: 45}, {x: 1, y: 1, z: 1});
-        this.renderPresets();
-    }
+    // connectedCallback(){
+    //     this.endy.createObject(this.objectId, 'cube', {x: 0, y: 0, z: 0}, {x: 45, y: 45, z: 45}, {x: 1, y: 1, z: 1});
+    //     this.renderPresets();
+    // }
 
-    attributeChangedCallback(name:string, oldValue:any, newValue:any){
-        switch(name){
-            case 'color':
-                var color = checkValueForColor(newValue);
-                if(color !== false){
-                    this.endy.setColor(this.objectId, color as Color);
-                } 
-                break;
-            case 'position':
+    // attributeChangedCallback(name:string, oldValue:any, newValue:any){
+    //     switch(name){
+    //         case 'color':
+    //             var color = checkValueForColor(newValue);
+    //             if(color !== false){
+    //                 this.endy.setColor(this.objectId, color as Color);
+    //             } 
+    //             break;
+    //         case 'position':
 
-                break;
-            case 'rotation':
+    //             break;
+    //         case 'rotation':
 
-                break;
-            case 'scale':
+    //             break;
+    //         case 'scale':
                     
-                break;
+    //             break;
 
-        }
-    }
+    //     }
+    // }
 
     private renderPresets(){
         var color = this.getAttribute('color');
