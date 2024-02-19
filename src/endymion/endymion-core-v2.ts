@@ -22,7 +22,7 @@ class EndymionCoreV2 {
                 ...(this.window as any).EnSpace,
                 environment: 'web-browser'
             };
-            window.addEventListener('vuplexready', () => {
+            this.window.addEventListener('vuplexready', () => {
                 this.communicationInterface = (this.window as any)[commInterface];
                 this.messageStack.forEach((message) => {
                     this.communicationInterface.postMessage(message);
