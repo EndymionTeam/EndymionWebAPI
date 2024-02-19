@@ -36,6 +36,7 @@ Easy interact with Endymion browser using HTML5 and javascript
 
 
 # Create Primitives
+## Creations
 Primitives are created in three phases        
 - 1 Getting Intance by endymion library
 - 2 Apply pre settings
@@ -67,9 +68,20 @@ Primitive "hello world!" is as simple cube create
     let cube = en.cube();
     cube.create();
 ```
-It create a white cube centered on the marker and with same marker dimensions.
+It create a white cube centered on the marker and with same marker dimensions.      
 
-## Available Primitives
+## modify
+After creation you can modify entity applying same methods used in creation phase ending chained        
+methods with 'apply()'.
+
+```javascript
+    let cube = en.cube().create()
+
+    cube.setColor('red')
+    .setRot(45,0,0)
+    .apply()
+```
+### Available Primitives
 | Name       |  
 |------------| 
 | cube       |  
