@@ -32,7 +32,11 @@ export type Coordinates = { x: number, y: number, z: number };
  * @typedef {'delta' | 'absolute'} TransformType
  */
 export type TransformType = 'delta' | 'absolute';
-
+export type  Transform = {
+    position: Position,
+    rotation: Rotation,
+    scale: Scale,
+}
 /**
  * Represents the possible types of transformations that can be applied to an object.
  * @typedef {'position' | 'rotation' | 'scale'} TransformGreatness
@@ -145,7 +149,7 @@ export type webviewParentTransform = 'p' | 'r' | 's' | 'pr' | 'ps' | 'rs' | 'prs
 /**
  * Represents the parent of a web view.
  */
-export type webViewParent = { id: string, inherit_transform: webviewParentTransform } | undefined;
+export type webViewParent = { id: string, inherit_transform: webviewParentTransform | undefined } | undefined;
 
 /**
  * Represents the payload for a web view.
