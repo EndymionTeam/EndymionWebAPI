@@ -8,9 +8,7 @@ import { EnPlane } from '../entities/en-plane';
 import { EnQuad } from '../entities/en-quad';
 import { EnWebview } from '../entities/en-webview';
 import { EnShapeLine } from '../entities/en-shape-line';
-import { StarterWebView } from '../aggregates/starter-webview';
-import { PagePlaceholder } from '../aggregates/page-placeholder';
-import { PageHologram } from '../aggregates/page-hologram';
+import { MasterPage } from './master-page';
 
 export class En {
     core: EndymionCore;
@@ -32,7 +30,5 @@ export class En {
     sphere = (): EnSphere => new EnSphere(this.commInterface, this.w);
     webview = (): EnWebview => new EnWebview(this.commInterface, this.w);
     line = (): EnShapeLine => new EnShapeLine(this.commInterface, this.w);
-    starterWebview = () => new StarterWebView(this);
-    pagePlaceholder = () => new PagePlaceholder(this);
-    pageHologram = () => new PageHologram(this);
+    starterWebview = () => new MasterPage(this);
 }
