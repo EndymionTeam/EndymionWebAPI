@@ -161,6 +161,61 @@ Them can only used as terminal methods.
 
 
 # Create Assets
+## Creating
+Assets are created in three phases        
+- 1 Getting Intance by endymion library
+- 2 Apply pre settings
+- 3 Ask to Endymion Browser to load it
+
+```javascript
+    //get cube instance by endymion library
+    let duck = en.asset();
+    //set color
+    duck.setAnim(1);
+    //ask endymion browser to load it
+    duck.load('./assets/duck.glb');
+```
+
+## Modify
+After creation you can modify entity applying same methods used in creation phase ending chained        
+methods with 'apply()'.
+
+```javascript
+     let duck = en.asset();
+
+    duck.setRot(45,0,0)
+    .apply();
+```
+### Available Methods
+On Assets you can use all methods allowed for primitives with exclusion reported in table
+| Name                                              | Description                           | Details                                                    |   
+| --------------------------------------------------| ------------------------------------- | ---------------------------------------------------------- |  
+| setColor(Color or string)                         | set entity color                      | NOT ALLOWED (an error is throwned)                         |
+| setOpacity(value:number)                          | set opacity of entity                 | NOT ALLOWED (an error is throwned)                         |
+| create()                                          | ask to endymion browser to create     | NOT ALLOWED (an error is throwned)                         |
+| setAnim(animationIndex: number)                   | choose an animation                   | choose an animation available on asset                     |
+| playAnim()                                        | play animation                        |                                                            |
+| stopAnim()                                        | stop animation                        |                                                            |
+| pauseAnim()                                       | pause animation                       |                                                            |
+| load(url:string)                                  | load asset                            | ask to Endymion Browser to load asset (relative/absolute)  |
+
+NB. load(), apply() and destroy() methods cannot be followed by settings methods.        
+Them can only used as terminal methods.
+
+### Avalilable Events Subscription
+All event subscription for entities are available with esclusion reported in table
+
+| Name                      | Description                           | type                      |   
+| --------------------------| ------------------------------------- | --------------------------|
+| colorUpdated$             | observable on color update event      | NOT AVAILABLE             |
+| created$                  | observable on create event            | NOT AVAILABLE             |
+| animationUpdated$         | observable on animation update event  |                           |
+| animationPlaying$         | observable on playing event           |                           |
+| animationPaused$          | observable on pause event             |                           |
+| animationStopped          | observable on stop event              |                           |
+
+
+
 # Create WebView
 
 # Browser Event Management
