@@ -33,7 +33,6 @@ export class EnWebview extends BaseEntity {
                 api: '2',
                 name: 'actor-set-transform', payload: {
                     id: this.id,
-                    type: 'absolute',
                     rotation: this.entity.rotation,
                     position: this.entity.position,
                     scale: this.entity.scale

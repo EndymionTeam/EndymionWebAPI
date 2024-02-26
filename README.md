@@ -217,6 +217,29 @@ All event subscription for entities are available with esclusion reported in tab
 
 
 # Create WebView
+A webView is a container for a web page that you can ask to create to Endymion Browser.     
+WebView allow to render on same browser visualization more than one html content at same time.
+
+You can ask Endymion browser to create it so:
+```javascript
+    let webView = en.webview();
+    webView.setUrl('relative/absolute path to html page');
+    webView.create();
+```
+
+### Available Methods
+On Assets you can use all methods allowed for primitives with exclusion reported in table
+| Name                                              | Description                           | Details                                                   |   
+| --------------------------------------------------| ------------------------------------- | --------------------------------------------------------- |  
+| setColor(Color or string)                         | set entity color                      | NOT ALLOWED (an error is throwned)                        |
+| setOpacity(value:number)                          | set opacity of entity                 | NOT ALLOWED (an error is throwned)                        |
+| setUrl(url:string)                                | url of html page                      | url of html page to use in webview                        |
+| setParent(parent: WebViewParent)                  | { id: parentId,                       | parent id and inherith trasform by parent                 |
+|                                                   |   inherit_transform: undefined | -> } | One of: ["prs", "p", "pr", "ps"] where: "p" = position,   |
+|                                                   |                                       | "r" = rotation and "s" scale. Default "prs"               |
+
+
+
 
 # Browser Event Management
 # Entity: deal with events
