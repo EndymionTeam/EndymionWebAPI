@@ -30,7 +30,7 @@ export class BaseEntity {
     private hapticPlay: Subject<boolean> = new Subject<boolean>();
     private destroyed: Subject<boolean> = new Subject<boolean>();
 
-    protected get id() {
+    get id() {
         return this.core.getObjectId();
     }
     protected entity: Entity = {

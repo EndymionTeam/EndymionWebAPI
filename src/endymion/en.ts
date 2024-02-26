@@ -8,6 +8,7 @@ import { EnPlane } from '../entities/en-plane';
 import { EnQuad } from '../entities/en-quad';
 import { EnWebview } from '../entities/en-webview';
 import { EnShapeLine } from '../entities/en-shape-line';
+import { MasterPage } from './master-page';
 
 export class En {
     core: EndymionCore;
@@ -29,5 +30,5 @@ export class En {
     sphere = (): EnSphere => new EnSphere(this.commInterface, this.w);
     webview = (): EnWebview => new EnWebview(this.commInterface, this.w);
     line = (): EnShapeLine => new EnShapeLine(this.commInterface, this.w);
-
+    starterWebview = () => new MasterPage(this);
 }
