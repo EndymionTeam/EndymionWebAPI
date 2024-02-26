@@ -170,7 +170,7 @@ Assets are created in three phases
 ```javascript
     //get cube instance by endymion library
     let duck = en.asset();
-    //set color
+    //set animation to use (optional)
     duck.setAnim(1);
     //ask endymion browser to load it
     duck.load('./assets/duck.glb');
