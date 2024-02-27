@@ -24,6 +24,13 @@ class EndymionCoreV2 {
             };
             this.window.addEventListener('vuplexready', () => {
                 this.communicationInterface = (this.window as any)[commInterface];
+                this.communicationInterface.postMessage({
+                    "name": "api-init",
+                    "payload":
+                    {
+                        "api": "2"
+                    }
+                })
                 this.messageStack.forEach((message) => {
                     this.communicationInterface.postMessage(message);
                 });

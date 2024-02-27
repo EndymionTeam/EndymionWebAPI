@@ -37,7 +37,6 @@ export class EnAsset extends BaseEntity {
     playAnim() {
         if (this.animationIndex > -1) {
             this.actions.push({
-                api: '2',
                 name: 'gltf-play-anim',
                 payload: {
                     id: this.id,
@@ -52,7 +51,6 @@ export class EnAsset extends BaseEntity {
     }
     stopAnim() {
         this.actions.push({
-            api: '2',
             name: 'gltf-stop-anim',
             payload: {
                 id: this.id
@@ -65,7 +63,6 @@ export class EnAsset extends BaseEntity {
     }
     pauseAnim() {
         this.actions.push({
-            api: '2',
             name: 'gltf-pause-anim',
             payload: {
                 id: this.id
@@ -84,9 +81,8 @@ export class EnAsset extends BaseEntity {
 
         this.entity.id = this.id;
         this.actions = [
-            { api: '2', name: 'gltf-create', payload: { id: this.id, url: url } },
+            { name: 'gltf-create', payload: { id: this.id, url: url } },
             {
-                api: '2',
                 name: 'actor-set-transform', payload: {
                     id: this.id,
                     rotation: this.entity.rotation,

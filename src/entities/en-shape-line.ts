@@ -30,7 +30,7 @@ export class EnShapeLine extends BaseEntity {
         this.entity.id = this.id;
         this.actions = [
             {
-                api: '2', name: 'shape-line-create', payload: {
+               name: 'shape-line-create', payload: {
                     id: this.entity.id.toString(),
                     color: this.color,
                     thickness: this.thickness,

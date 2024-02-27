@@ -12,7 +12,7 @@ export class EnCylinder extends BaseEntity {
         this.entity.id = this.id;
         this.actions = [
             {
-                api: '2', name: 'primitive-create', payload: {
+                name: 'primitive-create', payload: {
                     id: this.entity.id,
                     primitive: this.entity.primitive,
                     transform: {

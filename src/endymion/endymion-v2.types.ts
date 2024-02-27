@@ -120,7 +120,6 @@ export type EntityMap = {
  * @typedef {name:ActionName, payload:any} action
  */
 export interface Action {
-    api: string,
     name: ActionName,
     payload: any
 }
@@ -180,7 +179,7 @@ export type actorSetActivePayload = {
 /**
  * Payload for setting the aimable state of an object.
  */
-export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible'
+export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result'
 
 /**
  * Represents the payload for a message.

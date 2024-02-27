@@ -29,6 +29,7 @@ export class BaseEntity {
     private isClickable: Subject<boolean> = new Subject<boolean>();
     private hapticPlay: Subject<boolean> = new Subject<boolean>();
     private destroyed: Subject<boolean> = new Subject<boolean>();
+    private actionResult: Subject<any> = new Subject<any>();
 
     get id() {
         return this.core.getObjectId();
@@ -88,6 +89,7 @@ export class BaseEntity {
     isClickable$ = this.isClickable.asObservable();
     hapticPlay$ = this.hapticPlay.asObservable();
     destroyed$ = this.destroyed.asObservable();
+    actionResult$ = this.actionResult.asObservable();
 
     constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
@@ -126,10 +128,12 @@ export class BaseEntity {
                 case 'webview-visible':
                     this.webViewVisible.next(message);
                     break;
+                case 'api-on-result':
+                    this.actionResult.next(message);
+                break;
             }
         })
     ).subscribe(r => r);
-
 
     create() {
         if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
@@ -156,7 +160,7 @@ export class BaseEntity {
     }
     destroy() {
         try {
-            this.actions.push({ api: '2', name: 'actor-destroy', payload: { id: this.entity.id } });
+            this.actions.push({ name: 'actor-destroy', payload: { id: this.entity.id } });
             this.core.sendActions(this.actions);
             this.destroyed.next(true);
         } catch (e) {
@@ -172,7 +176,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { position: this.entity.position } })
         this.positionUpdated.next(this.entity.position);
         if(this.isCreated) {
-            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
+            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
         }
         return this;
     }
@@ -184,7 +188,7 @@ export class BaseEntity {
         this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { position: { x, y, z } } });
         this.positionUpdated.next(this.entity.position);
-        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
+        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
         return this;
     }
     setRot(x: number, y: number, z: number): BaseEntity {
@@ -192,7 +196,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { rotation: this.entity.rotation } })
         this.rotationUpdated.next(this.entity.rotation);
         if(this.isCreated) {
-            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation  } });
+            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation  } });
         }
         return this;
     }
@@ -200,7 +204,7 @@ export class BaseEntity {
         this.entity.rotation = { x: this.entity.rotation.x + x, y: this.entity.rotation.y + y, z: this.entity.rotation.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { rotation: { x, y, z } } });
         this.rotationUpdated.next(this.entity.rotation);
-        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  rotation: this.entity.rotation  } });
+        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  rotation: this.entity.rotation  } });
         return this;
     }
     setScale(x: number, y: number, z: number): BaseEntity {
@@ -208,7 +212,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { scale: this.entity.scale } })
         this.scaleUpdated.next(this.entity.scale);
         if(this.isCreated) {
-            this.actions.push({ api: '2', name: 'actor-set-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
+            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
         }
         return this;
     }
@@ -216,7 +220,7 @@ export class BaseEntity {
         this.entity.scale = { x: this.entity.scale.x + x, y: this.entity.scale.y + y, z: this.entity.scale.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { scale: { x, y, z } } });
         this.scaleUpdated.next(this.entity.scale);
-        this.actions.push({ api: '2', name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
+        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
         return this;
     }
     setColor(color: Color | string): BaseEntity {
@@ -265,7 +269,7 @@ export class BaseEntity {
         this.color = { r: selectedColor.r / 255, g: selectedColor.g / 255, b: selectedColor.b / 255, a: selectedColor.a };
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.color } })
         this.colorUpdated.next(this.color);
-        this.actions.push({ api: '2', name: 'primitive-set-color', payload: { id: this.entity.id, color: this.color } });
+        this.actions.push({ name: 'primitive-set-color', payload: { id: this.entity.id, color: this.color } });
         return this;
     }
     setOpacity(value: number): BaseEntity {
@@ -280,21 +284,21 @@ export class BaseEntity {
         this.targetable = value;
         this.updated.next({ name: 'actor-set-aimable', type: 'update', payload: { enabled: value, radius: radius } });
         this.setTargetableUpdated.next({ enabled: value, radius: radius });
-        this.actions.push({ api: '2', name: 'actor-set-aimable', payload: { id: this.entity.id, enabled: this.targetable, radius: radius } });
+        this.actions.push({ name: 'actor-set-aimable', payload: { id: this.entity.id, enabled: this.targetable, radius: radius } });
         return this;
     }
     setActive(value: boolean): BaseEntity {
         this.active = value;
         this.updated.next({ name: 'actor-setactive', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
-        this.actions.push({ api: '2', name: 'actor-setactive', payload: { id: this.entity.id, activated: this.active } });
+        this.actions.push({ name: 'actor-setactive', payload: { id: this.entity.id, activated: this.active } });
         return this;
     }
     setClickable(value: boolean): BaseEntity {
         this.clickable = value;
         this.updated.next({ name: 'actor-set-clickable', type: 'update', payload: { clickable: value } });
         this.isClickable.next(value);
-        this.actions.push({ api: '2', name: 'actor-set-clickable', payload: { id: this.entity.id, enabled: this.clickable } });
+        this.actions.push({ name: 'actor-set-clickable', payload: { id: this.entity.id, enabled: this.clickable } });
         return this;
     }
     setHapticFeedback(value: boolean): BaseEntity {
