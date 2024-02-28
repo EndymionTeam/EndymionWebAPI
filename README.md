@@ -19,7 +19,7 @@ Easy interact with Endymion browser using HTML5 and javascript
 ## Installation
 1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.0.0) and set in script tag in html page in head tag
 ```HTML 
-    <script src="endymion.2.0.0"></script>
+    <script src="<latest version of endymion browser>"></script>
 ```
 ## Entity Classification
 
