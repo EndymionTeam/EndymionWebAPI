@@ -50,7 +50,7 @@ export class BaseEntity {
     }
     protected set actions(actions: Action[]) {
         if (!actions) throw new Error(`[en-primitive][actions] - value is not valid - ${actions}`);
-        if(actions.length === 0) {
+        if (actions.length === 0) {
             this._actions = [];
             return;
         }
@@ -112,17 +112,17 @@ export class BaseEntity {
         tap(message => {
             switch (message.name) {
                 case 'actor-on-aim':
-                    if(this.playHaptic){
+                    if (this.playHaptic) {
                         this.core.playHaptic();
                         this.hapticPlay.next(true);
-                    } 
+                    }
                     this.targetted.next(message);
                     break;
                 case 'actor-on-click':
-                    if(this.playHaptic){
+                    if (this.playHaptic) {
                         this.core.playHaptic();
                         this.hapticPlay.next(true);
-                    } 
+                    }
                     this.clicked.next(message);
                     break;
                 case 'webview-visible':
@@ -130,7 +130,7 @@ export class BaseEntity {
                     break;
                 case 'api-on-result':
                     this.actionResult.next(message);
-                break;
+                    break;
             }
         })
     ).subscribe(r => r);
@@ -168,35 +168,35 @@ export class BaseEntity {
         }
     }
     setPos(x: number, y: number, z: number): BaseEntity {
-        if(typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
-        if(typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
-        if(typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
+        if (typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
+        if (typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
+        if (typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
 
         this.entity.position = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { position: this.entity.position } })
         this.positionUpdated.next(this.entity.position);
-        if(this.isCreated) {
-            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
+        if (this.isCreated) {
+            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), position: this.entity.position } });
         }
         return this;
     }
     addPos(x: number, y: number, z: number): BaseEntity {
-        if(typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
-        if(typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
-        if(typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
-        
+        if (typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
+        if (typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
+        if (typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
+
         this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { position: { x, y, z } } });
         this.positionUpdated.next(this.entity.position);
-        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position  } });
+        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position } });
         return this;
     }
     setRot(x: number, y: number, z: number): BaseEntity {
         this.entity.rotation = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { rotation: this.entity.rotation } })
         this.rotationUpdated.next(this.entity.rotation);
-        if(this.isCreated) {
-            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation  } });
+        if (this.isCreated) {
+            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation } });
         }
         return this;
     }
@@ -204,15 +204,15 @@ export class BaseEntity {
         this.entity.rotation = { x: this.entity.rotation.x + x, y: this.entity.rotation.y + y, z: this.entity.rotation.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { rotation: { x, y, z } } });
         this.rotationUpdated.next(this.entity.rotation);
-        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  rotation: this.entity.rotation  } });
+        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation } });
         return this;
     }
     setScale(x: number, y: number, z: number): BaseEntity {
         this.entity.scale = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { scale: this.entity.scale } })
         this.scaleUpdated.next(this.entity.scale);
-        if(this.isCreated) {
-            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
+        if (this.isCreated) {
+            this.actions.push({ name: 'actor-set-transform', payload: { id: this.entity.id.toString(), scale: this.entity.scale } });
         }
         return this;
     }
@@ -220,11 +220,11 @@ export class BaseEntity {
         this.entity.scale = { x: this.entity.scale.x + x, y: this.entity.scale.y + y, z: this.entity.scale.z + z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { scale: { x, y, z } } });
         this.scaleUpdated.next(this.entity.scale);
-        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(),  scale: this.entity.scale  } });
+        this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), scale: this.entity.scale } });
         return this;
     }
     setColor(color: Color | string): BaseEntity {
-        if(color === undefined) throw new Error('[en-primitive][setcolor] - color value is not valid');
+        if (color === undefined) throw new Error('[en-primitive][setcolor] - color value is not valid');
         let selectedColor: Color = { r: 0, g: 0, b: 0, a: 1 };
         if (typeof color === 'string') {
             if (color.includes('#')) {

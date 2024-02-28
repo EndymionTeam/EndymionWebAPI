@@ -151,7 +151,6 @@ class EndymionCoreV2 {
         if (actName == undefined || actName == null) throw new Error('[core][createAction] - actName is not defined');
         if (actPayload == undefined || actPayload == null) throw new Error('[core][createAction] - actPayload is not defined');
         var act = {
-            api: "2",
             name: actName,
             payload: actPayload
         };
