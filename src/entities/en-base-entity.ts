@@ -21,19 +21,22 @@ export class BaseEntity {
     private applyError: Subject<any> = new Subject<any>();
     private error: Subject<any> = new Subject<any>();
     private createdError: Subject<any> = new Subject<any>();
-    private setTargetableUpdated: Subject<{ enabled: boolean, radius: number }> = new Subject<{ enabled: boolean, radius: number }>();
+    private setAimableUpdated: Subject<{ enabled: boolean, radius: number }> = new Subject<{ enabled: boolean, radius: number }>();
     private message: Subject<IncomingMessage> = new Subject<IncomingMessage>();
-    private targetted: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private aimed: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private clicked: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private webViewVisible: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private isClickable: Subject<boolean> = new Subject<boolean>();
     private hapticPlay: Subject<boolean> = new Subject<boolean>();
     private destroyed: Subject<boolean> = new Subject<boolean>();
     private actionResult: Subject<any> = new Subject<any>();
+    protected customId: number = 0;
+    isCustomId: boolean = false;
 
     get id() {
         return this.core.getObjectId();
     }
+
     protected entity: Entity = {
         id: 0,
         primitive: 'cube',
@@ -67,7 +70,7 @@ export class BaseEntity {
     }
     protected clickable: boolean = false;
     protected active: boolean = true;
-    protected targetable: boolean = false;
+    protected aimable: boolean = false;
     protected playHaptic: boolean = false;
 
     updated$ = this.updated.asObservable();
@@ -75,7 +78,7 @@ export class BaseEntity {
     positionUpdated$ = this.positionUpdated.asObservable();
     rotationUpdated$ = this.rotationUpdated.asObservable();
     scaleUpdated$ = this.scaleUpdated.asObservable();
-    setTargetableUpdated$ = this.setTargetableUpdated.asObservable();
+    setAimableUpdated$ = this.setAimableUpdated.asObservable();
     setActiveUpdated: Subject<boolean> = new Subject<boolean>();
     setActiveUpdated$ = this.setActiveUpdated.asObservable();
     created$ = this.created.asObservable();
@@ -83,13 +86,20 @@ export class BaseEntity {
     applyError$ = this.applyError.asObservable();
     createdError$ = this.createdError.asObservable();
     error$ = this.error.asObservable();
-    targetted$ = this.targetted.asObservable();
+    aimed$ = this.aimed.asObservable();
     clicked$ = this.clicked.asObservable();
     webViewVisible$ = this.webViewVisible.asObservable();
     isClickable$ = this.isClickable.asObservable();
     hapticPlay$ = this.hapticPlay.asObservable();
     destroyed$ = this.destroyed.asObservable();
     actionResult$ = this.actionResult.asObservable();
+    message$ = this.message.asObservable().pipe(
+        tap((message) => {
+            if (this.core.isDebugMode()) {
+                console.log(message);
+            }
+        })
+    );
 
     constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
@@ -102,38 +112,31 @@ export class BaseEntity {
             let payload: MessagePayload = json.payload;
             if (!name || !payload) return;
             if ((payload as any).id == that.entity.id) {
+                switch (name) {
+                    case 'actor-on-aim':
+                        if (that.playHaptic) {
+                            that.core.playHaptic();
+                            that.hapticPlay.next(true);
+                        }
+                        that.aimed.next({ name: name, type: 'message', payload: payload });
+                        break;
+                    case 'actor-on-click':
+                        if (that.playHaptic) {
+                            that.core.playHaptic();
+                            that.hapticPlay.next(true);
+                        }
+                        that.clicked.next({ name: name, type: 'message', payload: payload });
+                        break;
+                    case 'webview-visible':
+                        that.webViewVisible.next({ name: name, type: 'message', payload: payload });
+                        break;
+                }
                 that.message.next({ name: name, type: 'message', payload: payload });
             }
         });
     }
 
-    message$ = this.message.asObservable().pipe(
-        tap(message => { if (this.core.isDebugMode()) console.log('message', message); }),
-        tap(message => {
-            switch (message.name) {
-                case 'actor-on-aim':
-                    if (this.playHaptic) {
-                        this.core.playHaptic();
-                        this.hapticPlay.next(true);
-                    }
-                    this.targetted.next(message);
-                    break;
-                case 'actor-on-click':
-                    if (this.playHaptic) {
-                        this.core.playHaptic();
-                        this.hapticPlay.next(true);
-                    }
-                    this.clicked.next(message);
-                    break;
-                case 'webview-visible':
-                    this.webViewVisible.next(message);
-                    break;
-                case 'api-on-result':
-                    this.actionResult.next(message);
-                    break;
-            }
-        })
-    ).subscribe(r => r);
+
 
     create() {
         if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
@@ -166,6 +169,11 @@ export class BaseEntity {
         } catch (e) {
             this.error.next({ method: 'destroy', error: e });
         }
+    }
+    setId(id: number): BaseEntity {
+        this.isCustomId = true;
+        this.customId = id;
+        return this;
     }
     setPos(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
@@ -280,11 +288,11 @@ export class BaseEntity {
         this.colorUpdated.next(this.color);
         return this;
     }
-    setTargetable(value: boolean, radius: number = 0.1): BaseEntity {
-        this.targetable = value;
+    setAimable(value: boolean, radius: number = 0.1): BaseEntity {
+        this.aimable = value;
         this.updated.next({ name: 'actor-set-aimable', type: 'update', payload: { enabled: value, radius: radius } });
-        this.setTargetableUpdated.next({ enabled: value, radius: radius });
-        this.actions.push({ name: 'actor-set-aimable', payload: { id: this.entity.id, enabled: this.targetable, radius: radius } });
+        this.setAimableUpdated.next({ enabled: value, radius: radius });
+        this.actions.push({ name: 'actor-set-aimable', payload: { id: this.entity.id, enabled: this.aimable, radius: radius } });
         return this;
     }
     setActive(value: boolean): BaseEntity {

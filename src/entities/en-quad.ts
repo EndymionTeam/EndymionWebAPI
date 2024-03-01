@@ -9,7 +9,7 @@ export class EnQuad extends BaseEntity {
     }
 
     create(): EnQuad {
-        this.entity.id = this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
             {
                 name: 'primitive-create', payload: {

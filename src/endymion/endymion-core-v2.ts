@@ -23,14 +23,15 @@ class EndymionCoreV2 {
                 environment: 'web-browser'
             };
             this.window.addEventListener('vuplexready', () => {
+                if(this.isDebugMode()) console.log('vuplexready event received');
                 this.communicationInterface = (this.window as any)[commInterface];
-                this.communicationInterface.postMessage({
+                this.messageStack.unshift({
                     "name": "api-init",
                     "payload":
                     {
                         "api": "2"
                     }
-                })
+                });
                 this.messageStack.forEach((message) => {
                     this.communicationInterface.postMessage(message);
                 });
@@ -60,6 +61,13 @@ class EndymionCoreV2 {
         (this.window as any).console.error = enError;
         (this.window as any).alert = enAlert;
         (this.window as any).onerror = enOnWindowError;
+        this.communicationInterface.postMessage({
+            "name": "api-init",
+            "payload":
+            {
+                "api": "2"
+            }
+        });
     }
     getObjectId = (): number => {
         (this.window as any).EnSpace.objectId++;

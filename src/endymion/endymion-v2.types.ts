@@ -68,7 +68,8 @@ export type ActionName = 'api-multi-action'
     | 'primitive-create'
     | 'primitive-set-color'
     | 'shape-line-create'
-    | 'webview-create';
+    | 'webview-create'
+    | 'tracker-add-image';
 
 /**
  * Represents an entity in the Endymion system.
@@ -179,7 +180,7 @@ export type actorSetActivePayload = {
 /**
  * Payload for setting the aimable state of an object.
  */
-export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result'
+export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'tracker-on-image'
 
 /**
  * Represents the payload for a message.

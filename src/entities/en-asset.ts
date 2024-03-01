@@ -79,12 +79,12 @@ export class EnAsset extends BaseEntity {
             ? url
             : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`
 
-        this.entity.id = this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
-            { name: 'gltf-create', payload: { id: this.id, url: url } },
+            { name: 'gltf-create', payload: { id: this.entity.id, url: url } },
             {
                 name: 'actor-set-transform', payload: {
-                    id: this.id,
+                    id: this.entity.id,
                     rotation: this.entity.rotation,
                     position: this.entity.position,
                     scale: this.entity.scale

@@ -17,6 +17,9 @@ export class EnWebview extends BaseEntity {
         throw new Error("[en-webview][setOpacity] - Method not allowed on EnWebview");
     }
     setUrl(url: string): EnWebview {
+        url = url.includes('http')
+        ? url
+        : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;
         this.url = url;
         return this;
     }
@@ -26,12 +29,12 @@ export class EnWebview extends BaseEntity {
     }
     override create(): EnWebview {
         if (!this.url) throw new Error('[en-webview][create] - url is required');
-        this.entity.id = this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
-            { name: 'webview-create', payload: { id: this.id, url: this.url, parent: this.webViewParent } },
+            { name: 'webview-create', payload: { id: this.entity.id, url: this.url, parent: this.webViewParent } },
             {
                 name: 'actor-set-transform', payload: {
-                    id: this.id,
+                    id: this.entity.id,
                     rotation: this.entity.rotation,
                     position: this.entity.position,
                     scale: this.entity.scale

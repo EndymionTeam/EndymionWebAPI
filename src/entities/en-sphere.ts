@@ -9,7 +9,7 @@ export class EnSphere extends BaseEntity {
     }
 
     create(): EnSphere {
-        this.entity.id = this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
             {
                 name: 'primitive-create', payload: {

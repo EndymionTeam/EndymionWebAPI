@@ -144,14 +144,14 @@ Them can only used as terminal methods.
 | positionUpdated$          | observable on position update event   | position value            |
 | rotationUpdated$          | observable on rotation update event   | rotation value            |
 | scaleUpdated$             | observable on scale update event      | scale value               |
-| setTargetableUpdated$     | observable on targetable value        | { enabled, radius }       |
+| setAimableUpdated$        | observable on aimable  value          | { enabled, radius }       |
 | setActivatedUpdated$      | observable on activate status value   | boolean                   |
 | created$                  | observable on create event            | actions list              |
 | createError$              | observable on create errors           | { method, error }         |
 | applyed$                  | observable on apply event             | actions list              |
 | applyError$               | observable on apply errors            | { method, error }         |
 | error$                    | observable on generic errors          | { method, error }         |
-| targetted$                | observable on target event            | { name, payload }         |
+| aimed$                    | observable on aim event               | { name, payload }         |
 | clicked$                  | observable on click event             | { name, payload }         |
 | webViewVisible$           | observable on webView visible event   | { name, payload }         |    
 | isClickable$              | observable on clickable update event  | boolean                   |
