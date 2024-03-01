@@ -23,15 +23,9 @@ class EndymionCoreV2 {
                 environment: 'web-browser'
             };
             this.window.addEventListener('vuplexready', () => {
-                if(this.isDebugMode()) console.log('vuplexready event received');
+                if (this.isDebugMode()) console.log('vuplexready event received');
                 this.communicationInterface = (this.window as any)[commInterface];
-                this.messageStack.unshift({
-                    "name": "api-init",
-                    "payload":
-                    {
-                        "api": "2"
-                    }
-                });
+                this.initApiVersion();
                 this.messageStack.forEach((message) => {
                     this.communicationInterface.postMessage(message);
                 });
@@ -50,24 +44,19 @@ class EndymionCoreV2 {
                 this.messageStack.push(message);
             };
             this.communicationInterface.addEventListener = (message: any) => { };
-            return;
-        }
+           
+        } else {
 
-        (this.window as any).EnSpace = {
-            ...(this.window as any).EnSpace,
-            environment: 'web-view'
-        };
-        (this.window as any).console.log = enLog;
-        (this.window as any).console.error = enError;
-        (this.window as any).alert = enAlert;
-        (this.window as any).onerror = enOnWindowError;
-        this.communicationInterface.postMessage({
-            "name": "api-init",
-            "payload":
-            {
-                "api": "2"
-            }
-        });
+            (this.window as any).EnSpace = {
+                ...(this.window as any).EnSpace,
+                environment: 'web-view'
+            };
+            (this.window as any).console.log = enLog;
+            (this.window as any).console.error = enError;
+            (this.window as any).alert = enAlert;
+            (this.window as any).onerror = enOnWindowError;
+            this.initApiVersion();
+        }
     }
     getObjectId = (): number => {
         (this.window as any).EnSpace.objectId++;
@@ -163,6 +152,16 @@ class EndymionCoreV2 {
             payload: actPayload
         };
         return act as Action;
+    }
+    private initApiVersion = ()=>{
+        if(this.isDebugMode()) console.log('initApiVersion');
+        this.communicationInterface.postMessage({
+            name: "api-init",
+            payload:
+            {
+                api: "2"
+            }
+        });
     }
 }
 
