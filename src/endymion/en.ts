@@ -64,9 +64,8 @@ export class En {
     sphere = (): EnSphere => new EnSphere(this.commInterface, this.w);
     webview = (): EnWebview => new EnWebview(this.commInterface, this.w);
     line = (): EnShapeLine => new EnShapeLine(this.commInterface, this.w);
-    masterPage = () => new MasterPage(this);
-
-    addTrakingImage = (url: string, refWidth:number = 0.05) => {
+    masterPage = (): MasterPage => new MasterPage(this);
+    addTrackingImage = (url: string, refWidth:number = 0.05) => {
         let id = this.core.getObjectId();
         let payload = {
             id: id,

@@ -16,7 +16,6 @@ export type Page = {
 export class MasterPage {
     pages: Page[] = [];
     constructor(private en: En) {
-
     }
     addPage(name: string,
         url: string,
@@ -38,6 +37,9 @@ export class MasterPage {
     
     addPages(pages: Page[]) {
         this.pages = pages;
+    }
+    addTrackingImage(imagePath: string) {
+        this.en.addTrackingImage(imagePath);
     }
     connect() {
         this.pages.map(page => {
