@@ -1,10 +1,11 @@
-import { Color, PrimitiveType, webViewParent as WebViewParent } from "../endymion/endymion-v2.types";
+import { Color, PrimitiveType, webViewParent as WebViewParent, webViewType } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {
     type: PrimitiveType = 'webview';
     webViewParent!: WebViewParent;
     url: string = '';
+    webViewType: webViewType = 'flat-fixed';
     constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
         super(commInterface, w);
         this.entity.primitive = this.type;
@@ -27,11 +28,18 @@ export class EnWebview extends BaseEntity {
         this.webViewParent = webViewParent;
         return this;
     }
+    setType(type: webViewType): EnWebview {
+        this.webViewType = type;
+        return this;
+    }
     override create(): EnWebview {
         if (!this.url) throw new Error('[en-webview][create] - url is required');
         this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
-            { name: 'webview-create', payload: { id: this.entity.id, url: this.url, parent: this.webViewParent } },
+            { name: 'webview-create', payload: { id: this.entity.id, 
+                type: this.webViewType,
+                url: this.url, 
+                parent: this.webViewParent } },
             {
                 name: 'actor-set-transform', payload: {
                     id: this.entity.id,

@@ -65,7 +65,7 @@ export class En {
     webview = (): EnWebview => new EnWebview(this.commInterface, this.w);
     line = (): EnShapeLine => new EnShapeLine(this.commInterface, this.w);
     masterPage = (): MasterPage => new MasterPage(this);
-    addTrackingImage = (url: string, refWidth:number = 0.05) => {
+    addTrackingImage = (url: string, refWidth:number = 0.05):number => {
         let id = this.core.getObjectId();
         let payload = {
             id: id,
@@ -73,5 +73,6 @@ export class En {
             refWidth : refWidth 
         }
         this.core.sendActions([{ name: 'tracker-add-image', payload: payload }]);
+        return id;
     }
 }

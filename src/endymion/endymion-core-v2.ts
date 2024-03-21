@@ -18,6 +18,7 @@ class EndymionCoreV2 {
         if (this.communicationInterface == undefined
             || this.communicationInterface === ''
             || this.communicationInterface === null) {
+                console.log('vuplex not ready');
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-browser'
@@ -44,9 +45,9 @@ class EndymionCoreV2 {
                 this.messageStack.push(message);
             };
             this.communicationInterface.addEventListener = (message: any) => { };
-           
-        } else {
 
+        } else {
+            console.log('vuplex already ready');
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-view'
@@ -153,8 +154,8 @@ class EndymionCoreV2 {
         };
         return act as Action;
     }
-    private initApiVersion = ()=>{
-        if(this.isDebugMode()) console.log('initApiVersion');
+    private initApiVersion = () => {
+        if (this.isDebugMode()) console.log('initApiVersion');
         this.communicationInterface.postMessage({
             name: "api-init",
             payload:
