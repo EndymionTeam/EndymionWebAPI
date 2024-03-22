@@ -39,7 +39,7 @@ export class EnAsset extends BaseEntity {
             this.actions.push({
                 name: 'gltf-play-anim',
                 payload: {
-                    id: this.id,
+                    id:  this.entity.id,
                     index: this.animationIndex
                 }
             });
@@ -53,7 +53,7 @@ export class EnAsset extends BaseEntity {
         this.actions.push({
             name: 'gltf-stop-anim',
             payload: {
-                id: this.id
+                id:  this.entity.id
             }
         });
         this.apply();
@@ -65,7 +65,7 @@ export class EnAsset extends BaseEntity {
         this.actions.push({
             name: 'gltf-pause-anim',
             payload: {
-                id: this.id
+                id:  this.entity.id
             }
         });
         this.apply();
