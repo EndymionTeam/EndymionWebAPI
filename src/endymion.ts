@@ -8,7 +8,7 @@ GenerateTransparentMeta(document);
     objectId: 0,
     environment: 'web-browser',
     debugMode: false,
-    apiVersion: '2.0.0',
+    apiVersion: '2.3.0',
 }
 
 export { En };

@@ -4,6 +4,7 @@ import { Position, Rotation, Scale, Color, ActionName, Action } from './endymion
 
 class EndymionCoreV2 {
     private messageStack: any[] = [];
+    private apiVerisionInitExecuted = false;
     protected objectId = 0;
     protected defaultPosition: Position = { x: 0, y: 0, z: 0 };
     protected defaultRotation: Rotation = { x: 0, y: 0, z: 0 };
@@ -18,13 +19,13 @@ class EndymionCoreV2 {
         if (this.communicationInterface == undefined
             || this.communicationInterface === ''
             || this.communicationInterface === null) {
-                console.log('vuplex not ready');
+            console.log('communication interface not ready');
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-browser'
             };
             this.window.addEventListener('vuplexready', () => {
-                if (this.isDebugMode()) console.log('vuplexready event received');
+                if (this.isDebugMode()) console.log('communication interface ready event received');
                 this.communicationInterface = (this.window as any)[commInterface];
                 this.initApiVersion();
                 this.messageStack.forEach((message) => {
@@ -47,7 +48,7 @@ class EndymionCoreV2 {
             this.communicationInterface.addEventListener = (message: any) => { };
 
         } else {
-            console.log('vuplex already ready');
+            console.log('communication interface already ready');
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-view'
@@ -155,14 +156,17 @@ class EndymionCoreV2 {
         return act as Action;
     }
     private initApiVersion = () => {
-        if (this.isDebugMode()) console.log('initApiVersion');
-        this.communicationInterface.postMessage({
-            name: "api-init",
-            payload:
-            {
-                api: "2"
-            }
-        });
+        if (!this.apiVerisionInitExecuted) {
+            if (this.isDebugMode()) console.log('initApiVersion');
+            this.apiVerisionInitExecuted = true;
+            this.communicationInterface.postMessage({
+                name: "api-init",
+                payload:
+                {
+                    api: "2"
+                }
+            });
+        }
     }
 }
 

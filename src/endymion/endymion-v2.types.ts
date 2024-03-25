@@ -50,14 +50,14 @@ export type Color = { r: number, g: number, b: number, a: number };
 
 /**
  * Represents the name of an action that can be performed in Endymion.
- * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'| 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-setactive' | 'object-setaimable' | 'shape-line-create' | 'actor-set-transform'} ActionName
+ * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'| 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-set-active' | 'object-setaimable' | 'shape-line-create' | 'actor-set-transform'} ActionName
  */
 export type ActionName = 'api-multi-action'
     | 'actor-add-transform'
     | 'actor-set-transform'
     | 'actor-destroy'
     | 'actor-destroy-all'
-    | 'actor-setactive'
+    | 'actor-set-active'
     | 'actor-set-aimable'
     | 'actor-set-clickable'
     | 'device-play-haptic'

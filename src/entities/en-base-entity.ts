@@ -47,11 +47,13 @@ export class BaseEntity {
 
     protected color: Color = { r: 0, g: 0, b: 0, a: 1 };
     protected core: EndymionCore;
-    private _actions: Action[] = [];
+    //TODO: actions is at any because there is a method that 
+    //use an action with version 2 that is specified
+    private _actions: any[] = [];
     protected get actions() {
         return this._actions;
     }
-    protected set actions(actions: Action[]) {
+    protected set actions(actions: any[]) {
         if (!actions) throw new Error(`[en-primitive][actions] - value is not valid - ${actions}`);
         if (actions.length === 0) {
             this._actions = [];
@@ -193,7 +195,7 @@ export class BaseEntity {
         if (typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
         if (typeof z !== 'number') throw new Error('[en-primitive][setPos] - z value is not valid');
 
-        this.entity.position = { x: this.entity.position.x + x, y: this.entity.position.y + y, z: this.entity.position.z + z };
+        this.entity.position = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { position: { x, y, z } } });
         this.positionUpdated.next(this.entity.position);
         this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position } });
@@ -209,7 +211,7 @@ export class BaseEntity {
         return this;
     }
     addRot(x: number, y: number, z: number): BaseEntity {
-        this.entity.rotation = { x: this.entity.rotation.x + x, y: this.entity.rotation.y + y, z: this.entity.rotation.z + z };
+        this.entity.rotation = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { rotation: { x, y, z } } });
         this.rotationUpdated.next(this.entity.rotation);
         this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation } });
@@ -225,7 +227,7 @@ export class BaseEntity {
         return this;
     }
     addScale(x: number, y: number, z: number): BaseEntity {
-        this.entity.scale = { x: this.entity.scale.x + x, y: this.entity.scale.y + y, z: this.entity.scale.z + z };
+        this.entity.scale = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { scale: { x, y, z } } });
         this.scaleUpdated.next(this.entity.scale);
         this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), scale: this.entity.scale } });
@@ -297,9 +299,10 @@ export class BaseEntity {
     }
     setActive(value: boolean): BaseEntity {
         this.active = value;
-        this.updated.next({ name: 'actor-setactive', type: 'update', payload: { activated: value } });
+        this.updated.next({ name: 'actor-set-active', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
-        this.actions.push({ name: 'actor-setactive', payload: { id: this.entity.id, activated: this.active } });
+        //TODO; this action working still api:2 property setted
+        this.actions.push({ api:2, name: 'actor-set-active', payload: { id: this.entity.id, activated: this.active } });
         return this;
     }
     setClickable(value: boolean): BaseEntity {
