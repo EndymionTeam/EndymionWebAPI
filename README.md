@@ -1,23 +1,40 @@
-# EndymionWebApi
+# EndymionWebApi 2.3.0
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-* [Getting Started](#getting-started)
-    * [Installation](#installation)
-    * [Entity Classification](#entity-classification)
-* [Create Primitives](#create-primitives)
-* [Create Assets](#create-assets)
-* [Create WebView](#create-webview)
-* [Browser Events](#browser-events)
-* [Entity: deal with events](#entity-deal-with-events)
+- [EndymionWebApi 2.3.0](#endymionwebapi-230)
+  - [Table of Contents](#table-of-contents)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Entity Classification](#entity-classification)
+- [Create Primitives](#create-primitives)
+  - [Creation](#creation)
+  - [Modify](#modify)
+    - [Available Primitives](#available-primitives)
+    - [Available Methods](#available-methods)
+    - [Avalilable Events Subscription](#avalilable-events-subscription)
+- [Create Assets](#create-assets)
+  - [Creating](#creating)
+  - [Modify](#modify-1)
+    - [Available Methods](#available-methods-1)
+    - [Avalilable Events Subscription](#avalilable-events-subscription-1)
+- [Create WebView](#create-webview)
+    - [Available Methods](#available-methods-2)
+- [Library General Methods and Events](#library-general-methods-and-events)
+  - [General Methods](#general-methods)
+    - [General Methods Examples](#general-methods-examples)
+  - [Events](#events)
+    - [General Events Examples](#general-events-examples)
+- [Create a QR Code Based Experience](#create-a-qr-code-based-experience)
+
 
 
 ---
 
 # Getting Started
 ## Installation
-1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.0.0) and set in script tag in html page in head tag
+1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.3.0) and set in script tag in html page in head tag
 ```HTML 
     <script src="<latest version of endymion browser>"></script>
 ```
@@ -121,7 +138,7 @@ On Entity you can use this methods
 |                                                   |                                       | 4 - named color like 'lime'                                |
 | setOpacity(value:number)                          | set opacity of entity                 | set opacity of entity work on alpha value of color         |
 |                                                   |                                       | values accepted >0 and < 1                                 |
-| setTargetable(value:boolean, radius:number = 0.1) | define if entity is aimable by browser| radius define sensible area that aimed should emit event   |
+| setAimable(value:boolean, radius:number = 0.1)    | define if entity is aimable by browser| radius define sensible area that aimed should emit event   |
 | setActive(value:boolean)                          | define active state of primitive      | inactive state will not render by browser                  |
 | setClickable(value:boolean)                       | define if primitive is clickable      | click event is emitted if value == true                    |
 | setHapticFeedback(value:boolean)                  | define if haptic is activated         | if activated an haptic feedback is placed when entity is   |
@@ -239,8 +256,89 @@ On Assets you can use all methods allowed for primitives with exclusion reported
 |                                                   |                                       | "r" = rotation and "s" scale. Default "prs"               |
 
 
+# Library General Methods and Events
+You can perform general action and subscribe general events to take control of environment
+Here a list of available methods
+## General Methods
+| Name                                                  | Description                                                       |   
+| ------------------------------------------------------| ----------------------------------------------------------------- |  
+| enableDebug()                                         | Allow to see action logged in a box sended to Endymion Browser    |
+|                                                       | and message by Endymion Browset to library                        |
+| disableDebug()                                        | Disable debug mode                                                |
+| addTrackingImage(url:string, refWidth: number = 0.05) | addTrackingImage allow to define an image that will be used like  |
+|                                                       | experience activator. When Endymion Browser aim this library fire |
+|                                                       | a trakingImage event that you can use to start experience         |
+|                                                       | refWidth express in meter the image side length of a square image |
+| playHaptic()                                          | play an haptic feedback on device                                 |
+
+### General Methods Examples
+
+enable debug mode
+```javascript
+    en.enableDebug()
+```
+disable debug mode
+```javascript
+    en.disableDebug()
+```
+add tracking image
+enable debug mode
+```javascript
+    // optional in this example but you should subscribe tracking event 
+    // to add operations after endymion browser framed the image used to start the experience
+    en.trackImage$.subscribe(event=>{
+        //event -> {name: 'tracker-on-image', type:'message', payload:any }
+        if(event.payload.state == true){
+            //operations to start experience
+        }
+    })
+    en.addTrackingImage('/assets/image/tracking-image.jpg')
+```
+
+## Events
+
+Here a list of available events that you can subscribe
 
 
-# Browser Event Management
-# Entity: deal with events
+| Name               | Description                                                                    |   
+| ------------------ | ------------------------------------------------------------------------------ |  
+| message$           | {name: string, type:string = 'message', payload:any }                          |  
+|                    | where name can be = 'api-on-result'| 'tracker-on-image'                        |  
+|                    | payload for 'api-on-result' is                                                 |  
+|                    | {"uuid" : string, "success" : boolean, "message" : string }                    |  
+|                    | 'api-on-result' represent a status on action requested to Endymion Browser     |  
+|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean } |  
+|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean    |    
+|                    | that Endymion Browser framed the image used to start the experience (see       |  
+|                    | addTrackingImage method)                                                       |  
+| actionResult$      | {name: 'api-on-result', type:'message', payload:any }                          |  
+|                    | payload for 'api-on-result' is                                                 |       
+|                    | {"uuid": string, "success": boolean, "message": string }                       |  
+|                    | 'api-on-result' represent a status on action requested to Endymion Browser     |  
+| trackImage$        | {name: 'tracker-on-image', type:'message', payload:any }                       |  
+|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean } |  
+|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean    |    
+|                    | that Endymion Browser framed the image used to start the experience (see       |  
+|                    | addTrackingImage method)                                                       |  
+
+### General Events Examples
+subscribe events
+```javascript
+    en.message$.subscribe(event=>{
+        //event ->{name: string, type:'message', payload:any }
+    });
+    en.actionResult$.subscribe(event=>{
+        //event ->{name: 'api-on-result', type:'message', payload:{"uuid": string, "success": boolean, "message": string } }
+    });
+        en.trackImage$.subscribe(event=>{
+        //event ->{name: 'tracker-on-image', type:'message', payload:{"id" : string | number, "state" : boolean } }
+    });
+```
+
+# Create a QR Code Based Experience
+An augmented reality experience based on the QR code uses your smartphone or tablet to enjoy AR content that will only be displayed when the QR code is framed.  
+Find detailed instructions for creating this type of experience here.  
+
+[QR code based experience](QR-code-experience.md)
+
 

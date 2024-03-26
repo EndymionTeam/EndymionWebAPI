@@ -55,6 +55,9 @@ export class En {
     disableDebug = () => {
         this.core.disableDebug();
     }
+    playHaptic() {
+        this.core.playHaptic();
+    }
     asset = (): EnAsset => new EnAsset(this.commInterface, this.w);
     capsule = (): EnCapsule => new EnCapsule(this.commInterface, this.w);
     cube = (): EnCube => new EnCube(this.commInterface, this.w);
