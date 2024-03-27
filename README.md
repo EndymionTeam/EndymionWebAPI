@@ -100,7 +100,6 @@ methods with 'apply()'.
 
 ```javascript
     let cube = en.cube().create()
-
     cube.setColor('red')
     .setRot(45,0,0)
     .apply()
@@ -253,14 +252,15 @@ You can ask Endymion browser to create it so:
 
 ### Available Methods
 On Assets you can use all methods allowed for primitives with exclusion reported in table
-| Name                                              | Description                           | Details                                                   |   
-| --------------------------------------------------| ------------------------------------- | --------------------------------------------------------- |  
-| setColor(Color or string)                         | set entity color                      | NOT ALLOWED (an error is throwned)                        |
-| setOpacity(value:number)                          | set opacity of entity                 | NOT ALLOWED (an error is throwned)                        |
-| setUrl(url:string)                                | url of html page                      | url of html page to use in webview                        |
-| setParent(parent: WebViewParent)                  | { id: parentId,                       | parent id and inherith trasform by parent                 |
-|                                                   |   inherit_transform: undefined | -> } | One of: ["prs", "p", "pr", "ps"] where: "p" = position,   |
-|                                                   |                                       | "r" = rotation and "s" scale. Default "prs"               |
+| Name                                              | Description                           | Details                                                    |   
+| --------------------------------------------------| ------------------------------------- | ---------------------------------------------------------- |  
+| setColor(Color or string)                         | set entity color                      | NOT ALLOWED (an error is throwned)                         |
+| setOpacity(value:number)                          | set opacity of entity                 | NOT ALLOWED (an error is throwned)                         |
+| setUrl(url:string)                                | url of html page                      | url of html page to use in webview                         |
+| setParent(parent: WebViewParent)                  | { id: parentId,                       | parent id and inherith trasform by parent                  |
+|                                                   |   inherit_transform: undefined | -> } | One of: ["prs", "p", "pr", "ps"] where: "p" = position,    |
+|                                                   |                                       | "r" = rotation and "s" scale. Default "prs"                |
+| setType(type:, webViewType)                       | set webview type                      | can be 'persp', 'flat-scaled', 'flat-fixed', 'screen-fixed'|
 
 
 # Library General Methods and Events

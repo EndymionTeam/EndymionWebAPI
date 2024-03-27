@@ -19,7 +19,7 @@ class EndymionCoreV2 {
         if (this.communicationInterface == undefined
             || this.communicationInterface === ''
             || this.communicationInterface === null) {
-            console.log('communication interface not ready');
+                if (this.isDebugMode())console.log('communication interface not ready');
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-browser'
@@ -48,7 +48,7 @@ class EndymionCoreV2 {
             this.communicationInterface.addEventListener = (message: any) => { };
 
         } else {
-            console.log('communication interface already ready');
+            if(this.isDebugMode())console.log('communication interface already ready');
             (this.window as any).EnSpace = {
                 ...(this.window as any).EnSpace,
                 environment: 'web-view'
@@ -77,7 +77,7 @@ class EndymionCoreV2 {
         (this.window as any).EnSpace.debugMode = false;
     }
     isDebugMode = (): boolean => {
-        return (this.window as any).EnSpace.debugMode;
+        return (this.window as any).EnSpace?.debugMode || false;
     }
     /**
      * Send message to Endymion Browser Application
