@@ -187,7 +187,7 @@ export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' 
  */
 export type MessagePayload = {
     id: string,
-    state?: string
+    state?: string | boolean
 }
 
 /**
