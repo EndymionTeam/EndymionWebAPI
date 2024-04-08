@@ -19,6 +19,7 @@ export class En {
     private message: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private actionResult: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private trackImage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
+    private pageVisibility: Subject<boolean> = new Subject<boolean>();
     private connections: Map<number, EnWebview | null> = new Map<number, EnWebview | null>();
     private currentConnectionImageId: number = -1;
 
@@ -31,7 +32,7 @@ export class En {
     );
     actionResult$ = this.actionResult.asObservable();
     trackImage$ = this.trackImage.asObservable();
-
+    pageVisibility$ = this.pageVisibility.asObservable();
 
     constructor(private commInterface: string = 'vuplex', private w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
@@ -49,6 +50,9 @@ export class En {
                     break;
                 case 'tracker-on-image':
                     that.trackImage.next({ name: name, type: 'message', payload: payload });
+                    break;
+                case 'webview-visible':
+                    that.pageVisibility.next(payload.state as boolean);
                     break;
             }
             that.message.next({ name: name, type: 'message', payload: payload });

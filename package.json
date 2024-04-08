@@ -1,6 +1,6 @@
 {
   "name": "endymion",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Endymion library for augmented reality",
   "main": "./lib/endymion.js",
   "types": "./lib/endymion.d.ts",
