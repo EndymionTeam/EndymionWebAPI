@@ -19,8 +19,8 @@ export class EnWebview extends BaseEntity {
     }
     setUrl(url: string): EnWebview {
         url = url.includes('http')
-        ? url
-        : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;
+            ? url
+            : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;
         this.url = url;
         return this;
     }
@@ -36,16 +36,21 @@ export class EnWebview extends BaseEntity {
         if (!this.url) throw new Error('[en-webview][create] - url is required');
         this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
-            { name: 'webview-create', payload: { id: this.entity.id, 
-                type: this.webViewType,
-                url: this.url, 
-                parent: this.webViewParent } },
             {
                 name: 'actor-set-transform', payload: {
                     id: this.entity.id,
                     rotation: this.entity.rotation,
                     position: this.entity.position,
                     scale: this.entity.scale
+                }
+            },
+            {
+                name: 'webview-create',
+                payload: {
+                    id: this.entity.id,
+                    type: this.webViewType,
+                    url: this.url,
+                    parent: this.webViewParent
                 }
             }]
         super.create();

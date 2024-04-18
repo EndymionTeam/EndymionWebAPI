@@ -81,7 +81,6 @@ export class EnAsset extends BaseEntity {
 
         this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
-            { name: 'gltf-create', payload: { id: this.entity.id, url: url } },
             {
                 name: 'actor-set-transform', payload: {
                     id: this.entity.id,
@@ -89,7 +88,8 @@ export class EnAsset extends BaseEntity {
                     position: this.entity.position,
                     scale: this.entity.scale
                 }
-            }]
+            },
+            { name: 'gltf-create', payload: { id: this.entity.id, url: url } }]
         super.create();
         return this;
     }

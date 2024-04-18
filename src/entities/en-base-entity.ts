@@ -252,6 +252,9 @@ export class BaseEntity {
                 var hexColor = namedColor().get(color.toUpperCase()) as string;
                 selectedColor = hexToRGB(hexColor) as Color;
             }
+            if(color === 'transparent') {
+                selectedColor = { r: 0, g: 0, b: 0, a: 0 };
+            }
         }
         if (typeof color === 'object'
             && color !== null
