@@ -37,20 +37,17 @@ export class EnWebview extends BaseEntity {
         this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
             {
-                name: 'actor-set-transform', payload: {
-                    id: this.entity.id,
-                    rotation: this.entity.rotation,
-                    position: this.entity.position,
-                    scale: this.entity.scale
-                }
-            },
-            {
                 name: 'webview-create',
                 payload: {
                     id: this.entity.id,
                     type: this.webViewType,
                     url: this.url,
-                    parent: this.webViewParent
+                    parent: this.webViewParent,
+                    transform: {
+                        rotation: this.entity.rotation,
+                        position: this.entity.position,
+                        scale: this.entity.scale
+                    }
                 }
             }]
         super.create();

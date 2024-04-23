@@ -218,6 +218,11 @@ export class BaseEntity {
         return this;
     }
     setScale(x: number, y: number, z: number): BaseEntity {
+        if (x == null || x == undefined) throw new Error('[en-primitive][setScale] - x value is not valid');
+        if ((y == null || y == undefined) && (z == null || z == undefined)) {
+            y = x;
+            z = x;
+        }
         this.entity.scale = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-set-transform', type: 'update', payload: { scale: this.entity.scale } })
         this.scaleUpdated.next(this.entity.scale);
@@ -227,6 +232,11 @@ export class BaseEntity {
         return this;
     }
     addScale(x: number, y: number, z: number): BaseEntity {
+        if (x == null || x == undefined) throw new Error('[en-primitive][setScale] - x value is not valid');
+        if ((y == null || y == undefined) && (z == null || z == undefined)) {
+            y = x;
+            z = x;
+        }
         this.entity.scale = { x: x, y: y, z: z };
         this.updated.next({ name: 'actor-add-transform', type: 'update', payload: { scale: { x, y, z } } });
         this.scaleUpdated.next(this.entity.scale);
@@ -252,7 +262,7 @@ export class BaseEntity {
                 var hexColor = namedColor().get(color.toUpperCase()) as string;
                 selectedColor = hexToRGB(hexColor) as Color;
             }
-            if(color === 'transparent') {
+            if (color === 'transparent') {
                 selectedColor = { r: 0, g: 0, b: 0, a: 0 };
             }
         }
@@ -305,7 +315,7 @@ export class BaseEntity {
         this.updated.next({ name: 'actor-set-active', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
         //TODO; this action working still api:2 property setted
-        this.actions.push({ api:2, name: 'actor-set-active', payload: { id: this.entity.id, activated: this.active } });
+        this.actions.push({ api: 2, name: 'actor-set-active', payload: { id: this.entity.id, activated: this.active } });
         return this;
     }
     setClickable(value: boolean): BaseEntity {

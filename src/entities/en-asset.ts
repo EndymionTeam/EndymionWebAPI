@@ -39,7 +39,7 @@ export class EnAsset extends BaseEntity {
             this.actions.push({
                 name: 'gltf-play-anim',
                 payload: {
-                    id:  this.entity.id,
+                    id: this.entity.id,
                     index: this.animationIndex
                 }
             });
@@ -53,7 +53,7 @@ export class EnAsset extends BaseEntity {
         this.actions.push({
             name: 'gltf-stop-anim',
             payload: {
-                id:  this.entity.id
+                id: this.entity.id
             }
         });
         this.apply();
@@ -65,7 +65,7 @@ export class EnAsset extends BaseEntity {
         this.actions.push({
             name: 'gltf-pause-anim',
             payload: {
-                id:  this.entity.id
+                id: this.entity.id
             }
         });
         this.apply();
@@ -82,14 +82,17 @@ export class EnAsset extends BaseEntity {
         this.entity.id = this.isCustomId ? this.customId : this.id;
         this.actions = [
             {
-                name: 'actor-set-transform', payload: {
+                name: 'gltf-create',
+                payload: {
                     id: this.entity.id,
-                    rotation: this.entity.rotation,
-                    position: this.entity.position,
-                    scale: this.entity.scale
+                    url: url,
+                    transform: {
+                        position: this.entity.position,
+                        rotation: this.entity.rotation,
+                        scale: this.entity.scale
+                    }
                 }
-            },
-            { name: 'gltf-create', payload: { id: this.entity.id, url: url } }]
+            }]
         super.create();
         return this;
     }
