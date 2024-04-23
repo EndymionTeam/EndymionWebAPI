@@ -41,7 +41,7 @@ Easy interact with Endymion browser using HTML5 and javascript
 
 # Getting Started
 ## Installation
-1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.3.0) and set in script tag in html page in head tag
+1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.4.3) and set in script tag in html page in head tag
 ```HTML 
     <script src="<latest version of endymion browser>"></script>
 ```
@@ -133,9 +133,15 @@ On Entity you can use this methods
 | setScale(x, y, z)                                 | set entity scale                      | each axis accept a number, measure unit is lenght of       | 
 |                                                   |                                       | marker side (all values must be provide otherwise          |
 |                                                   |                                       | an error should throwned)                                  |
+| setScale(value)                                   | set entity scale                      | accept a number, all axis are setted to same value         | 
+|                                                   |                                       | (a value must be provided otherwise an error should        |
+|                                                   |                                       | throwned)                                                  |
 | addScale(x, y, z)                                 | add an offset to entity               | each axis accept a number, measure unit is lenght of       | 
 |                                                   | scale                                 | marker side (all values must be provide otherwise          |
 |                                                   |                                       | an error should throwned)                                  |
+| addScale(value)                                   | add an offset to entity               | accept a number, all axis are setted to same value         | 
+|                                                   | scale                                 | (a value must be provided otherwise an error should        |
+|                                                   |                                       | throwned)        
 | setColor(Color or string)                         | set entity color                      | Color type = { r:number, g:number, b:number, a:number}     |
 |                                                   |                                       | or string that can be:                                     |
 |                                                   |                                       | 1 - HexColor prefixed by # (ex: #FFAADD)                   |
@@ -205,6 +211,7 @@ methods with 'apply()'.
 
 ```javascript
      let duck = en.asset();
+    duck.load('./assets/duck.glb');
 
     duck.setRot(45,0,0)
     .apply();
@@ -245,9 +252,21 @@ WebView allow to render on same browser visualization more than one html content
 
 You can ask Endymion browser to create it so:
 ```javascript
+    //create an anchor to fix the webview
+    let anchor = en.cube();
+    //deactivate entity so it is not visible in page but it can still be used to anchor webview
+    anchor.setActive(false);
+    //you can position, rotation and scale anchor like you want
+    anchor.create();
+
     let webView = en.webview();
-    webView.setUrl('relative/absolute path to html page');
-    webView.create();
+    webView.setUrl('relative/absolute path to html page')
+        //set type (can be  'persp', 'flat-scaled', 'flat-fixed', 'screen-fixed')
+        .setType('persp')
+        //ensure to anchor the webview
+        //use entity.id property - anchor.id asc en library to generate a new index
+        .setParent({id: anchor.entity.id})
+        .create();
 ```
 
 ### Available Methods
@@ -293,13 +312,24 @@ enable debug mode
 ```javascript
     // optional in this example but you should subscribe tracking event 
     // to add operations after endymion browser framed the image used to start the experience
-    en.trackImage$.subscribe(event=>{
+    let imageId = en.trackImage$.subscribe(event=>{
         //event -> {name: 'tracker-on-image', type:'message', payload:any }
         if(event.payload.state == true){
             //operations to start experience
+            //tracking image id is used to anchor webviews that effectly show experience
+            let webView = en.webview();
+            webView.setUrl('relative/absolute path to html page')
+                //set type (can be  'persp', 'flat-scaled', 'flat-fixed', 'screen-fixed')
+                .setType('flat-fixed')
+                //ensure to anchor the webview to tracking image
+                .setParent({id: imageId})
+                .create();
         }
     })
+    //effectly add image that is used to start experience
     en.addTrackingImage('/assets/image/tracking-image.jpg')
+
+   
 ```
 
 ## Events
@@ -337,7 +367,7 @@ subscribe events
     en.actionResult$.subscribe(event=>{
         //event ->{name: 'api-on-result', type:'message', payload:{"uuid": string, "success": boolean, "message": string } }
     });
-        en.trackImage$.subscribe(event=>{
+    en.trackImage$.subscribe(event=>{
         //event ->{name: 'tracker-on-image', type:'message', payload:{"id" : string | number, "state" : boolean } }
     });
 ```
@@ -361,7 +391,7 @@ dowload Endymion library [here](https://github.com/EndymionTeam/EndymionWebAPI/r
         <title>QR Code Experience</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="endymion.2.3.0"><script> <!-- ensure to  link the correct version -->
+        <script src="endymion.2.4.3"><script> <!-- ensure to  link the correct version -->
     </head>
     <body>
         
@@ -378,7 +408,7 @@ Use the Endymion library creating your first entity ( a cube )
         <title>QR Code Experience</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="endymion.2.3.0"><script> <!-- ensure to  link the correct version -->
+        <script src="endymion.2.4.3"><script> <!-- ensure to  link the correct version -->
     </head>
     <body>
         <script>
