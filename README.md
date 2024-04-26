@@ -1,9 +1,9 @@
-# EndymionWebApi 2.3.0
+# EndymionWebApi 2.5.0
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.3.0](#endymionwebapi-230)
+- [EndymionWebApi 2.5.0](#endymionwebapi-250)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -43,7 +43,7 @@ Easy interact with Endymion browser using HTML5 and javascript
 
 # Getting Started
 ## Installation
-1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.4.3) and set in script tag in html page in head tag
+1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.5.0) and set in script tag in html page in head tag
 ```HTML 
     <script src="<latest version of endymion browser>"></script>
 ```
@@ -192,7 +192,7 @@ Them can only used as terminal methods.
 | applyed$                  | observable on apply event              | actions list              |
 | applyError$               | observable on apply errors             | { method, error }         |
 | error$                    | observable on generic errors           | { method, error }         |
-| aimed$                    | observable on aim event                | { name, payload }         |
+| aimed$                    | observable on aim event                | { name:'actor-on-aim', type:string, payload:{id : string, state: boolean}}|
 | clicked$                  | observable on click event              | { name, payload }         |
 | webViewVisible$           | observable on webView visible event    | { name, payload }         |    
 | isClickable$              | observable on clickable update event   | boolean                   |
