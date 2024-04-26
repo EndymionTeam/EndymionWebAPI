@@ -95,7 +95,7 @@ export class En {
 
     addTrackingImage = (url: string, refWidth: number = 0.05): number => {
         if(url === undefined || url === null || url === '') throw new Error('[EN][addTrackingImage] - url is required');
-        let id = this.core.getObjectId();
+        let id = this.core.generateObjectId();
         url = url.includes('http')
         ? url
         : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;

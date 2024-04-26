@@ -79,7 +79,7 @@ export class EnAsset extends BaseEntity {
             ? url
             : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`
 
-        this.entity.id = this.isCustomId ? this.customId : this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
         this.actions = [
             {
                 name: 'gltf-create',

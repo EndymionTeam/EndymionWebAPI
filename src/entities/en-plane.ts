@@ -9,7 +9,7 @@ export class EnPlane extends BaseEntity {
     }
 
     create(): EnPlane {
-        this.entity.id = this.isCustomId ? this.customId : this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
         this.actions = [
             {
                 name: 'primitive-create', payload: {

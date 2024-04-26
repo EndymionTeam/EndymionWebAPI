@@ -9,7 +9,7 @@ export class EnCapsule extends BaseEntity {
     }
 
     create(): EnCapsule {
-        this.entity.id = this.isCustomId ? this.customId : this.id;
+        this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
         this.actions = [
             {
                name: 'primitive-create', payload: {

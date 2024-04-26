@@ -60,7 +60,7 @@ class EndymionCoreV2 {
             this.initApiVersion();
         }
     }
-    getObjectId = (): number => {
+    generateObjectId = (): number => {
         (this.window as any).EnSpace.objectId++;
         return (this.window as any).EnSpace.objectId;
     }

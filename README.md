@@ -26,6 +26,8 @@ Easy interact with Endymion browser using HTML5 and javascript
     - [General Methods Examples](#general-methods-examples)
   - [Events](#events)
     - [General Events Examples](#general-events-examples)
+- [Accessing to Entity State](#accessing-to-entity-state)
+    - [Here an example](#here-an-example)
 - [Create a QR Code Based Experience](#create-a-qr-code-based-experience)
   - [How to define a qr code based experience.](#how-to-define-a-qr-code-based-experience)
   - [HTML page settings](#html-page-settings)
@@ -166,26 +168,36 @@ Them can only used as terminal methods.
 
 ### Avalilable Events Subscription
 
-| Name                      | Description                           | type                      |   
-| --------------------------| ------------------------------------- | --------------------------|
-| updated$                  | observable on update event            | action description        |
-| colorUpdated$             | observable on color update event      | color value               |
-| positionUpdated$          | observable on position update event   | position value            |
-| rotationUpdated$          | observable on rotation update event   | rotation value            |
-| scaleUpdated$             | observable on scale update event      | scale value               |
-| setAimableUpdated$        | observable on aimable  value          | { enabled, radius }       |
-| setActivatedUpdated$      | observable on activate status value   | boolean                   |
-| created$                  | observable on create event            | actions list              |
-| createError$              | observable on create errors           | { method, error }         |
-| applyed$                  | observable on apply event             | actions list              |
-| applyError$               | observable on apply errors            | { method, error }         |
-| error$                    | observable on generic errors          | { method, error }         |
-| aimed$                    | observable on aim event               | { name, payload }         |
-| clicked$                  | observable on click event             | { name, payload }         |
-| webViewVisible$           | observable on webView visible event   | { name, payload }         |    
-| isClickable$              | observable on clickable update event  | boolean                   |
-| hapticPlay$               | observable on haptic feedback play evt| boolean                   |
-| destroyed$                | observable on destroyed event         | --                        |
+| Name                      | Description                            | type                      |   
+| --------------------------| -------------------------------------- | ------------------------- |
+| updated$                  | observable on update event             | action description        |
+| colorUpdated$             | observable on color update event       | color value               |
+| opacity$                  | observable on opacity update           | 0 <= number <= 1          |
+| positionUpdated$          | observable on position update event    | position value            |
+| posX$                     | observable on x coordinate on position | number                    |
+| posY$                     | observable on y coordinate on position | number                    |
+| posZ$                     | observable on z coordinate on position | number                    |
+| rotationUpdated$          | observable on rotation update event    | rotation value            |
+| rotX$                     | observable on x angle on rotation      | number                    |
+| rotY$                     | observable on y angle on rotation      | number                    |
+| rotZ$                     | observable on z angle on rotation      | number                    |
+| scaleUpdated$             | observable on scale update event       | scale value               |
+| scaleX$                   | observable on x scale on scale         | number                    |
+| scaleY$                   | observable on y scale on scale         | number                    |
+| scaleZ$                   | observable on z scale on scale         | number                    |
+| setAimableUpdated$        | observable on aimable  value           | { enabled, radius }       |
+| setActivatedUpdated$      | observable on activate status value    | boolean                   |
+| created$                  | observable on create event             | actions list              |
+| createError$              | observable on create errors            | { method, error }         |
+| applyed$                  | observable on apply event              | actions list              |
+| applyError$               | observable on apply errors             | { method, error }         |
+| error$                    | observable on generic errors           | { method, error }         |
+| aimed$                    | observable on aim event                | { name, payload }         |
+| clicked$                  | observable on click event              | { name, payload }         |
+| webViewVisible$           | observable on webView visible event    | { name, payload }         |    
+| isClickable$              | observable on clickable update event   | boolean                   |
+| hapticPlay$               | observable on haptic feedback play evt | boolean                   |
+| destroyed$                | observable on destroyed event          | --                        |
 
 
 
@@ -243,9 +255,8 @@ All event subscription for entities are available with esclusion reported in tab
 | animationPlaying$         | observable on playing event           |                           |
 | animationPaused$          | observable on pause event             |                           |
 | animationStopped          | observable on stop event              |                           |
-
-
-
+  
+  
 # Create WebView
 A webView is a container for a web page that you can ask to create to Endymion Browser.     
 WebView allow to render on same browser visualization more than one html content at same time.
@@ -370,6 +381,40 @@ subscribe events
     en.trackImage$.subscribe(event=>{
         //event ->{name: 'tracker-on-image', type:'message', payload:{"id" : string | number, "state" : boolean } }
     });
+```
+
+# Accessing to Entity State
+It is possible to access the status of the entity that has been created through the following properties
+| Name                      | Returned Type                   |   
+| --------------------------| --------------------------------|
+| state                     | {                               |
+|                           |     id: number,                 |
+|                           |     primitive: PrimitiveType,   |
+|                           |     position: Position,         |
+|                           |     rotation: Rotation,         |
+|                           |     scale: Scale,               |
+|                           |     color: Color,               |
+|                           |     clickable: boolean,         |
+|                           |     active: boolean,            |
+|                           |     aimable: boolean,           |
+|                           |     playHaptic: boolean         |
+|                           |  }                              |
+|                           |                                 |
+| pos                       | { x: 0, y: 0, z: 0 }            |
+| rot                       | { x: 0, y: 0, z: 0 }            |
+| scale                     | { x: 0, y: 0, z: 0 }            |
+| color                     | { r: 0, g: 0, b: 0, a: 1 }      |   
+| clickable                 | boolean                         |
+| active                    | boolean                         |
+| aimable                   | boolean                         |
+| playHaptic                | boolean                         |
+
+
+### Here an example
+```javascript
+    let cube = en.cube().create()
+    let position = cube.pos;
+    //position is { x: 0, y: 0, z: 0 }
 ```
 
 # Create a QR Code Based Experience

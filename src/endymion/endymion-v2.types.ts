@@ -86,36 +86,18 @@ export type Entity = {
     rotation: Rotation,
     /** The scale of the entity in 3D space. */
     scale: Scale,
-    /** defina if entity is targetable. */
-}
-/**
- * Represents an entity map with its properties.
- * @typedef {id:number, primitive:Primitive, position:Position, rotation:Rotation, scale:Scale, color:Color} EntityMap
- */
-export type EntityMap = {
-    /** The unique identifier of the entity. */
-    id: number,
-    /** The primitive shape of the entity. */
-    primitive: PrimitiveType,
-    /** The position of the entity in 3D space. */
-    position: Position,
-    /** The rotation of the entity in 3D space. */
-    rotation: Rotation,
-    /** The scale of the entity in 3D space. */
-    scale: Scale,
-    /** The color of the entity. */
+    /** define entity color */
     color: Color,
-    /** The url of the gltf file to be imported. */
-    url?: string
-    /** detail of parent of webview */
-    parent?: webViewParent,
-    /** detail of active state of actor */
-    actorActivated?: boolean,
-    /** detail of aimable state of object */
-    target?: boolean
-    /** radius of viewfinder */
-    radius?: number
+    /** define if entity is clickable */
+    clickable: boolean,
+    /** define if entity is active  */
+    active: boolean,
+    /** define if entity is aimable */
+    aimable: boolean,
+    /** define if on entity interaction haptic is acticve */
+    playHaptic: boolean,
 }
+
 /**
  * Represents an action object with a name and payload.
  * @typedef {name:ActionName, payload:any} action
