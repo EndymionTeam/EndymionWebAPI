@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.0
+# EndymionWebApi 2.5.1
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.0](#endymionwebapi-250)
+- [EndymionWebApi 2.5.1](#endymionwebapi-251)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -28,6 +28,7 @@ Easy interact with Endymion browser using HTML5 and javascript
     - [General Events Examples](#general-events-examples)
 - [Accessing to Entity State](#accessing-to-entity-state)
     - [Here an example](#here-an-example)
+- [Utilities](#utilities)
 - [Create a QR Code Based Experience](#create-a-qr-code-based-experience)
   - [How to define a qr code based experience.](#how-to-define-a-qr-code-based-experience)
   - [HTML page settings](#html-page-settings)
@@ -43,9 +44,16 @@ Easy interact with Endymion browser using HTML5 and javascript
 
 # Getting Started
 ## Installation
-1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.5.0) and set in script tag in html page in head tag
+1 - download last version from repository [here](https://github.com/EndymionTeam/EndymionWebAPI/releases/tag/2.5.1) and set in script tag in html page in head tag
 ```HTML 
     <script src="<latest version of endymion browser>"></script>
+```
+1.1 - To ensure the transparency of the page so that the HTML content is visible as an overlay, the following meta tag must be added to <head> the page section
+```HTML 
+<head>
+    ...
+   <meta name="transparent" content="true">
+</head>
 ```
 ## Entity Classification
 
@@ -416,6 +424,14 @@ It is possible to access the status of the entity that has been created through 
     let position = cube.pos;
     //position is { x: 0, y: 0, z: 0 }
 ```
+
+# Utilities
+There are a few utilities that can simplify the development process
+| Name                      | Returned Type                         |   
+| --------------------------| --------------------------------------|
+| removeSupportStyle()      | remove style automatically added for  |
+|                           | set transparent color to body         |
+
 
 # Create a QR Code Based Experience
 An augmented reality experience based on the QR code uses your smartphone or tablet to enjoy AR content that will only be displayed when the QR code is framed.  
