@@ -93,13 +93,12 @@ export class BaseEntity {
         return this.entity.playHaptic;
     }
     protected core: EndymionCore;
-    //TODO: actions is at any because there is a method that 
-    //use an action with version 2 that is specified
-    private _actions: any[] = [];
+
+    private _actions: Action[] = [];
     protected get actions() {
         return this._actions;
     }
-    protected set actions(actions: any[]) {
+    protected set actions(actions: Action[]) {
         if (!actions) throw new Error(`[en-primitive][actions] - value is not valid - ${actions}`);
         if (actions.length === 0) {
             this._actions = [];
@@ -293,9 +292,6 @@ export class BaseEntity {
     }
     setScale(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][setScale] - x value is not valid');
-        if (typeof y !== 'number') throw new Error('[en-primitive][setScale] - y value is not valid');
-        if (typeof z !== 'number') throw new Error('[en-primitive][setScale] - z value is not valid');
-
         if (x == null || x == undefined) throw new Error('[en-primitive][setScale] - x value is not valid');
         if ((y == null || y == undefined) && (z == null || z == undefined)) {
             y = x;
@@ -398,8 +394,7 @@ export class BaseEntity {
         this.entity.active = value;
         this.updated.next({ name: 'actor-set-active', type: 'update', payload: { activated: value } });
         this.setActiveUpdated.next(value);
-        //TODO; this action working still api:2 property setted
-        this.actions.push({ api: 2, name: 'actor-set-active', payload: { id: this.entity.id, activated: this.entity.active } });
+        this.actions.push({ name: 'actor-set-active', payload: { id: this.entity.id, activated: this.entity.active } });
         return this;
     }
     setClickable(value: boolean): BaseEntity {
