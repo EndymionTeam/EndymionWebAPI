@@ -32,7 +32,7 @@ export type Coordinates = { x: number, y: number, z: number };
  * @typedef {'delta' | 'absolute'} TransformType
  */
 export type TransformType = 'delta' | 'absolute';
-export type  Transform = {
+export type Transform = {
     position: Position,
     rotation: Rotation,
     scale: Scale,
@@ -50,7 +50,10 @@ export type Color = { r: number, g: number, b: number, a: number };
 
 /**
  * Represents the name of an action that can be performed in Endymion.
- * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'| 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-set-active' | 'object-setaimable' | 'shape-line-create' | 'actor-set-transform'} ActionName
+ * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'
+ * | 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' 
+ * | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-set-active' | 'object-setaimable' 
+ * | 'shape-line-create' | 'actor-set-transform' | 'webview-set-orientation' | 'webview-send-message'} ActionName
  */
 export type ActionName = 'api-multi-action'
     | 'actor-add-transform'
@@ -69,7 +72,9 @@ export type ActionName = 'api-multi-action'
     | 'primitive-set-color'
     | 'shape-line-create'
     | 'webview-create'
-    | 'tracker-add-image';
+    | 'tracker-add-image'
+    | 'webview-set-orientation'
+    | 'webview-send-message';
 
 /**
  * Represents an entity in the Endymion system.
@@ -115,7 +120,11 @@ export type message = {
     origin: string,
     data: any
 }
-
+/**
+ * represent webview orientation
+ * @typedef { 'device' | 'landscape' | 'landscape-reversed' | 'portrait' | 'portrait-reversed' } webviewOrientation
+ */
+export type webviewOrientation = 'device' | 'landscape' | 'landscape-reversed' | 'portrait' | 'portrait-reversed'
 /**
  * Represents the possible transformations for a webview parent.
  * - 'p': Position transformation
@@ -161,14 +170,16 @@ export type actorSetActivePayload = {
 
 /**
  * Payload for setting the aimable state of an object.
+ * @typedef {'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'tracker-on-image' | 'webview-on-message'} MessageName
  */
-export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'tracker-on-image'
+export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'tracker-on-image' | 'webview-on-message';
 
 /**
  * Represents the payload for a message.
  */
 export type MessagePayload = {
     id: string,
+    url?: string,
     state?: string | boolean
 }
 

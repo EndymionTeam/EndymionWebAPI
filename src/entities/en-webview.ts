@@ -1,4 +1,4 @@
-import { Color, PrimitiveType, webViewParent as WebViewParent, webViewType } from "../endymion/endymion-v2.types";
+import { ActionName, Color, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {
@@ -31,6 +31,31 @@ export class EnWebview extends BaseEntity {
     setType(type: webViewType): EnWebview {
         this.webViewType = type;
         return this;
+    }
+    setOrientation(orientation: webviewOrientation): EnWebview {
+        if(orientation == null)  throw new Error('[en-webview][sendMessage] - orientation is required');
+        let action = {
+            name: 'webview-set-orientation' as ActionName,
+            payload: {
+                id: this.entity.id,
+                mode: orientation
+            }
+        };
+        this.actions.push(action);
+        return this;
+    }
+    sendMessage(destinationId: number, message: string) {
+        if(destinationId < 0)  throw new Error('[en-webview][sendMessage] - destination webview id is required');
+        if(message == '' || message == null)  throw new Error('[en-webview][sendMessage] - message is required');
+        let action =  {
+            name : 'webview-send-message' as ActionName, 
+            payload :  
+             { 
+               id : destinationId,
+               message : message
+             }           
+         }
+         this.actions.push(action);
     }
     override create(): EnWebview {
         if (!this.url) throw new Error('[en-webview][create] - url is required');

@@ -27,6 +27,7 @@ export class BaseEntity {
     private aimed: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private clicked: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private webViewVisible: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private webViewMessage: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private isClickable: Subject<boolean> = new Subject<boolean>();
     private hapticPlay: Subject<boolean> = new Subject<boolean>();
     private destroyed: Subject<boolean> = new Subject<boolean>();
@@ -133,6 +134,7 @@ export class BaseEntity {
     aimed$ = this.aimed.asObservable();
     clicked$ = this.clicked.asObservable();
     webViewVisible$ = this.webViewVisible.asObservable();
+    webViewMessage$ = this.webViewMessage.asObservable();
     isClickable$ = this.isClickable.asObservable();
     hapticPlay$ = this.hapticPlay.asObservable();
     destroyed$ = this.destroyed.asObservable();
@@ -188,6 +190,9 @@ export class BaseEntity {
                         break;
                     case 'webview-visible':
                         that.webViewVisible.next({ name: name, type: 'message', payload: payload });
+                        break;
+                    case 'webview-on-message':
+                        that.webViewMessage.next({ name: name, type: 'message', payload: payload });
                         break;
                 }
                 that.message.next({ name: name, type: 'message', payload: payload });

@@ -7,7 +7,7 @@ GenerateSupporStyles(document);
     objectId: 0,
     environment: 'web-browser',
     debugMode: false,
-    apiVersion: '2.5.1',
+    apiVersion: '2.5.2',
 }
 
 export { En };

@@ -290,15 +290,22 @@ You can ask Endymion browser to create it so:
 
 ### Available Methods
 On Assets you can use all methods allowed for primitives with exclusion reported in table
-| Name                                              | Description                           | Details                                                    |   
-| --------------------------------------------------| ------------------------------------- | ---------------------------------------------------------- |  
-| setColor(Color or string)                         | set entity color                      | NOT ALLOWED (an error is throwned)                         |
-| setOpacity(value:number)                          | set opacity of entity                 | NOT ALLOWED (an error is throwned)                         |
-| setUrl(url:string)                                | url of html page                      | url of html page to use in webview                         |
-| setParent(parent: WebViewParent)                  | { id: parentId,                       | parent id and inherith trasform by parent                  |
-|                                                   |   inherit_transform: undefined | -> } | One of: ["prs", "p", "pr", "ps"] where: "p" = position,    |
-|                                                   |                                       | "r" = rotation and "s" scale. Default "prs"                |
-| setType(type:, webViewType)                       | set webview type                      | can be 'persp', 'flat-scaled', 'flat-fixed', 'screen-fixed'|
+| Name                                                 | Description                           | Details                                                            |   
+| -----------------------------------------------------| ------------------------------------- | ----------------------------------------------------------         |  
+| setColor(Color or string)                            | set entity color                      | NOT ALLOWED (an error is throwned)                                 |
+| setOpacity(value:number)                             | set opacity of entity                 | NOT ALLOWED (an error is throwned)                                 |
+| setUrl(url:string)                                   | url of html page                      | url of html page to use in webview                                 |
+| setParent(parent: WebViewParent)                     | { id: parentId,                       | parent id and inherith trasform by parent                          |
+|                                                      |   inherit_transform: undefined | -> } | One of: ["prs", "p", "pr", "ps"] where: "p" = position,            |
+|                                                      |                                       | "r" = rotation and "s" scale. Default "prs"                        |
+| setType(type:, webViewType)                          | set webview type                      | can be 'persp', 'flat-scaled', 'flat-fixed', 'screen-fixed'        |
+| setOrientation(orientation: webViewOrientation)      | set webview orientation               | can be 'device', 'landscape', 'landscape-reversed',                | 
+|                                                      |                                       |  'portrait', 'portrait-reversed'                                   |  
+|sendMessage(destinationId: number, message: string)   | send message to another webview       | destinationId of the child webview (message from parent to child), |
+|                                                      |                                       | or "__PARENT__" (message from child to parent)                     |
+|                                                      |                                       | message accept both string or JSON object. JSON object will be     |
+|                                                      |                                       | automatically handled as string
+
 
 
 # Library General Methods and Events
@@ -356,26 +363,28 @@ enable debug mode
 Here a list of available events that you can subscribe
 
 
-| Name               | Description                                                                    |   
-| ------------------ | ------------------------------------------------------------------------------ |  
-| message$           | {name: string, type:string = 'message', payload:any }                          |  
-|                    | where name can be = 'api-on-result'| 'tracker-on-image'                        |  
-|                    | payload for 'api-on-result' is                                                 |  
-|                    | {"uuid" : string, "success" : boolean, "message" : string }                    |  
-|                    | 'api-on-result' represent a status on action requested to Endymion Browser     |  
-|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean } |  
-|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean    |    
-|                    | that Endymion Browser framed the image used to start the experience (see       |  
-|                    | addTrackingImage method)                                                       |  
-| actionResult$      | {name: 'api-on-result', type:'message', payload:any }                          |  
-|                    | payload for 'api-on-result' is                                                 |       
-|                    | {"uuid": string, "success": boolean, "message": string }                       |  
-|                    | 'api-on-result' represent a status on action requested to Endymion Browser     |  
-| trackImage$        | {name: 'tracker-on-image', type:'message', payload:any }                       |  
-|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean } |  
-|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean    |    
-|                    | that Endymion Browser framed the image used to start the experience (see       |  
-|                    | addTrackingImage method)                                                       |  
+| Name               | Description                                                                                 |   
+| ------------------ | ------------------------------------------------------------------------------------------- |  
+| message$           | {name: string, type:string = 'message', payload:any }  where name can be = 'api-on-result', | 
+|                    | 'tracker-on-image', webview-on-message'                                                     |  
+|                    | payload for 'api-on-result' is                                                              |  
+|                    | {"uuid" : string, "success" : boolean, "message" : string }                                 |  
+|                    | 'api-on-result' represent a status on action requested to Endymion Browser                  |  
+|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean }              |  
+|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean                 |    
+|                    | that Endymion Browser framed the image used to start the experience (see                    |  
+|                    | addTrackingImage method)                                                                    |  
+|                    | payload for 'webview-on-message' is { id:string, url:string, message:string }               |  
+|                    | id is identifier of webview sender, url url of the sender webview, message is message sent  |  
+| actionResult$      | {name: 'api-on-result', type:'message', payload:any }                                       |  
+|                    | payload for 'api-on-result' is                                                              |       
+|                    | {"uuid": string, "success": boolean, "message": string }                                    |  
+|                    | 'api-on-result' represent a status on action requested to Endymion Browser                  |  
+| trackImage$        | {name: 'tracker-on-image', type:'message', payload:any }                                    |  
+|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean }              |  
+|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean                 |    
+|                    | that Endymion Browser framed the image used to start the experience (see                    |  
+|                    | addTrackingImage method)                                                                    |  
 
 ### General Events Examples
 subscribe events

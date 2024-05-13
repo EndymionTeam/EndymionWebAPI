@@ -8,7 +8,6 @@ import { EnPlane } from '../entities/en-plane';
 import { EnQuad } from '../entities/en-quad';
 import { EnWebview } from '../entities/en-webview';
 import { EnShapeLine } from '../entities/en-shape-line';
-import { MasterPage } from './master-page';
 import { MessageName, MessagePayload, MessageIncoming } from './endymion-v2.types';
 import { Subject, tap } from 'rxjs';
 import { Win } from '../utils/nav-utils';
@@ -20,6 +19,7 @@ export class En {
     private actionResult: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private trackImage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private pageVisibility: Subject<boolean> = new Subject<boolean>();
+    private webViewMessage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private connections: Map<number, EnWebview | null> = new Map<number, EnWebview | null>();
     private currentConnectionImageId: number = -1;
 
@@ -33,6 +33,7 @@ export class En {
     actionResult$ = this.actionResult.asObservable();
     trackImage$ = this.trackImage.asObservable();
     pageVisibility$ = this.pageVisibility.asObservable();
+    webViewMessage$ = this.webViewMessage.asObservable();
 
     constructor(private commInterface: string = 'vuplex', private w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
@@ -53,6 +54,9 @@ export class En {
                     break;
                 case 'webview-visible':
                     that.pageVisibility.next(payload.state as boolean);
+                    break;
+                case 'webview-on-message':
+                    that.webViewMessage.next({ name: name, type: 'message', payload: payload });
                     break;
             }
             that.message.next({ name: name, type: 'message', payload: payload });
