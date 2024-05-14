@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.1
+# EndymionWebApi 2.5.2
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.1](#endymionwebapi-251)
+- [EndymionWebApi 2.5.2](#endymionwebapi-252)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
