@@ -18,6 +18,7 @@
     "test": "npm run build && mocha --require ts-node/register src/**/*.spec.ts",
     "test:ci": "mocha --require ts-node/register src/**/*.spec.ts --reporter mocha-junit-reporter",
     "doc": "typedoc src/endymion.ts --out ./docs --darkHighlightTheme dark-plus",
+    "d": "typedoc --options typedoc.json",
     "publish": "npm publish --registry https://npm.endymion.tech/"
   },
   "keywords": [

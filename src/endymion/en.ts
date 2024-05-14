@@ -1,16 +1,16 @@
 import { EndymionCore } from './endymion-core-v2';
-import { EnCube } from '../entities/en-cube';
-import { EnSphere } from '../entities/en-sphere';
-import { EnCylinder } from '../entities/en-cylinder';
-import { EnAsset } from '../entities/en-asset';
-import { EnCapsule } from '../entities/en-capsule';
-import { EnPlane } from '../entities/en-plane';
-import { EnQuad } from '../entities/en-quad';
-import { EnWebview } from '../entities/en-webview';
-import { EnShapeLine } from '../entities/en-shape-line';
+import { EnCube } from '../Entities/en-cube';
+import { EnSphere } from '../Entities/en-sphere';
+import { EnCylinder } from '../Entities/en-cylinder';
+import { EnAsset } from '../Entities/en-asset';
+import { EnCapsule } from '../Entities/en-capsule';
+import { EnPlane } from '../Entities/en-plane';
+import { EnQuad } from '../Entities/en-quad';
+import { EnWebview } from '../Entities/en-webview';
+import { EnShapeLine } from '../Entities/en-shape-line';
 import { MessageName, MessagePayload, MessageIncoming } from './endymion-v2.types';
 import { Subject, tap } from 'rxjs';
-import { Win } from '../utils/nav-utils';
+import { Win } from '../Utils/nav-utils';
 
 export class En {
     core: EndymionCore;
@@ -22,7 +22,10 @@ export class En {
     private webViewMessage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private connections: Map<number, EnWebview | null> = new Map<number, EnWebview | null>();
     private currentConnectionImageId: number = -1;
-
+    /**
+     * message$ - Observable to listen to messages from Endymion Browser
+     * if debug mode is enabled, messages will be logged to console
+     */
     message$ = this.message.asObservable().pipe(
         tap((message) => {
             if (this.core.isDebugMode()) {
@@ -30,9 +33,21 @@ export class En {
             }
         })
     );
+    /**
+     * actionResult$ - Observable to listen to action results from Endymion Browser
+     */
     actionResult$ = this.actionResult.asObservable();
+    /**
+     * trackImage$ - Observable to listen to tracking image events from Endymion Browser
+     */
     trackImage$ = this.trackImage.asObservable();
+    /**
+     * pageVisibility$ - Observable to listen to page visibility events from Endymion Browser
+     */
     pageVisibility$ = this.pageVisibility.asObservable();
+    /**
+     * webViewMessage$ - Observable to listen to webview messages from Endymion Browser
+     */
     webViewMessage$ = this.webViewMessage.asObservable();
 
     constructor(private commInterface: string = 'vuplex', private w: Window = window) {
@@ -62,12 +77,24 @@ export class En {
             that.message.next({ name: name, type: 'message', payload: payload });
         });
     }
+    /**
+     * enable debug mode
+     * message from Endymion Browser will be logged to console
+     * action sended to Endymion Browser will be logged to console
+     * a box will appear in the scene to show the debug message
+     */
     enableDebug = () => {
         this.core.enableDebug();
     }
+    /**
+     * disable debug mode
+     */
     disableDebug = () => {
         this.core.disableDebug();
     }
+    /**
+     * play haptic feedback
+     */
     playHaptic() {
         this.core.playHaptic();
     }
@@ -87,16 +114,49 @@ export class En {
     getWebView = (imageId: number): EnWebview | null => {
         return this.connections.get(imageId)!;
     }
+    /**
+     * @returns EnAsset
+     * example: en.asset().load('https://example.com/model.glb')
+     */
     asset = (): EnAsset => new EnAsset(this.commInterface, this.w);
+    /**
+     * @returns EnCapsule
+     */
     capsule = (): EnCapsule => new EnCapsule(this.commInterface, this.w);
+    /**
+     * @returns EnCube
+     */
     cube = (): EnCube => new EnCube(this.commInterface, this.w);
+    /**
+     * @returns EnCylinder
+     */
     cylinder = (): EnCylinder => new EnCylinder(this.commInterface, this.w);
+    /**
+     * @returns EnPlane
+     */
     plane = (): EnPlane => new EnPlane(this.commInterface, this.w);
+    /**
+     * @returns EnQuad
+     */
     quad = (): EnQuad => new EnQuad(this.commInterface, this.w);
+    /**
+     * @returns EnSphere
+     */
     sphere = (): EnSphere => new EnSphere(this.commInterface, this.w);
+    /**
+     * @returns EnWebview
+     */
     webview = (): EnWebview => new EnWebview(this.commInterface, this.w);
+    /**
+     * @returns EnShapeLine
+     */
     line = (): EnShapeLine => new EnShapeLine(this.commInterface, this.w);
-
+    /**
+     * add tracking image to the scene
+     * @param url - url of the image to be tracked
+     * @param refWidth - reference width of the image to be tracked
+     * @returns id of the image
+     */
     addTrackingImage = (url: string, refWidth: number = 0.05): number => {
         if(url === undefined || url === null || url === '') throw new Error('[EN][addTrackingImage] - url is required');
         let id = this.core.generateObjectId();

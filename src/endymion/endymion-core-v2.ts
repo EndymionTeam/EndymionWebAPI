@@ -1,5 +1,5 @@
 
-import { enError, enLog, enAlert, enOnWindowError } from '../utils/debug';
+import { enError, enLog, enAlert, enOnWindowError } from '../Utils/debug';
 import { Position, Rotation, Scale, Color, ActionName, Action } from './endymion-v2.types';
 
 class EndymionCoreV2 {

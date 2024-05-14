@@ -19,7 +19,7 @@
     ]
   },
    "files": [
-      "src/endymion.ts"
+      "src/Endymion.ts"
     ],
   "exclude":[
     "./test/**/*.spec.ts"

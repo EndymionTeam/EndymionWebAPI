@@ -1,5 +1,5 @@
-import { En } from './endymion/en';
-import { GenerateSupporStyles, removeSupportStyle } from './utils/dom-utils';
+import { En } from './Endymion/en';
+import { GenerateSupporStyles, removeSupportStyle } from './Utils/dom-utils';
 GenerateSupporStyles(document);
 (window as any).en = new En();
 (window as any).removeSupportStyle = removeSupportStyle;
@@ -10,4 +10,4 @@ GenerateSupporStyles(document);
     apiVersion: '2.5.2',
 }
 
-export { En };
+export { En }

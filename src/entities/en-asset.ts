@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
-import { Color, PrimitiveType } from "../endymion/endymion-v2.types";
+import { Color, PrimitiveType } from "../Endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnAsset extends BaseEntity {

@@ -1,4 +1,4 @@
-import { PrimitiveType } from "../endymion/endymion-v2.types";
+import { PrimitiveType } from "../Endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnSphere extends BaseEntity {
