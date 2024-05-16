@@ -1,8 +1,8 @@
-import { Color, Action, Entity, MessageName, MessagePayload, MessageIncoming as IncomingMessage, Position, Rotation, Scale } from "../Endymion/endymion-v2.types";
-import { EndymionCore } from "../Endymion/endymion-core-v2";
+import { Color, Action, Entity, MessageName, MessagePayload, MessageIncoming as IncomingMessage, Position, Rotation, Scale } from "../endymion/endymion-v2.types";
+import { EndymionCore } from "../endymion/endymion-core-v2";
 import { BehaviorSubject, Subject, tap } from "rxjs";
-import { Win } from "../Utils/nav-utils";
-import { hexToRGB, namedColor } from "../Utils/color-utils";
+import { Win } from "../utils/nav-utils";
+import { hexToRGB, namedColor } from "../utils/color-utils";
 type enEvent = {
     name: string,
     type: string,

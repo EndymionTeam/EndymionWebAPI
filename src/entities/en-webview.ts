@@ -1,4 +1,4 @@
-import { ActionName, Color, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../Endymion/endymion-v2.types";
+import { ActionName, Color, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {

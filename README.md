@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.2
+# EndymionWebApi 2.5.3
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.2](#endymionwebapi-252)
+- [EndymionWebApi 2.5.3](#endymionwebapi-253)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -37,6 +37,7 @@ Easy interact with Endymion browser using HTML5 and javascript
   - [Qr code](#qr-code)
   - [Enjoy with Endymion Browser](#enjoy-with-endymion-browser)
   - [Clone and Go](#clone-and-go)
+- [Changelog](#changelog)
 
 
 
@@ -512,6 +513,11 @@ Now when you scan the QR code with the Endymion Browser application, a cube will
 ## Clone and Go  
 if you want to quickly and easily try augmented reality with Endymion, just clone the following repository and with a few operations you will finally be ready to experiment.  
 [Cube-Demo](https://github.com/EndymionDemo/cube-demo)
+
+
+# Changelog
+2.5.3 removed auto debug mode on console.log
+
 
 
 

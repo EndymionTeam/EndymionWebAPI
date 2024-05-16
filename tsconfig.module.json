@@ -20,7 +20,6 @@
   },
    "files": [
       "src/endymion.ts",
-      "src/endymion/en.ts",
       "src/endymion/endymion-core-v2.ts"
 
     ],

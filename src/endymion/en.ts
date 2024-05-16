@@ -1,16 +1,16 @@
 import { EndymionCore } from './endymion-core-v2';
-import { EnCube } from '../Entities/en-cube';
-import { EnSphere } from '../Entities/en-sphere';
-import { EnCylinder } from '../Entities/en-cylinder';
-import { EnAsset } from '../Entities/en-asset';
-import { EnCapsule } from '../Entities/en-capsule';
-import { EnPlane } from '../Entities/en-plane';
-import { EnQuad } from '../Entities/en-quad';
-import { EnWebview } from '../Entities/en-webview';
-import { EnShapeLine } from '../Entities/en-shape-line';
+import { EnCube } from '../entities/en-cube';
+import { EnSphere } from '../entities/en-sphere';
+import { EnCylinder } from '../entities/en-cylinder';
+import { EnAsset } from '../entities/en-asset';
+import { EnCapsule } from '../entities/en-capsule';
+import { EnPlane } from '../entities/en-plane';
+import { EnQuad } from '../entities/en-quad';
+import { EnWebview } from '../entities/en-webview';
+import { EnShapeLine } from '../entities/en-shape-line';
 import { MessageName, MessagePayload, MessageIncoming } from './endymion-v2.types';
 import { Subject, tap } from 'rxjs';
-import { Win } from '../Utils/nav-utils';
+import { Win } from '../utils/nav-utils';
 
 export class En {
     core: EndymionCore;

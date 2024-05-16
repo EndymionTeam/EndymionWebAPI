@@ -27,14 +27,13 @@ function enConsole(message: string, type: 'log' | 'error' = 'log') {
     var p = document.createElement('p');
     p.appendChild(text);
     logBox.insertBefore(p, logBox.firstChild);
-    logBox.style.display = 'block';
+    if((window as any).debugMode == true) logBox.style.display = 'block';
     if (type === 'log') {
         p.style.color = 'black';
     }
     if (type === 'error') {
         p.style.color = 'red';
     }
-
 }
 function createMessageBox() {
     var div = document.createElement('div');
