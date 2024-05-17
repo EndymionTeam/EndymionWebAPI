@@ -10,7 +10,13 @@ type enEvent = {
 }
 export class BaseEntity {
     protected win: Win;
-    private isCreated: boolean = false;
+    private _isCreated: boolean = false;
+    get isCreated(){
+        return this._isCreated;
+    }
+    protected set isCreated(value: boolean){
+        this._isCreated = value;
+    }
     private updated: Subject<enEvent> = new Subject<enEvent>();
     private colorUpdated: Subject<Color> = new Subject<Color>();
     private opacityUpdated: Subject<number> = new Subject<number>();
@@ -227,8 +233,7 @@ export class BaseEntity {
     }
     destroy() {
         try {
-            this.actions.push({ name: 'actor-destroy', payload: { id: this.entity.id } });
-            this.core.sendActions(this.actions);
+            this.core.sendActions([{ name: 'actor-destroy', payload: { id: this.entity.id } }]);
             this.destroyed.next(true);
         } catch (e) {
             this.error.next({ method: 'destroy', error: e });

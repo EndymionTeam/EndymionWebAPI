@@ -4,6 +4,7 @@ import { BaseEntity } from "./en-base-entity";
 
 export class EnAsset extends BaseEntity {
     type: PrimitiveType = 'gltf';
+    private url: string = '';
     private animationIndex: number = -1;
     private animationUpdated: Subject<number> = new Subject<number>();
     private animationPlaying: Subject<boolean> = new Subject<boolean>();
@@ -78,6 +79,12 @@ export class EnAsset extends BaseEntity {
         url = url.includes('http')
             ? url
             : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`
+        
+        if(this.isCreated && this.url !== url){
+            this.destroy();
+            this.setId(this.entity.id);
+            this.isCreated = false;
+        }
 
         this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
         this.actions = [
@@ -92,8 +99,11 @@ export class EnAsset extends BaseEntity {
                         scale: this.entity.scale
                     }
                 }
-            }]
+        }];
         super.create();
+        if(this.isCreated && this.url !== url){
+            this.isCustomId = false;
+        }
         return this;
     }
 
