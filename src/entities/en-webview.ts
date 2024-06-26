@@ -1,4 +1,4 @@
-import { ActionName, Color, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
+import { ActionName, Color, PolicyType, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {
@@ -53,6 +53,18 @@ export class EnWebview extends BaseEntity {
              { 
                id : destinationId,
                message : message
+             }           
+         }
+         this.actions.push(action);
+    }
+    setClickPolicy(destinationId: number, type: PolicyType){
+        if(destinationId < 0)  throw new Error('[en-webview][setClickPolicy] - destination webview id is required');
+        let action =  {
+            name : 'webview-send-message' as ActionName, 
+            payload :  
+             { 
+               id : destinationId,
+               rule : type
              }           
          }
          this.actions.push(action);

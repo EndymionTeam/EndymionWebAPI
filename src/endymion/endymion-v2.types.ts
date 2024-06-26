@@ -130,7 +130,7 @@ export type webviewOrientation = 'device' | 'landscape' | 'landscape-reversed' |
  * - 'p': Position transformation
  * - 'r': Rotation transformation
  * - 's': Scale transformation
- * - 'pr': Position and rotation transformations
+ * - 'pr': Position and rotation to com
  * - 'ps': Position and scale transformations
  * - 'rs': Rotation and scale transformations
  * - 'prs': Position, rotation, and scale transformations
@@ -191,3 +191,5 @@ export type MessageIncoming = {
     type: string,
     payload: MessagePayload
 }
+
+export type PolicyType = 'block' | 'pass' | 'pass_transparent';
