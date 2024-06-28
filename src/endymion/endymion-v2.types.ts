@@ -192,4 +192,7 @@ export type MessageIncoming = {
     payload: MessagePayload
 }
 
+/**
+ * represent click policy on webview that is on other
+ */
 export type PolicyType = 'block' | 'pass' | 'pass_transparent';

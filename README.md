@@ -302,10 +302,13 @@ On Assets you can use all methods allowed for primitives with exclusion reported
 | setType(type:, webViewType)                          | set webview type                      | can be 'persp', 'flat-scaled', 'flat-fixed', 'screen-fixed'        |
 | setOrientation(orientation: webViewOrientation)      | set webview orientation               | can be 'device', 'landscape', 'landscape-reversed',                | 
 |                                                      |                                       |  'portrait', 'portrait-reversed'                                   |  
-|sendMessage(destinationId: number, message: string)   | send message to another webview       | destinationId of the child webview (message from parent to child), |
+| sendMessage(destinationId: number, message: string)  | send message to another webview       | destinationId of the child webview (message from parent to child), |
 |                                                      |                                       | or "__PARENT__" (message from child to parent)                     |
 |                                                      |                                       | message accept both string or JSON object. JSON object will be     |
-|                                                      |                                       | automatically handled as string
+|                                                      |                                       | automatically handled as string                                    |
+| setClickPolicy(type: PolicyType)                     | set click policy of webview           | type may be 'block' = block click on object,  'pass' = propagate it|
+|                                                      |                                       | to above objects, 'pass_transparent' = propagate it only if webview|
+|                                                      |;                                      | is transparent                                                     |
 
 
 
@@ -517,6 +520,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 
 # Changelog
 2.5.3 removed auto debug mode on console.log
+2.5.5 added click policy method to webview, docs update
 
 
 

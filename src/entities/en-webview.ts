@@ -56,18 +56,19 @@ export class EnWebview extends BaseEntity {
              }           
          }
          this.actions.push(action);
+         return this;
     }
-    setClickPolicy(destinationId: number, type: PolicyType){
-        if(destinationId < 0)  throw new Error('[en-webview][setClickPolicy] - destination webview id is required');
+    setClickPolicy(type: PolicyType){
         let action =  {
             name : 'webview-send-message' as ActionName, 
             payload :  
              { 
-               id : destinationId,
+               id : this.entity.id,
                rule : type
              }           
          }
          this.actions.push(action);
+         return this;
     }
     override create(): EnWebview {
         if (!this.url) throw new Error('[en-webview][create] - url is required');
