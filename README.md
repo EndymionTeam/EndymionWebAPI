@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.6
+# EndymionWebApi 2.5.7
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.6](#endymionwebapi-254)
+- [EndymionWebApi 2.5.7](#endymionwebapi-257)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -343,7 +343,7 @@ enable debug mode
     // optional in this example but you should subscribe tracking event 
     // to add operations after endymion browser framed the image used to start the experience
     let imageId = en.trackImage$.subscribe(event=>{
-        //event -> {name: 'tracker-on-image', type:'message', payload:any }
+        //event -> {name: 'imgtracker-on-image', type:'message', payload:any }
         if(event.payload.state == true){
             //operations to start experience
             //tracking image id is used to anchor webviews that effectly show experience
@@ -370,12 +370,12 @@ Here a list of available events that you can subscribe
 | Name               | Description                                                                                 |   
 | ------------------ | ------------------------------------------------------------------------------------------- |  
 | message$           | {name: string, type:string = 'message', payload:any }  where name can be = 'api-on-result', | 
-|                    | 'tracker-on-image', webview-on-message'                                                     |  
+|                    | 'imgtracker-on-image', webview-on-message'                                                     |  
 |                    | payload for 'api-on-result' is                                                              |  
 |                    | {"uuid" : string, "success" : boolean, "message" : string }                                 |  
 |                    | 'api-on-result' represent a status on action requested to Endymion Browser                  |  
-|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean }              |  
-|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean                 |    
+|                    | payload for 'imgtracker-on-image' is {"id" : string | number, "state" : boolean }              |  
+|                    | 'imgtracker-on-image' represent a status of tracking image,  state = true mean                 |    
 |                    | that Endymion Browser framed the image used to start the experience (see                    |  
 |                    | addTrackingImage method)                                                                    |  
 |                    | payload for 'webview-on-message' is { id:string, url:string, message:string }               |  
@@ -384,9 +384,9 @@ Here a list of available events that you can subscribe
 |                    | payload for 'api-on-result' is                                                              |       
 |                    | {"uuid": string, "success": boolean, "message": string }                                    |  
 |                    | 'api-on-result' represent a status on action requested to Endymion Browser                  |  
-| trackImage$        | {name: 'tracker-on-image', type:'message', payload:any }                                    |  
-|                    | payload for 'tracker-on-image' is {"id" : string | number, "state" : boolean }              |  
-|                    | 'tracker-on-image' represent a status of tracking image,  state = true mean                 |    
+| trackImage$        | {name: 'imgtracker-on-image', type:'message', payload:any }                                    |  
+|                    | payload for 'imgtracker-on-image' is {"id" : string | number, "state" : boolean }              |  
+|                    | 'imgtracker-on-image' represent a status of tracking image,  state = true mean                 |    
 |                    | that Endymion Browser framed the image used to start the experience (see                    |  
 |                    | addTrackingImage method)                                                                    |  
 
@@ -400,7 +400,7 @@ subscribe events
         //event ->{name: 'api-on-result', type:'message', payload:{"uuid": string, "success": boolean, "message": string } }
     });
     en.trackImage$.subscribe(event=>{
-        //event ->{name: 'tracker-on-image', type:'message', payload:{"id" : string | number, "state" : boolean } }
+        //event ->{name: 'imgtracker-on-image', type:'message', payload:{"id" : string | number, "state" : boolean } }
     });
 ```
 
@@ -522,6 +522,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 2.5.3 removed auto debug mode on console.log  
 2.5.5 added click policy method to webview, docs update
 2.5.6 google analitycs tag automatic
+2.5.7 update api to new version 3
 
 
 

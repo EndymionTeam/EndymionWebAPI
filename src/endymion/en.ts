@@ -64,7 +64,7 @@ export class En {
                 case 'api-on-result':
                     that.actionResult.next({ name: name, type: 'message', payload: payload });
                     break;
-                case 'tracker-on-image':
+                case 'imgtracker-on-image':
                     that.trackImage.next({ name: name, type: 'message', payload: payload });
                     break;
                 case 'webview-visible':
@@ -169,7 +169,7 @@ export class En {
             url: url,
             refWidth: refWidth
         }
-        this.core.sendActions([{ name: 'tracker-add-image', payload: payload }]);
+        this.core.sendActions([{ name: 'imgtracker-add-image', payload: payload }]);
         return id;
     }
 }

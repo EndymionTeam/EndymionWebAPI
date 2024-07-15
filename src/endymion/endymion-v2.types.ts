@@ -72,7 +72,7 @@ export type ActionName = 'api-multi-action'
     | 'primitive-set-color'
     | 'shape-line-create'
     | 'webview-create'
-    | 'tracker-add-image'
+    | 'imgtracker-add-image'
     | 'webview-set-orientation'
     | 'webview-send-message';
 
@@ -170,9 +170,9 @@ export type actorSetActivePayload = {
 
 /**
  * Payload for setting the aimable state of an object.
- * @typedef {'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'tracker-on-image' | 'webview-on-message'} MessageName
+ * @typedef {'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message'} MessageName
  */
-export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'tracker-on-image' | 'webview-on-message';
+export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message';
 
 /**
  * Represents the payload for a message.

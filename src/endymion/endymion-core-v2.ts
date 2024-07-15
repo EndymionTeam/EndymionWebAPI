@@ -163,7 +163,7 @@ class EndymionCoreV2 {
                 name: "api-init",
                 payload:
                 {
-                    api: "2"
+                    api: "3"
                 }
             });
         }
