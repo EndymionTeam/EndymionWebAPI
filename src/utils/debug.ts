@@ -27,7 +27,7 @@ function enConsole(message: string, type: 'log' | 'error' = 'log') {
     var p = document.createElement('p');
     p.appendChild(text);
     logBox.insertBefore(p, logBox.firstChild);
-    if((window as any).debugMode == true) logBox.style.display = 'block';
+    logBox.style.display = 'block';
     if (type === 'log') {
         p.style.color = 'black';
     }
