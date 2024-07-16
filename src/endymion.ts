@@ -9,7 +9,8 @@ ApplyGoogleAnalyticsScript(document, 'G-7GSJCF5BLC');
     objectId: 0,
     environment: 'web-browser',
     debugMode: false,
-    apiVersion: '2.5.7',
+    version: '2.5.8',
+    apiVersion:'3'
 }
 
 export { En }

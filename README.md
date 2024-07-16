@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.7
+# EndymionWebApi 2.5.8
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.7](#endymionwebapi-257)
+- [EndymionWebApi 2.5.8](#endymionwebapi-258)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -28,6 +28,8 @@ Easy interact with Endymion browser using HTML5 and javascript
     - [General Events Examples](#general-events-examples)
 - [Accessing to Entity State](#accessing-to-entity-state)
     - [Here an example](#here-an-example)
+- [QrCode Scan Setup](#qrcode-scan-setup)
+    - [Here an example](#here-an-example-1)
 - [Utilities](#utilities)
 - [Create a QR Code Based Experience](#create-a-qr-code-based-experience)
   - [How to define a qr code based experience.](#how-to-define-a-qr-code-based-experience)
@@ -438,6 +440,32 @@ It is possible to access the status of the entity that has been created through 
     //position is { x: 0, y: 0, z: 0 }
 ```
 
+# QrCode Scan Setup
+
+| Name                                                   | Description                      | Details                                                           |   
+| -------------------------------------------------------| -------------------------------- | ------------------------------------------------------------------|  
+| qrcode.init(trackMode: 'cv' | 'anchor',                | init qr code scan system         | trackMode track mode to be used                                   |
+|        maxActives: number = 1, maxCached: number = 10, |                                  | maxActives max possible active qrcodes at same time              |
+|        refSize: number = 0.1)                          |                                  | maxCached max number of qrcode to keep in cache                   |
+|                                                        |                                  | refSize qrcode reference size in meters (only for "anchor" mode)  |
+| qrcode.reset()                                         | reset qr code scan system        |                                                                   |
+| qrcode.run()                                           | start qr code scan               |                                                                   |
+| qrcode.stop()                                          | stop qr code scan                |
+
+### Here an example
+```javascript
+    //init with anchor system and other values setted to default
+    en.qrcode.init('anchor');
+    //start run qr code scan
+    en.qrcode.run();
+
+    //stop after 5 seconds
+    setTimeout(()=>en.qrcode.stop(), 5000);
+    
+```
+
+
+
 # Utilities
 There are a few utilities that can simplify the development process
 | Name                      | Returned Type                         |   
@@ -519,10 +547,11 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 
 
 # Changelog
-2.5.3 removed auto debug mode on console.log  
-2.5.5 added click policy method to webview, docs update
-2.5.6 google analitycs tag automatic
-2.5.7 update api to new version 3
+2.5.3 removed auto debug mode on console.log          
+2.5.5 added click policy method to webview, docs update     
+2.5.6 google analitycs tag automatic        
+2.5.7 update api to new version 3       
+2.5.8 qrcode methods added, added api version setting and init, docs updated     
 
 
 
