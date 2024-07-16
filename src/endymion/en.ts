@@ -98,22 +98,23 @@ export class En {
     playHaptic() {
         this.core.playHaptic();
     }
-    connect = (url: string): En => {
-        if(url === undefined || url === null || url === '') throw new Error('[EN][connect] - url is required');
-        this.currentConnectionImageId = this.addTrackingImage(url);
-        return this;
-    }
-    toWebView = (webViewCreationFn: (imageId: number, state: boolean) => EnWebview): number | string => {
-        var that = this;
-         this.trackImage$.subscribe((message: MessageIncoming) => {
-            let webView = webViewCreationFn(that.currentConnectionImageId, message.payload.state as boolean);
-            this.connections.set(that.currentConnectionImageId, webView);
-        });
-        return that.currentConnectionImageId;
-    };
-    getWebView = (imageId: number): EnWebview | null => {
-        return this.connections.get(imageId)!;
-    }
+    //TODO: will be developed
+    // connect = (url: string): En => {
+    //     if(url === undefined || url === null || url === '') throw new Error('[EN][connect] - url is required');
+    //     this.currentConnectionImageId = this.addTrackingImage(url);
+    //     return this;
+    // }
+    // toWebView = (webViewCreationFn: (imageId: number, state: boolean) => EnWebview): number | string => {
+    //     var that = this;
+    //      this.trackImage$.subscribe((message: MessageIncoming) => {
+    //         let webView = webViewCreationFn(that.currentConnectionImageId, message.payload.state as boolean);
+    //         this.connections.set(that.currentConnectionImageId, webView);
+    //     });
+    //     return that.currentConnectionImageId;
+    // };
+    // getWebView = (imageId: number): EnWebview | null => {
+    //     return this.connections.get(imageId)!;
+    // }
     /**
      * @returns EnAsset
      * example: en.asset().load('https://example.com/model.glb')
@@ -158,11 +159,11 @@ export class En {
      * @returns id of the image
      */
     addTrackingImage = (url: string, refWidth: number = 0.05): number => {
-        if(url === undefined || url === null || url === '') throw new Error('[EN][addTrackingImage] - url is required');
+        if (url === undefined || url === null || url === '') throw new Error('[EN][addTrackingImage] - url is required');
         let id = this.core.generateObjectId();
         url = url.includes('http')
-        ? url
-        : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;
+            ? url
+            : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;
 
         let payload = {
             id: id,
@@ -171,5 +172,22 @@ export class En {
         }
         this.core.sendActions([{ name: 'imgtracker-add-image', payload: payload }]);
         return id;
+    }
+    qrcode = {
+        init: (trackMode: 'cv' | 'anchor', maxActives: number = 1, maxCached: number = 10, refSize: number = 0.1) => {
+            let payload = {
+                trackMode: trackMode,
+                maxActives: maxActives,
+                maxCached: maxCached,
+                refSize: refSize
+            };
+            this.core.sendActions([{ name: 'qrctracker-init', payload: payload }]);
+        },
+        reset: () => {
+            this.core.sendActions([{ name: "qrctracker-reset", payload: {} }]);
+        },
+        run: ()=>{
+            this.core.sendActions([{ name : "qrctracker-run", payload: { state : true }}]);
+        }
     }
 }

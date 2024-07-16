@@ -53,7 +53,8 @@ export type Color = { r: number, g: number, b: number, a: number };
  * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'
  * | 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' 
  * | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-set-active' | 'object-setaimable' 
- * | 'shape-line-create' | 'actor-set-transform' | 'webview-set-orientation' | 'webview-send-message'} ActionName
+ * | 'shape-line-create' | 'actor-set-transform' | 'webview-set-orientation' | 'webview-send-message' | 'qrctracker-init' 
+ * | 'qrctracker-reset' | 'qrctracker-run'} ActionName
  */
 export type ActionName = 'api-multi-action'
     | 'actor-add-transform'
@@ -74,7 +75,10 @@ export type ActionName = 'api-multi-action'
     | 'webview-create'
     | 'imgtracker-add-image'
     | 'webview-set-orientation'
-    | 'webview-send-message';
+    | 'webview-send-message'
+    | 'qrctracker-init'
+    | 'qrctracker-reset'
+    | 'qrctracker-run';
 
 /**
  * Represents an entity in the Endymion system.
@@ -196,3 +200,10 @@ export type MessageIncoming = {
  * represent click policy on webview that is on other
  */
 export type PolicyType = 'block' | 'pass' | 'pass_transparent';
+
+export type TrackInit = {
+    trackMode: "cv" | "anchor",
+    maxActives: number,
+    maxCached: number,
+    refSize: number
+}
