@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.8
+# EndymionWebApi 2.5.9
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.8](#endymionwebapi-258)
+- [EndymionWebApi 2.5.9](#endymionwebapi-259)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -547,11 +547,12 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 
 
 # Changelog
-2.5.3 removed auto debug mode on console.log          
+2.5.3 removed auto debug mode on console.log         
 2.5.5 added click policy method to webview, docs update     
 2.5.6 google analitycs tag automatic        
 2.5.7 update api to new version 3       
-2.5.8 qrcode methods added, added api version setting and init, docs updated     
+2.5.8 qrcode methods added, added api version setting and init, docs updated   
+2.5.9 analytics added  
 
 
 
