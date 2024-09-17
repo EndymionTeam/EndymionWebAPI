@@ -1,6 +1,6 @@
 /**
  * Represents a primitive shape that can be used in 3D modeling.
- * @typedef {('cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad')} Primitive
+ * @typedef {('cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview' | 'shape-line')} Primitive
  * @memberof EndymionApi
  */
 export type PrimitiveType = 'cube' | 'sphere' | 'cylinder' | 'capsule' | 'plane' | 'quad' | 'gltf' | 'webview' | 'shape-line';
@@ -50,11 +50,11 @@ export type Color = { r: number, g: number, b: number, a: number };
 
 /**
  * Represents the name of an action that can be performed in Endymion.
- * @typedef {'multi-action' | 'primitive-create' | 'create-object' | 'destroy-object' | 'import-gltf'
- * | 'actor-set-transform' | 'primitive-set-color' | 'play-haptic' | 'play-anim' | 'destroy-allobjects' 
- * | 'gltf-stop-anim' | 'gltf-pause-anim' | 'webview-create' | 'actor-set-active' | 'object-setaimable' 
- * | 'shape-line-create' | 'actor-set-transform' | 'webview-set-orientation' | 'webview-send-message' | 'qrctracker-init' 
- * | 'qrctracker-reset' | 'qrctracker-run'} ActionName
+ * @typedef {('api-multi-action' | 'actor-add-transform' | 'actor-set-transform' | 'actor-destroy' | 'actor-destroy-all' 
+ * | 'actor-set-active' | 'actor-set-aimable' | 'actor-set-clickable'| 'device-play-haptic'| 'gltf-create'| 'gltf-play-anim'
+ * | 'gltf-pause-anim' | 'gltf-stop-anim' | 'primitive-create'  | 'primitive-set-color' | 'shape-line-create' 
+ * | 'webview-create' | 'imgtracker-add-image' | 'imgtracker-init' | 'imgtracker-reset' | 'webview-set-orientation' 
+ * | 'webview-send-message' | 'qrctracker-init' | 'qrctracker-reset' | 'qrctracker-run')} ActionName
  */
 export type ActionName = 'api-multi-action'
     | 'actor-add-transform'
@@ -74,6 +74,8 @@ export type ActionName = 'api-multi-action'
     | 'shape-line-create'
     | 'webview-create'
     | 'imgtracker-add-image'
+    | 'imgtracker-init'
+    | 'imgtracker-reset'
     | 'webview-set-orientation'
     | 'webview-send-message'
     | 'qrctracker-init'

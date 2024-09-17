@@ -64,6 +64,7 @@ function createMessageBox() {
     div.style.textAlign = 'center';
     div.style.transform = 'translate(-50%, -50%)';
     div.style.padding = '20px';
+    div.style.overflow = 'scroll';
     div.appendChild(p);
     div.appendChild(button);
     document.body.appendChild(div);

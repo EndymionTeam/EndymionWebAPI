@@ -157,6 +157,7 @@ export class En {
      * @param url - url of the image to be tracked
      * @param refWidth - reference width of the image to be tracked
      * @returns id of the image
+     * @obsolete
      */
     addTrackingImage = (url: string, refWidth: number = 0.05): number => {
         if (url === undefined || url === null || url === '') throw new Error('[EN][addTrackingImage] - url is required');
@@ -172,6 +173,44 @@ export class En {
         }
         this.core.sendActions([{ name: 'imgtracker-add-image', payload: payload }]);
         return id;
+    }
+    /**
+     * Tracking Image methods
+     * allow to set an use image to start an experience
+     */
+    trackingImage = {
+        /**
+         * init tracking image system
+         */
+        init: (): void => {
+            this.core.sendActions([{ name: 'imgtracker-init', payload: {} }])
+        },
+        /* add tracking image to the scene
+        * @param url - url of the image to be tracked
+        * @param refWidth - reference width of the image to be tracked
+        * @returns id of the image
+        */
+        add: (url: string, refWidth: number = 0.05): number => {
+            if (url === undefined || url === null || url === '') throw new Error('[EN][addTrackingImage] - url is required');
+            let id = this.core.generateObjectId();
+            url = url.includes('http')
+                ? url
+                : `${this.win.getCurrentProtocol()}//${this.win.getCurrentHost()}/${url}`;
+    
+            let payload = {
+                id: id,
+                url: url,
+                refWidth: refWidth
+            }
+            this.core.sendActions([{ name: 'imgtracker-add-image', payload: payload }]);
+            return id;
+        },
+        /**
+         * reset tracking image
+         */
+        reset:():void=>{
+            this.core.sendActions([{ name:'imgtracker-reset', payload:{} }])
+        }
     }
     /**
      * qrcode methods
@@ -205,9 +244,9 @@ export class En {
         run: () => {
             this.core.sendActions([{ name: "qrctracker-run", payload: { state: true } }]);
         },
-                /**
-         * qr code scan stop
-         */
+        /**
+ * qr code scan stop
+ */
         stop: () => {
             this.core.sendActions([{ name: "qrctracker-run", payload: { state: false } }]);
         }

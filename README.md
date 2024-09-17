@@ -1,9 +1,9 @@
-# EndymionWebApi 2.5.9
+# EndymionWebApi 2.6.0
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.5.9](#endymionwebapi-259)
+- [EndymionWebApi 2.6.0](#endymionwebapi-260)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -28,8 +28,10 @@ Easy interact with Endymion browser using HTML5 and javascript
     - [General Events Examples](#general-events-examples)
 - [Accessing to Entity State](#accessing-to-entity-state)
     - [Here an example](#here-an-example)
-- [QrCode Scan Setup](#qrcode-scan-setup)
+- [Image Tracking Scan Setup](#image-tracking-scan-setup)
     - [Here an example](#here-an-example-1)
+- [QrCode Scan Setup](#qrcode-scan-setup)
+    - [Here an example](#here-an-example-2)
 - [Utilities](#utilities)
 - [Create a QR Code Based Experience](#create-a-qr-code-based-experience)
   - [How to define a qr code based experience.](#how-to-define-a-qr-code-based-experience)
@@ -318,16 +320,16 @@ On Assets you can use all methods allowed for primitives with exclusion reported
 You can perform general action and subscribe general events to take control of environment
 Here a list of available methods
 ## General Methods
-| Name                                                  | Description                                                       |   
-| ------------------------------------------------------| ----------------------------------------------------------------- |  
-| enableDebug()                                         | Allow to see action logged in a box sended to Endymion Browser    |
-|                                                       | and message by Endymion Browset to library                        |
-| disableDebug()                                        | Disable debug mode                                                |
-| addTrackingImage(url:string, refWidth: number = 0.05) | addTrackingImage allow to define an image that will be used like  |
-|                                                       | experience activator. When Endymion Browser aim this library fire |
-|                                                       | a trakingImage event that you can use to start experience         |
-|                                                       | refWidth express in meter the image side length of a square image |
-| playHaptic()                                          | play an haptic feedback on device                                 |
+| Name                                                  | Description                                                               |   
+| ------------------------------------------------------| ------------------------------------------------------------------------- |  
+| enableDebug()                                         | Allow to see action logged in a box sended to Endymion Browser            |
+|                                                       | and message by Endymion Browset to library                                |
+| disableDebug()                                        | Disable debug mode                                                        |
+| addTrackingImage(url:string, refWidth: number = 0.05) | addTrackingImage allow to define an image that will be used like          |
+|                                                       | experience activator. When Endymion Browser aim this library fire         |
+|                                                       | a trakingImage event that you can use to start experience                 |
+|                                                       | refWidth express in meter the image side length of a square image         |
+| playHaptic()                                          | play an haptic feedback on device [deprecated see trackingImage methods]  |
 
 ### General Methods Examples
 
@@ -440,6 +442,28 @@ It is possible to access the status of the entity that has been created through 
     //position is { x: 0, y: 0, z: 0 }
 ```
 
+# Image Tracking Scan Setup
+
+| Name                                                      | Description                                                               |   
+| --------------------------------------------------------- | --------------------------------------------------------------------------|  
+| trackingImage.init()                                      | init tracking image system                                                |
+| trackingImage.add(url:string, refWidth: number = 0.05)    | addTrackingImage allow to define an image that will be used like          |
+|                                                           | experience activator. When Endymion Browser aim this library fire         |
+|                                                           | a trakingImage event that you can use to start experience                 |
+|                                                           | refWidth express in meter the image side length of a square image         |
+| trackingImage.reset()                                     | reset tracking image system                                               |
+
+### Here an example
+```javascript
+    //init tracking image system
+    en.trackingImage.init();
+    //add tracking image
+    en.trackingImage.add('/assets/image/tracking-image.jpg');
+
+    //if necessary you can use reset method to change image for example
+    en.trackingImage.reset();
+    
+```
 # QrCode Scan Setup
 
 | Name                                                   | Description                      | Details                                                           |   
@@ -553,6 +577,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 2.5.7 update api to new version 3       
 2.5.8 qrcode methods added, added api version setting and init, docs updated   
 2.5.9 analytics added  
+2.6.0 tracking image init and reset added, deprecated addTrackingImage method
 
 
 
