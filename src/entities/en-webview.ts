@@ -17,6 +17,9 @@ export class EnWebview extends BaseEntity {
     override setOpacity(value: number): BaseEntity {
         throw new Error("[en-webview][setOpacity] - Method not allowed on EnWebview");
     }
+    override setCollidable(value:boolean): BaseEntity{
+        throw new Error("[en-webview][setCollidable] - Method not allowed on EnWebview");
+    }
     setUrl(url: string): EnWebview {
         url = url.includes('http')
             ? url

@@ -20,6 +20,7 @@ export class En {
     private trackImage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private pageVisibility: Subject<boolean> = new Subject<boolean>();
     private webViewMessage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
+    private assetCollition: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private connections: Map<number, EnWebview | null> = new Map<number, EnWebview | null>();
     private currentConnectionImageId: number = -1;
     /**
@@ -49,6 +50,10 @@ export class En {
      * webViewMessage$ - Observable to listen to webview messages from Endymion Browser
      */
     webViewMessage$ = this.webViewMessage.asObservable();
+    /**
+     * assetCollition$ - Observable to listen to collitions messages from Endymion Browser
+     */
+    assetCollition$ = this.assetCollition.asObservable();
 
     constructor(private commInterface: string = 'vuplex', private w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
@@ -72,6 +77,9 @@ export class En {
                     break;
                 case 'webview-on-message':
                     that.webViewMessage.next({ name: name, type: 'message', payload: payload });
+                    break;
+                case 'actor-on-collision':
+                    that.assetCollition.next({ name: name, type: 'message', payload: payload});
                     break;
             }
             that.message.next({ name: name, type: 'message', payload: payload });
@@ -245,10 +253,17 @@ export class En {
             this.core.sendActions([{ name: "qrctracker-run", payload: { state: true } }]);
         },
         /**
- * qr code scan stop
- */
+         * qr code scan stop
+         */
         stop: () => {
             this.core.sendActions([{ name: "qrctracker-run", payload: { state: false } }]);
+        }
+    }
+
+    deviceCollition = (enable:boolean, radius:number = 0)=>{
+        if(enable){
+            if(radius < 0 || radius > 100) throw new Error('[EN][deviceCollition] - radius out of range [0,100]');
+            this.core.sendActions([{ name: 'actor-set-collidable', payload: { enabled: enable, radius: radius}}]);
         }
     }
 }

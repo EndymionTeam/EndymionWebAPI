@@ -32,6 +32,8 @@ Easy interact with Endymion browser using HTML5 and javascript
     - [Here an example](#here-an-example-1)
 - [QrCode Scan Setup](#qrcode-scan-setup)
     - [Here an example](#here-an-example-2)
+- [Device collition with assets](#device-collition-with-assets)
+    - [Here an example](#here-an-example-3)
 - [Utilities](#utilities)
 - [Create a QR Code Based Experience](#create-a-qr-code-based-experience)
   - [How to define a qr code based experience.](#how-to-define-a-qr-code-based-experience)
@@ -170,6 +172,8 @@ On Entity you can use this methods
 | setClickable(value:boolean)                       | define if primitive is clickable      | click event is emitted if value == true                    |
 | setHapticFeedback(value:boolean)                  | define if haptic is activated         | if activated an haptic feedback is placed when entity is   |
 |                                                   |                                       | aimed or clicked                                           |
+| setCollidable(value:boolean)                      | define if entity is collidaable       | device must by setted as collidable with en.deviceCollition|
+|                                                   |                                       | method                                                     |
 | create()                                          | ask to endymion browser to create     | allowed only a time, if entity exists an error should      |
 |                                                   |                                       | throwned                                                   |
 | apply()                                           | ask to endymion browser to modify     | allowed after creation, end method like create             |
@@ -181,36 +185,37 @@ Them can only used as terminal methods.
 
 ### Avalilable Events Subscription
 
-| Name                      | Description                            | type                      |   
-| --------------------------| -------------------------------------- | ------------------------- |
-| updated$                  | observable on update event             | action description        |
-| colorUpdated$             | observable on color update event       | color value               |
-| opacity$                  | observable on opacity update           | 0 <= number <= 1          |
-| positionUpdated$          | observable on position update event    | position value            |
-| posX$                     | observable on x coordinate on position | number                    |
-| posY$                     | observable on y coordinate on position | number                    |
-| posZ$                     | observable on z coordinate on position | number                    |
-| rotationUpdated$          | observable on rotation update event    | rotation value            |
-| rotX$                     | observable on x angle on rotation      | number                    |
-| rotY$                     | observable on y angle on rotation      | number                    |
-| rotZ$                     | observable on z angle on rotation      | number                    |
-| scaleUpdated$             | observable on scale update event       | scale value               |
-| scaleX$                   | observable on x scale on scale         | number                    |
-| scaleY$                   | observable on y scale on scale         | number                    |
-| scaleZ$                   | observable on z scale on scale         | number                    |
-| setAimableUpdated$        | observable on aimable  value           | { enabled, radius }       |
-| setActivatedUpdated$      | observable on activate status value    | boolean                   |
-| created$                  | observable on create event             | actions list              |
-| createError$              | observable on create errors            | { method, error }         |
-| applyed$                  | observable on apply event              | actions list              |
-| applyError$               | observable on apply errors             | { method, error }         |
-| error$                    | observable on generic errors           | { method, error }         |
-| aimed$                    | observable on aim event                | { name:'actor-on-aim', type:string, payload:{id : string, state: boolean}}|
-| clicked$                  | observable on click event              | { name, payload }         |
-| webViewVisible$           | observable on webView visible event    | { name, payload }         |    
-| isClickable$              | observable on clickable update event   | boolean                   |
-| hapticPlay$               | observable on haptic feedback play evt | boolean                   |
-| destroyed$                | observable on destroyed event          | --                        |
+| Name                      | Description                              | type                                                                      |   
+| --------------------------| -----------------------------------------| -------------------------                                                 |
+| updated$                  | observable on update event               | action description                                                        |
+| colorUpdated$             | observable on color update event         | color value                                                               |
+| opacity$                  | observable on opacity update             | 0 <= number <= 1                                                          |
+| positionUpdated$          | observable on position update event      | position value                                                            |
+| posX$                     | observable on x coordinate on position   | number                                                                    |
+| posY$                     | observable on y coordinate on position   | number                                                                    |
+| posZ$                     | observable on z coordinate on position   | number                                                                    |
+| rotationUpdated$          | observable on rotation update event      | rotation value                                                            |
+| rotX$                     | observable on x angle on rotation        | number                                                                    |
+| rotY$                     | observable on y angle on rotation        | number                                                                    |
+| rotZ$                     | observable on z angle on rotation        | number                                                                    |
+| scaleUpdated$             | observable on scale update event         | scale value                                                               |
+| scaleX$                   | observable on x scale on scale           | number                                                                    |
+| scaleY$                   | observable on y scale on scale           | number                                                                    |
+| scaleZ$                   | observable on z scale on scale           | number                                                                    |
+| setAimableUpdated$        | observable on aimable  value             | { enabled, radius }                                                       |
+| setActivatedUpdated$      | observable on activate status value      | boolean                                                                   |
+| created$                  | observable on create event               | actions list                                                              |
+| createError$              | observable on create errors              | { method, error }                                                         |
+| applyed$                  | observable on apply event                | actions list                                                              |
+| applyError$               | observable on apply errors               | { method, error }                                                         |
+| error$                    | observable on generic errors             | { method, error }                                                         |
+| aimed$                    | observable on aim event                  | { name:'actor-on-aim', type:string, payload:{id : string, state: boolean}}|
+| clicked$                  | observable on click event                | { name, payload }                                                         |
+| webViewVisible$           | observable on webView visible event      | { name, payload }                                                         | 
+| collition$                | observable on collition status of entity | { name: 'collition', state: boolean}                                      |
+| isClickable$              | observable on clickable update event     | boolean                                                                   |
+| hapticPlay$               | observable on haptic feedback play evt   | boolean                                                                   |
+| destroyed$                | observable on destroyed event            | --                                                                        |
 
 
 
@@ -433,6 +438,7 @@ It is possible to access the status of the entity that has been created through 
 | active                    | boolean                         |
 | aimable                   | boolean                         |
 | playHaptic                | boolean                         |
+| collidable                | boolean                         |
 
 
 ### Here an example
@@ -488,6 +494,45 @@ It is possible to access the status of the entity that has been created through 
     
 ```
 
+# Device collition with assets
+for use this functionality you have to set collidable property on asset with setCollidable method
+
+| Name                                                   | Description                       
+| -------------------------------------------------------| ------------------------------------------------------------------------------------------| 
+| en.deviceCollition(enable: boolean: radius:number = 0) | enable or disable device collition with asset rendered [ radius in meter range 0 - 100]   |
+| en.assetCollition$                                     | observable that return assets enabled collition status { name: 'actor-on-collision',      |
+|                                                        |  type:'message', payload: { id: string, state: boolean}                                   |
+
+### Here an example
+```javascript
+    // get a cube and set it collidable
+    let cube = en.cube().create();
+    cube.setCollidable(true).apply();
+
+    //get as sphere and set it collidable
+    let sphere = en.sphere().create();
+    sphere.setCollidable(true).apply();
+
+    //enable device to collition
+    en.deviceCollition(true);
+
+    //monitoring 
+    en.assetCollition$.subscribe(collition=>{
+        //collition = { name: 'actor-on-collision', type:'message', payload:{ id: string, state: boolean}}
+        // here you can monitoring via id who is in collition state with device
+    });
+
+    cube.collition$.subscribe(collition=>{
+        //collition = { name: collition, type: 'message', state: boolean }
+        //here you can react if cube is in collition state
+    });
+
+    sphere.collition$.subscribe(collition=>{
+        //collition = { name: collition, type: 'message', state: boolean }
+        //here you can react if cube is in collition state
+    });
+    
+```
 
 
 # Utilities
@@ -578,6 +623,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 2.5.8 qrcode methods added, added api version setting and init, docs updated   
 2.5.9 analytics added  
 2.6.0 tracking image init and reset added, deprecated addTrackingImage method
+2.7.0 added device asset collition capability, docs updated
 
 
 

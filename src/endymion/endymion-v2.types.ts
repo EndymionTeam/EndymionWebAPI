@@ -54,7 +54,7 @@ export type Color = { r: number, g: number, b: number, a: number };
  * | 'actor-set-active' | 'actor-set-aimable' | 'actor-set-clickable'| 'device-play-haptic'| 'gltf-create'| 'gltf-play-anim'
  * | 'gltf-pause-anim' | 'gltf-stop-anim' | 'primitive-create'  | 'primitive-set-color' | 'shape-line-create' 
  * | 'webview-create' | 'imgtracker-add-image' | 'imgtracker-init' | 'imgtracker-reset' | 'webview-set-orientation' 
- * | 'webview-send-message' | 'qrctracker-init' | 'qrctracker-reset' | 'qrctracker-run')} ActionName
+ * | 'webview-send-message' | 'qrctracker-init' | 'qrctracker-reset' | 'qrctracker-run' | 'actor-set-collidable')} ActionName
  */
 export type ActionName = 'api-multi-action'
     | 'actor-add-transform'
@@ -80,6 +80,7 @@ export type ActionName = 'api-multi-action'
     | 'webview-send-message'
     | 'qrctracker-init'
     | 'qrctracker-reset'
+    | 'actor-set-collidable'
     | 'qrctracker-run';
 
 /**
@@ -107,6 +108,8 @@ export type Entity = {
     aimable: boolean,
     /** define if on entity interaction haptic is acticve */
     playHaptic: boolean,
+    /**define if entity interact with collisions */
+    collidable: boolean
 }
 
 /**
@@ -178,7 +181,7 @@ export type actorSetActivePayload = {
  * Payload for setting the aimable state of an object.
  * @typedef {'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message'} MessageName
  */
-export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message';
+export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message' | 'actor-on-collision';
 
 /**
  * Represents the payload for a message.

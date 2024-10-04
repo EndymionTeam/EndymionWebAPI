@@ -38,6 +38,7 @@ export class BaseEntity {
     private hapticPlay: Subject<boolean> = new Subject<boolean>();
     private destroyed: Subject<boolean> = new Subject<boolean>();
     private actionResult: Subject<any> = new Subject<any>();
+    private collition: Subject<any> = new Subject<any>();
 
     private posXS:BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private posYS:BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -66,7 +67,8 @@ export class BaseEntity {
         clickable: false,
         active: true,
         aimable: false,
-        playHaptic: false
+        playHaptic: false,
+        collidable: false,
     };
 
     get state():Entity{
@@ -98,6 +100,9 @@ export class BaseEntity {
     }
     get playHaptic(){
         return this.entity.playHaptic;
+    }
+    get collidable(){
+        return this.entity.collidable;
     }
     protected core: EndymionCore;
 
@@ -145,6 +150,7 @@ export class BaseEntity {
     hapticPlay$ = this.hapticPlay.asObservable();
     destroyed$ = this.destroyed.asObservable();
     actionResult$ = this.actionResult.asObservable();
+    collition$ = this.collition.asObservable();
 
     posX$ = this.posXS.asObservable();
     posY$ = this.posYS.asObservable();
@@ -199,6 +205,11 @@ export class BaseEntity {
                         break;
                     case 'webview-on-message':
                         that.webViewMessage.next({ name: name, type: 'message', payload: payload });
+                        break;
+                    case 'actor-on-collision':
+                        if(that.entity.id.toString() == payload.id){
+                            that.collition.next({ name: 'collition', type: 'message', state: payload.state});
+                        }
                         break;
                 }
                 that.message.next({ name: name, type: 'message', payload: payload });
@@ -416,6 +427,12 @@ export class BaseEntity {
     }
     setHapticFeedback(value: boolean): BaseEntity {
         this.entity.playHaptic = value;
+        return this;
+    }
+    setCollidable(value: boolean):BaseEntity{
+        this.entity.collidable = value;
+        this.updated.next({ name: 'actor-set-collidable', type: 'update', payload: { id: this.entity.id, enabled: value }});
+        this.actions.push({name: 'actor-set-collidable', payload: { id: this.entity.id, enabled: value }});
         return this;
     }
 }
