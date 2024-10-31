@@ -21,6 +21,7 @@ export class En {
     private pageVisibility: Subject<boolean> = new Subject<boolean>();
     private webViewMessage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private assetCollition: Subject<MessageIncoming> = new Subject<MessageIncoming>();
+    private qrcodeDetected: Subject<MessageIncoming> = new Subject<MessageIncoming>();
     private connections: Map<number, EnWebview | null> = new Map<number, EnWebview | null>();
     private currentConnectionImageId: number = -1;
     /**
@@ -54,6 +55,10 @@ export class En {
      * assetCollition$ - Observable to listen to collitions messages from Endymion Browser
      */
     assetCollition$ = this.assetCollition.asObservable();
+    /**
+     * qrcodeDetected$ - Observable to listen qrcode detection event
+     */
+    qrcodeDetected$ = this.qrcodeDetected.asObservable();
 
     constructor(private commInterface: string = 'vuplex', private w: Window = window) {
         this.core = new EndymionCore(commInterface, w);
@@ -80,6 +85,9 @@ export class En {
                     break;
                 case 'actor-on-collision':
                     that.assetCollition.next({ name: name, type: 'message', payload: payload});
+                    break;
+                case 'qrctracker-on-qrcode':
+                    that.qrcodeDetected.next({ name: name, type: 'message', payload: payload});
                     break;
             }
             that.message.next({ name: name, type: 'message', payload: payload });

@@ -181,7 +181,7 @@ export type actorSetActivePayload = {
  * Payload for setting the aimable state of an object.
  * @typedef {'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message'} MessageName
  */
-export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message' | 'actor-on-collision';
+export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' | 'api-on-result' | 'imgtracker-on-image' | 'webview-on-message' | 'actor-on-collision' | 'qrctracker-on-qrcode';
 
 /**
  * Represents the payload for a message.
@@ -189,7 +189,8 @@ export type MessageName = 'actor-on-aim' | 'actor-on-click' | 'webview-visible' 
 export type MessagePayload = {
     id: string,
     url?: string,
-    state?: string | boolean
+    state?: string | boolean,
+    content?: string
 }
 
 /**

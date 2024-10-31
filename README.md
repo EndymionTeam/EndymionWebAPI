@@ -1,9 +1,9 @@
-# EndymionWebApi 2.6.0
+# EndymionWebApi 2.7.1
 Easy interact with Endymion browser using HTML5 and javascript
 
 ## Table of Contents
 
-- [EndymionWebApi 2.6.0](#endymionwebapi-260)
+- [EndymionWebApi 2.7.1](#endymionwebapi-271)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -472,15 +472,18 @@ It is possible to access the status of the entity that has been created through 
 ```
 # QrCode Scan Setup
 
-| Name                                                   | Description                      | Details                                                           |   
-| -------------------------------------------------------| -------------------------------- | ------------------------------------------------------------------|  
-| qrcode.init(trackMode: 'cv' | 'anchor',                | init qr code scan system         | trackMode track mode to be used                                   |
-|        maxActives: number = 1, maxCached: number = 10, |                                  | maxActives max possible active qrcodes at same time              |
-|        refSize: number = 0.1)                          |                                  | maxCached max number of qrcode to keep in cache                   |
-|                                                        |                                  | refSize qrcode reference size in meters (only for "anchor" mode)  |
-| qrcode.reset()                                         | reset qr code scan system        |                                                                   |
-| qrcode.run()                                           | start qr code scan               |                                                                   |
-| qrcode.stop()                                          | stop qr code scan                |
+| Name                                                   | Description                      | Details                                                                         |   
+| -------------------------------------------------------| -------------------------------- | --------------------------------------------------------------------------------|  
+| qrcode.init(trackMode: 'cv' | 'anchor',                | init qr code scan system         | trackMode track mode to be used                                                 |
+|        maxActives: number = 1, maxCached: number = 10, |                                  | maxActives max possible active qrcodes at same time                             |
+|        refSize: number = 0.1)                          |                                  | maxCached max number of qrcode to keep in cache                                 |
+|                                                        |                                  | refSize qrcode reference size in meters (only for "anchor" mode)                |
+| qrcode.reset()                                         | reset qr code scan system        |                                                                                 |
+| qrcode.run()                                           | start qr code scan               |                                                                                 |
+| qrcode.stop()                                          | stop qr code scan                |                                                                                 |
+| en.qrcodeDetected$                                     | observable on qrcode detected    | return this payload: {"id" : "qrcode-01", "content" : "https://endymion.tech" } |          
+|                                                        |                                  | id as qrcode id and content show qrcode content                                 |
+
 
 ### Here an example
 ```javascript
@@ -491,6 +494,16 @@ It is possible to access the status of the entity that has been created through 
 
     //stop after 5 seconds
     setTimeout(()=>en.qrcode.stop(), 5000);
+
+    //react to qrcode detection
+    en.qrcodeDetected$.subscribe(payload=>{
+        //webwview creation hosted in url contained in qrcode content
+        let url = payload.content;
+        let webView = en.webview();
+            webView.setUrl(url)
+                .setType('flat-fixed')
+                .create();
+    })
     
 ```
 
@@ -624,6 +637,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 2.5.9 analytics added  
 2.6.0 tracking image init and reset added, deprecated addTrackingImage method
 2.7.0 added device asset collition capability, docs updated
+2.7.1 qrcode detect evant implementation
 
 
 
