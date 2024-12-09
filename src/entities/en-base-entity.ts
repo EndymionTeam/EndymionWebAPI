@@ -402,6 +402,7 @@ export class BaseEntity {
         this.entity.color.a = value;
         this.updated.next({ name: 'color', type: 'update', payload: { color: this.entity.color } })
         this.colorUpdated.next(this.entity.color);
+        this.actions.push({ name: 'primitive-set-color', payload: { id: this.entity.id, color: this.entity.color } });
         return this;
     }
     setAimable(value: boolean, radius: number = 0.1): BaseEntity {
