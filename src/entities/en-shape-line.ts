@@ -1,4 +1,4 @@
-import { Coordinates, PrimitiveType } from "../endymion/endymion-v2.types";
+import { Action, Coordinates, PrimitiveType } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnShapeLine extends BaseEntity {
@@ -45,6 +45,26 @@ export class EnShapeLine extends BaseEntity {
         ]
         super.create();
         return this;
+    }
+
+    build(): Action[] {
+        this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
+        this.actions = [
+            {
+               name: 'shape-line-create', payload: {
+                    id: this.entity.id.toString(),
+                    color: this.entity.color,
+                    thickness: this.thickness,
+                    points: this.points,
+                    transform: {
+                        position: this.entity.position,
+                        rotation: this.entity.rotation,
+                        scale: this.entity.scale
+                    }
+                }
+            },
+        ]
+        return super.build();
     }
 
 }

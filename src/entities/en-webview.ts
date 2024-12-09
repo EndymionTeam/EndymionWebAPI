@@ -1,4 +1,4 @@
-import { ActionName, Color, PolicyType, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
+import { Action, ActionName, Color, PolicyType, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {
@@ -93,6 +93,27 @@ export class EnWebview extends BaseEntity {
             }]
         super.create();
         return this;
+    }
+
+    build(): Action[] {
+        if (!this.url) throw new Error('[en-webview][create] - url is required');
+        this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
+        this.actions = [
+            {
+                name: 'webview-create',
+                payload: {
+                    id: this.entity.id,
+                    type: this.webViewType,
+                    url: this.url,
+                    parent: this.webViewParent,
+                    transform: {
+                        rotation: this.entity.rotation,
+                        position: this.entity.position,
+                        scale: this.entity.scale
+                    }
+                }
+            }]
+        return super.build();
     }
 
 }

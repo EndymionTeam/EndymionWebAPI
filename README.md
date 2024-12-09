@@ -175,7 +175,7 @@ On Entity you can use this methods
 | setCollidable(value:boolean)                      | define if entity is collidaable       | device must by setted as collidable with en.deviceCollition|
 |                                                   |                                       | method                                                     |
 | create()                                          | ask to endymion browser to create     | allowed only a time, if entity exists an error should      |
-|                                                   |                                       | throwned                                                   |
+| build()                                           | build actions                         | list of actions that are necessary to create entity        |
 | apply()                                           | ask to endymion browser to modify     | allowed after creation, end method like create             |
 |                                                   | entity                                |                                                            |
 | destroy()                                         | destroy entity                        |                                                            |
@@ -248,16 +248,17 @@ methods with 'apply()'.
 ```
 ### Available Methods
 On Assets you can use all methods allowed for primitives with exclusion reported in table
-| Name                                              | Description                           | Details                                                    |   
-| --------------------------------------------------| ------------------------------------- | ---------------------------------------------------------- |  
-| setColor(Color or string)                         | set entity color                      | NOT ALLOWED (an error is throwned)                         |
-| setOpacity(value:number)                          | set opacity of entity                 | NOT ALLOWED (an error is throwned)                         |
-| create()                                          | ask to endymion browser to create     | NOT ALLOWED (an error is throwned)                         |
-| setAnim(animationIndex: number)                   | choose an animation                   | choose an animation available on asset                     |
-| playAnim()                                        | play animation                        |                                                            |
-| stopAnim()                                        | stop animation                        |                                                            |
-| pauseAnim()                                       | pause animation                       |                                                            |
-| load(url:string)                                  | load asset                            | ask to Endymion Browser to load asset (relative/absolute)  |
+| Name                                              | Description                                   | Details                                                    |   
+| --------------------------------------------------| ----------------------------------------------| ---------------------------------------------------------- |  
+| setColor(Color or string)                         | set entity color                              | NOT ALLOWED (an error is throwned)                         |
+| setOpacity(value:number)                          | set opacity of entity                         | NOT ALLOWED (an error is throwned)                         |
+| create()                                          | ask to endymion browser to create             | NOT ALLOWED (an error is throwned)                         |
+| setAnim(animationIndex: number)                   | choose an animation                           | choose an animation available on asset                     |
+| playAnim()                                        | play animation                                |                                                            |
+| stopAnim()                                        | stop animation                                |                                                            |
+| pauseAnim()                                       | pause animation                               |                                                            |
+| load(url:string)                                  | load asset                                    | ask to Endymion Browser to load asset (relative/absolute)  |
+| buildAsset(url:string)                            | get actions that are created in load method   | list of actions necessary for load asset                   |
 
 NB. load(), apply() and destroy() methods cannot be followed by settings methods.        
 Them can only used as terminal methods.
@@ -638,6 +639,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 2.6.0 tracking image init and reset added, deprecated addTrackingImage method
 2.7.0 added device asset collition capability, docs updated
 2.7.1 qrcode detect evant implementation
+2.7.2 added build method for defer send of actions to endymion
 
 
 

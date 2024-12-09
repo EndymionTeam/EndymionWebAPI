@@ -9,7 +9,7 @@ ApplyAnalytics(document, '66d201a048ad8047c37d9115');
     objectId: 0,
     environment: 'web-browser',
     debugMode: false,
-    version: '2.7.0',
+    version: '2.7.2',
     apiVersion:'3'
 }
 

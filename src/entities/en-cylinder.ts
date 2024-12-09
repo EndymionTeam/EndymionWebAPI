@@ -1,4 +1,4 @@
-import { PrimitiveType } from "../endymion/endymion-v2.types";
+import { Action, PrimitiveType } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnCylinder extends BaseEntity {
@@ -27,4 +27,21 @@ export class EnCylinder extends BaseEntity {
         return this;
     }
 
+    build(): Action[] {
+        this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
+        this.actions = [
+            {
+                name: 'primitive-create', payload: {
+                    id: this.entity.id,
+                    primitive: this.entity.primitive,
+                    transform: {
+                        position: this.entity.position,
+                        rotation: this.entity.rotation,
+                        scale: this.entity.scale
+                    }
+                }
+            }
+        ]
+        return super.build();
+    }
 }

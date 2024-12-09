@@ -217,8 +217,6 @@ export class BaseEntity {
         });
     }
 
-
-
     create() {
         if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
         try {
@@ -231,6 +229,22 @@ export class BaseEntity {
             this.error.next({ method: 'create', error: e });
         }
     }
+
+    build():Action[]{
+        let acts:Action[] = [];
+        if (this.isCreated) throw new Error('[en-primitive][create] - Entity already created');
+        try {
+            acts = this.actions;
+            this.created.next(this.actions);
+            this.actions = [];
+            this.isCreated = true;
+        } catch (e) {
+            this.createdError.next({ method: 'create', error: e });
+            this.error.next({ method: 'create', error: e });
+        }
+        return acts;
+    }
+
     apply() {
         if (!this.isCreated) throw new Error('[en-primitive][apply] - Entity not created');
         try {
@@ -242,6 +256,7 @@ export class BaseEntity {
             this.error.next({ method: 'apply', error: e });
         }
     }
+
     destroy() {
         try {
             this.core.sendActions([{ name: 'actor-destroy', payload: { id: this.entity.id } }]);
@@ -250,6 +265,7 @@ export class BaseEntity {
             this.error.next({ method: 'destroy', error: e });
         }
     }
+
     setId(id: number): BaseEntity {
         this.isCustomId = true;
         this.customId = id;
