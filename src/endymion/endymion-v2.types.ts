@@ -109,7 +109,9 @@ export type Entity = {
     /** define if on entity interaction haptic is acticve */
     playHaptic: boolean,
     /**define if entity interact with collisions */
-    collidable: boolean
+    collidable: boolean,
+    /** parent of entity, used for anchor to a qrcode or other entity */
+    parent?: number;
 }
 
 /**
@@ -196,7 +198,7 @@ export type MessagePayload = {
 /**
  * Represents the incoming message from the Endymion system.
  */
-export type MessageIncoming = {
+export type IncomingMessage = {
     name: MessageName,
     type: string,
     payload: MessagePayload

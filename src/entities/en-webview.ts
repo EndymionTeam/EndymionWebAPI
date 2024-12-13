@@ -1,11 +1,12 @@
-import { Action, ActionName, Color, PolicyType, PrimitiveType, webViewParent as WebViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
+import { Action, ActionName, Color, PolicyType, PrimitiveType, webViewParent, webViewType, webviewOrientation } from "../endymion/endymion-v2.types";
 import { BaseEntity } from "./en-base-entity";
 
 export class EnWebview extends BaseEntity {
     type: PrimitiveType = 'webview';
-    webViewParent!: WebViewParent;
+    webViewParent!: webViewParent;
     url: string = '';
     webViewType: webViewType = 'flat-fixed';
+
     constructor(protected commInterface: string = 'vuplex', protected w: Window = window) {
         super(commInterface, w);
         this.entity.primitive = this.type;
@@ -14,12 +15,15 @@ export class EnWebview extends BaseEntity {
     override setColor(color: Color): BaseEntity {
         throw new Error("[en-webview][setColor] - Method not allowed on EnWebview");
     }
+
     override setOpacity(value: number): BaseEntity {
         throw new Error("[en-webview][setOpacity] - Method not allowed on EnWebview");
     }
+
     override setCollidable(value:boolean): BaseEntity{
         throw new Error("[en-webview][setCollidable] - Method not allowed on EnWebview");
     }
+
     setUrl(url: string): EnWebview {
         url = url.includes('http')
             ? url
@@ -27,14 +31,17 @@ export class EnWebview extends BaseEntity {
         this.url = url;
         return this;
     }
-    setParent(webViewParent: WebViewParent): EnWebview {
+
+    override setParent(webViewParent: webViewParent): EnWebview {
         this.webViewParent = webViewParent;
         return this;
     }
+
     setType(type: webViewType): EnWebview {
         this.webViewType = type;
         return this;
     }
+
     setOrientation(orientation: webviewOrientation): EnWebview {
         if(orientation == null)  throw new Error('[en-webview][sendMessage] - orientation is required');
         let action = {
@@ -47,6 +54,7 @@ export class EnWebview extends BaseEntity {
         this.actions.push(action);
         return this;
     }
+
     sendMessage(destinationId: number, message: string) {
         if(destinationId < 0)  throw new Error('[en-webview][sendMessage] - destination webview id is required');
         if(message == '' || message == null)  throw new Error('[en-webview][sendMessage] - message is required');
@@ -61,6 +69,7 @@ export class EnWebview extends BaseEntity {
          this.actions.push(action);
          return this;
     }
+
     setClickPolicy(type: PolicyType){
         let action =  {
             name : 'webview-send-message' as ActionName, 
@@ -73,6 +82,7 @@ export class EnWebview extends BaseEntity {
          this.actions.push(action);
          return this;
     }
+
     override create(): EnWebview {
         if (!this.url) throw new Error('[en-webview][create] - url is required');
         this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();

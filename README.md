@@ -1,9 +1,9 @@
-# EndymionWebApi 2.7.1
-Easy interact with Endymion browser using HTML5 and javascript
+# EndymionWebApi 2.7.3
+Easy interact with Endymion browser using HTML5 and javascript      
 
 ## Table of Contents
 
-- [EndymionWebApi 2.7.1](#endymionwebapi-271)
+- [EndymionWebApi 2.7.3](#endymionwebapi-273)
   - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -174,6 +174,8 @@ On Entity you can use this methods
 |                                                   |                                       | aimed or clicked                                           |
 | setCollidable(value:boolean)                      | define if entity is collidaable       | device must by setted as collidable with en.deviceCollition|
 |                                                   |                                       | method                                                     |
+| setParent(id:number)                              |  define entity parent                 | set the entity relative to a marker id                     |
+|                                                   |                                       |                                                            |
 | create()                                          | ask to endymion browser to create     | allowed only a time, if entity exists an error should      |
 | build()                                           | build actions                         | list of actions that are necessary to create entity        |
 | apply()                                           | ask to endymion browser to modify     | allowed after creation, end method like create             |
@@ -640,6 +642,7 @@ if you want to quickly and easily try augmented reality with Endymion, just clon
 2.7.0 added device asset collition capability, docs updated
 2.7.1 qrcode detect evant implementation
 2.7.2 added build method for defer send of actions to endymion
+2.7.3 added setParent method to entity for anchor entity to a qrcode 
 
 
 
