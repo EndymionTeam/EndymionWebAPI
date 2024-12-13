@@ -15,6 +15,7 @@ export class EnQuad extends BaseEntity {
                 name: 'primitive-create', payload: {
                     id: this.entity.id,
                     primitive: this.entity.primitive,
+                    parent: this.entity.parent,
                     transform: {
                         position: this.entity.position,
                         rotation: this.entity.rotation,
@@ -34,6 +35,7 @@ export class EnQuad extends BaseEntity {
                 name: 'primitive-create', payload: {
                     id: this.entity.id,
                     primitive: this.entity.primitive,
+                    parent: this.entity.parent,
                     transform: {
                         position: this.entity.position,
                         rotation: this.entity.rotation,

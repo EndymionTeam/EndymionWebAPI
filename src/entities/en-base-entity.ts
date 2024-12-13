@@ -1,8 +1,10 @@
-import { Color, Action, Entity, MessageName, MessagePayload, MessageIncoming as IncomingMessage, Position, Rotation, Scale } from "../endymion/endymion-v2.types";
+import { Color, Action, Entity, MessageName, MessagePayload, entityParent, IncomingMessage } from "../endymion/endymion-v2.types";
 import { EndymionCore } from "../endymion/endymion-core-v2";
 import { BehaviorSubject, Subject, tap } from "rxjs";
 import { Win } from "../utils/nav-utils";
 import { hexToRGB, namedColor } from "../utils/color-utils";
+import { EnWebview } from "./en-webview";
+
 type enEvent = {
     name: string,
     type: string,
@@ -74,42 +76,58 @@ export class BaseEntity {
     get state():Entity{
         return this.entity;
     };
+
     get id(){
         return this.entity.id;
     }
+
     get pos(){
         return this.entity.position;
     }
+
     get rot(){
         return this.entity.rotation;
     }
+
     get scale(){
         return this.entity.scale;
     }
+
     get color(){
         return this.entity.color;
     }
+
     get clickable(){
         return this.entity.clickable;
     }
+
     get active(){
         return this.entity.active;
     }
+
     get aimable(){
         return this.entity.aimable;
     }
+
     get playHaptic(){
         return this.entity.playHaptic;
     }
+
     get collidable(){
         return this.entity.collidable;
     }
+
+    get parent(){
+        return this.entity.parent;
+    }
+
     protected core: EndymionCore;
 
     private _actions: Action[] = [];
     protected get actions() {
         return this._actions;
     }
+
     protected set actions(actions: Action[]) {
         if (!actions) throw new Error(`[en-primitive][actions] - value is not valid - ${actions}`);
         if (actions.length === 0) {
@@ -271,6 +289,7 @@ export class BaseEntity {
         this.customId = id;
         return this;
     }
+
     setPos(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][setPos] - x value is not valid');
         if (typeof y !== 'number') throw new Error('[en-primitive][setPos] - y value is not valid');
@@ -288,6 +307,7 @@ export class BaseEntity {
         }
         return this;
     }
+
     addPos(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][addPos] - x value is not valid');
         if (typeof y !== 'number') throw new Error('[en-primitive][addPos] - y value is not valid');
@@ -299,6 +319,7 @@ export class BaseEntity {
         this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), position: this.entity.position } });
         return this;
     }
+
     setRot(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][setRot] - x value is not valid');
         if (typeof y !== 'number') throw new Error('[en-primitive][setRot] - y value is not valid');
@@ -316,6 +337,7 @@ export class BaseEntity {
         }
         return this;
     }
+
     addRot(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][addRot] - x value is not valid');
         if (typeof y !== 'number') throw new Error('[en-primitive][addRot] - y value is not valid');
@@ -327,6 +349,7 @@ export class BaseEntity {
         this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), rotation: this.entity.rotation } });
         return this;
     }
+
     setScale(x: number, y: number, z: number): BaseEntity {
         if (typeof x !== 'number') throw new Error('[en-primitive][setScale] - x value is not valid');
         if (x == null || x == undefined) throw new Error('[en-primitive][setScale] - x value is not valid');
@@ -347,6 +370,7 @@ export class BaseEntity {
         }
         return this;
     }
+
     addScale(x: number, y: number, z: number): BaseEntity {
         if (x == null || x == undefined) throw new Error('[en-primitive][setScale] - x value is not valid');
         if ((y == null || y == undefined) && (z == null || z == undefined)) {
@@ -359,6 +383,7 @@ export class BaseEntity {
         this.actions.push({ name: 'actor-add-transform', payload: { id: this.entity.id.toString(), scale: this.entity.scale } });
         return this;
     }
+
     setColor(color: Color | string): BaseEntity {
         if (color === undefined) throw new Error('[en-primitive][setcolor] - color value is not valid');
         let selectedColor: Color = { r: 0, g: 0, b: 0, a: 1 };
@@ -411,6 +436,7 @@ export class BaseEntity {
         this.actions.push({ name: 'primitive-set-color', payload: { id: this.entity.id, color: this.entity.color } });
         return this;
     }
+
     setOpacity(value: number): BaseEntity {
         if (value < 0) throw new Error('[en-primitive][setOpacity] - opacity value is not valid');
         if (value > 1) throw new Error('[en-primitive][setOpacity] - opacity value must be minor or equal to 1');
@@ -421,6 +447,7 @@ export class BaseEntity {
         this.actions.push({ name: 'primitive-set-color', payload: { id: this.entity.id, color: this.entity.color } });
         return this;
     }
+
     setAimable(value: boolean, radius: number = 0.1): BaseEntity {
         this.entity.aimable = value;
         this.updated.next({ name: 'actor-set-aimable', type: 'update', payload: { enabled: value, radius: radius } });
@@ -428,6 +455,7 @@ export class BaseEntity {
         this.actions.push({ name: 'actor-set-aimable', payload: { id: this.entity.id, enabled: this.entity.aimable, radius: radius } });
         return this;
     }
+
     setActive(value: boolean): BaseEntity {
         this.entity.active = value;
         this.updated.next({ name: 'actor-set-active', type: 'update', payload: { activated: value } });
@@ -435,6 +463,7 @@ export class BaseEntity {
         this.actions.push({ name: 'actor-set-active', payload: { id: this.entity.id, activated: this.entity.active } });
         return this;
     }
+
     setClickable(value: boolean): BaseEntity {
         this.entity.clickable = value;
         this.updated.next({ name: 'actor-set-clickable', type: 'update', payload: { clickable: value } });
@@ -442,14 +471,21 @@ export class BaseEntity {
         this.actions.push({ name: 'actor-set-clickable', payload: { id: this.entity.id, enabled: this.entity.clickable } });
         return this;
     }
+
     setHapticFeedback(value: boolean): BaseEntity {
         this.entity.playHaptic = value;
         return this;
     }
+
     setCollidable(value: boolean):BaseEntity{
         this.entity.collidable = value;
         this.updated.next({ name: 'actor-set-collidable', type: 'update', payload: { id: this.entity.id, enabled: value }});
         this.actions.push({name: 'actor-set-collidable', payload: { id: this.entity.id, enabled: value }});
+        return this;
+    }
+
+    setParent(parent: entityParent ):BaseEntity{
+        this.entity.parent = parent;
         return this;
     }
 }

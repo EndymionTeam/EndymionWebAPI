@@ -109,7 +109,9 @@ export type Entity = {
     /** define if on entity interaction haptic is acticve */
     playHaptic: boolean,
     /**define if entity interact with collisions */
-    collidable: boolean
+    collidable: boolean,
+    /** parent of entity, used for anchor to a qrcode or other entity */
+    parent?: entityParent;
 }
 
 /**
@@ -149,7 +151,7 @@ export type webviewParentTransform = 'p' | 'r' | 's' | 'pr' | 'ps' | 'rs' | 'prs
 /**
  * Represents the parent of a web view.
  */
-export type webViewParent = { id: string, inherit_transform: webviewParentTransform | undefined } | undefined;
+export type entityParent = { id: string, inherit_transform: webviewParentTransform | undefined } | undefined;
 export type webViewType = 'persp' | 'flat-scaled' | 'flat-fixed' | 'screen-fixed';
 /**
  * Represents the payload for a web view.
@@ -166,7 +168,7 @@ export type webViewPayload = {
     /**
      * The parent of the web view.
      */
-    parent: webViewParent
+    parent: entityParent
 }
 
 /**
@@ -196,7 +198,7 @@ export type MessagePayload = {
 /**
  * Represents the incoming message from the Endymion system.
  */
-export type MessageIncoming = {
+export type IncomingMessage = {
     name: MessageName,
     type: string,
     payload: MessagePayload

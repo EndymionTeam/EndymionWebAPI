@@ -14,18 +14,22 @@ export class EnShapeLine extends BaseEntity {
         super(commInterface, w);
         this.entity.primitive = this.type;
     }
+
     setPoints(points: Coordinates[]): EnShapeLine {
         this.points = points;
         return this;
     }
+
     addPoint(point: Coordinates): EnShapeLine {
         this.points.push(point);
         return this;
     }
+
     setThickness(thickness: number): EnShapeLine {
         this.thickness = thickness;
         return this;
     }
+
     create(): EnShapeLine {
         this.entity.id = this.isCustomId ? this.customId : this.core.generateObjectId();
         this.actions = [
@@ -35,6 +39,7 @@ export class EnShapeLine extends BaseEntity {
                     color: this.entity.color,
                     thickness: this.thickness,
                     points: this.points,
+                    parent: this.entity.parent,
                     transform: {
                         position: this.entity.position,
                         rotation: this.entity.rotation,
@@ -56,6 +61,7 @@ export class EnShapeLine extends BaseEntity {
                     color: this.entity.color,
                     thickness: this.thickness,
                     points: this.points,
+                    parent: this.entity.parent,
                     transform: {
                         position: this.entity.position,
                         rotation: this.entity.rotation,

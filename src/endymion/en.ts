@@ -8,20 +8,20 @@ import { EnPlane } from '../entities/en-plane';
 import { EnQuad } from '../entities/en-quad';
 import { EnWebview } from '../entities/en-webview';
 import { EnShapeLine } from '../entities/en-shape-line';
-import { MessageName, MessagePayload, MessageIncoming } from './endymion-v2.types';
+import { MessageName, MessagePayload, IncomingMessage } from './endymion-v2.types';
 import { Subject, tap } from 'rxjs';
 import { Win } from '../utils/nav-utils';
 
 export class En {
     core: EndymionCore;
     private win: Win;
-    private message: Subject<MessageIncoming> = new Subject<MessageIncoming>();
-    private actionResult: Subject<MessageIncoming> = new Subject<MessageIncoming>();
-    private trackImage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
+    private message: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private actionResult: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private trackImage: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private pageVisibility: Subject<boolean> = new Subject<boolean>();
-    private webViewMessage: Subject<MessageIncoming> = new Subject<MessageIncoming>();
-    private assetCollition: Subject<MessageIncoming> = new Subject<MessageIncoming>();
-    private qrcodeDetected: Subject<MessageIncoming> = new Subject<MessageIncoming>();
+    private webViewMessage: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private assetCollition: Subject<IncomingMessage> = new Subject<IncomingMessage>();
+    private qrcodeDetected: Subject<IncomingMessage> = new Subject<IncomingMessage>();
     private connections: Map<number, EnWebview | null> = new Map<number, EnWebview | null>();
     private currentConnectionImageId: number = -1;
     /**
